@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.5, user-scalable=yes">
+  <title>Luxury Dark Engineering · Sign In</title>
+  <style>
+    /* ============================================
+       CSS VARIABLES
+       ============================================ */
+    :root {
+      --bg: #0a0b0d;
+      --surface: #15171a;
+      --surface-light: #202226;
+      --surface-glass: rgba(15, 17, 20, 0.82);
+      --border-light: rgba(255, 255, 255, 0.16);
+      --border-input: rgba(255, 255, 255, 0.09);
+      --text: #f2f2f2;
+      --muted: #8f9298;
+      --silver: #bfc2c7;
+      --gold: #c8aa82;
+      --gold-dark: #9e805d;
+      --gold-dim: rgba(200, 170, 130, 0.3);
+      --error: #e5534b;
+      --shadow-card: 0 30px 60px -10px rgba(0, 0, 0, 0.85), 0 0 0 0.5px rgba(255, 255, 255, 0.05) inset;
+      --radius-card: clamp(24px, 7vw, 36px);
+      --radius-input: 14px;
+      --radius-btn: 14px;
+      --font-sans: 'Inter', 'SF Pro Display', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      --transition-smooth: 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* ============================================
+       RESET & GLOBAL
+       ============================================ */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background: var(--bg);
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      margin: 0;
+      overflow-x: hidden;
+    }
+
+    /* ============================================
+       BACKGROUND — GAMBAR + OVERLAY
+       ============================================
+       >>> UNTUK MENGGANTI GAMBAR BACKGROUND:
+       1. Simpan gambar kamu di folder yang sama dengan index.html
+          contoh: background.jpg
+       2. Ganti baris di bawah ini:
+             url('https://images.unsplash.com/...')
+          menjadi:
+             url('background.jpg')
+       3. Selesai. Ukuran gambar tidak perlu diubah.
+       ============================================ */
+    .bg-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+
+      /* GANTI URL DI BAWAH INI DENGAN GAMBAR KAMU */
+      background-image:
+        /* --- OVERLAY (jangan dihapus, supaya card tetap terbaca) --- */
+        radial-gradient(ellipse 85% 75% at 50% 40%, transparent 25%, rgba(0, 0, 0, 0.75) 100%),
+        linear-gradient(180deg, rgba(10, 11, 13, 0.55) 0%, rgba(8, 9, 11, 0.85) 100%),
+        /* --- GAMBAR BACKGROUND --- */
+        url('https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1600&q=80');
+
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+
+      /* sedikit efek kedalaman */
+      filter: saturate(0.9) contrast(1.05) brightness(0.75);
+      animation: bgFadeIn 1.4s ease-out both;
+    }
+
+    /* lapisan tambahan: grid blueprint halus + metallic sheen */
+    .bg-layer::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255, 255, 255, 0.015) 39px, rgba(255, 255, 255, 0.015) 40px),
+        repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255, 255, 255, 0.015) 39px, rgba(255, 255, 255, 0.015) 40px),
+        linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    /* ambient lighting di atas gambar */
+    .bg-layer::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 45% at 50% 0%, rgba(200, 170, 130, 0.07) 0%, transparent 70%),
+        radial-gradient(circle at 80% 90%, rgba(80, 80, 90, 0.1) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    @keyframes bgFadeIn {
+      0% { opacity: 0; filter: saturate(0.9) contrast(1.05) brightness(0.4) blur(6px); }
+      100% { opacity: 1; filter: saturate(0.9) contrast(1.05) brightness(0.75) blur(0); }
+    }
+
+    /* ============================================
+       PAGE WRAPPER
+       ============================================ */
+    .page {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: clamp(16px, 4vw, 28px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      animation: pageFadeIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @keyframes pageFadeIn {
+      0% { opacity: 0; transform: translateY(12px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================
+       METALLIC LOGO
+       ============================================ */
+    .logo-area {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: clamp(16px, 3vh, 28px);
+      animation: logoSlide 0.9s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+      filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.7));
+    }
+
+    @keyframes logoSlide {
+      0% { opacity: 0; transform: translateY(-16px) scale(0.96); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .logo-svg {
+      width: clamp(72px, 18vw, 96px);
+      height: auto;
+      display: block;
+    }
+
+    /* ============================================
+       LOGIN CARD — dark glassmorphism
+       ============================================ */
+    .login-card {
+      width: 100%;
+      background: var(--surface-glass);
+      backdrop-filter: blur(20px) saturate(1.2);
+      -webkit-backdrop-filter: blur(20px) saturate(1.2);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-card);
+      padding: clamp(24px, 6vw, 40px) clamp(20px, 5vw, 34px) clamp(28px, 6vw, 38px);
+      box-shadow: var(--shadow-card);
+      display: flex;
+      flex-direction: column;
+      animation: cardEnter 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+      transition: box-shadow var(--transition-smooth);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 10%;
+      right: 10%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
+      pointer-events: none;
+    }
+
+    @keyframes cardEnter {
+      0% { opacity: 0; transform: translateY(28px) scale(0.98); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ============================================
+       TYPOGRAPHY
+       ============================================ */
+    .card-header {
+      margin-bottom: clamp(20px, 4vw, 28px);
+      animation: elemFadeIn 0.6s 0.3s both;
+    }
+
+    @keyframes elemFadeIn {
+      0% { opacity: 0; transform: translateY(8px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-header h1 {
+      font-size: clamp(1.6rem, 5vw, 2rem);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--text);
+    }
+
+    .card-header h1 .gold {
+      color: var(--gold);
+      font-weight: 500;
+    }
+
+    .card-header .subtitle {
+      margin-top: 6px;
+      font-size: clamp(0.8rem, 2.6vw, 0.9rem);
+      color: var(--muted);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      line-height: 1.4;
+    }
+
+    /* ============================================
+       FORM
+       ============================================ */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: clamp(14px, 3vw, 18px);
+      animation: elemFadeIn 0.6s both;
+    }
+
+    .form-group:nth-child(2) { animation-delay: 0.35s; }
+    .form-group:nth-child(3) { animation-delay: 0.4s; }
+    .form-group:nth-child(4) { animation-delay: 0.45s; }
+
+    .form-group label {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: var(--silver);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding-left: 2px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: rgba(22, 24, 28, 0.85);
+      border: 1px solid var(--border-input);
+      border-radius: var(--radius-input);
+      transition: border-color var(--transition-smooth), box-shadow var(--transition-smooth), background var(--transition-smooth);
+      overflow: hidden;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: rgba(200, 170, 130, 0.5);
+      box-shadow: 0 0 0 3px rgba(200, 170, 130, 0.08), 0 0 20px rgba(200, 170, 130, 0.04);
+      background: rgba(26, 28, 33, 0.9);
+    }
+
+    .input-wrapper.error {
+      border-color: rgba(229, 83, 75, 0.6);
+      box-shadow: 0 0 0 3px rgba(229, 83, 75, 0.08);
+    }
+
+    .input-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 16px;
+      color: var(--muted);
+      flex-shrink: 0;
+      transition: color var(--transition-smooth);
+    }
+
+    .input-wrapper:focus-within .input-icon { color: var(--gold); }
+    .input-wrapper.error .input-icon { color: var(--error); }
+
+    .input-icon svg { width: 18px; height: 18px; display: block; }
+
+    .input-field {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 15px 14px 15px 12px;
+      font-size: clamp(0.9rem, 2.8vw, 0.95rem);
+      font-family: var(--font-sans);
+      color: var(--text);
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      min-width: 0;
+      width: 100%;
+    }
+
+    .input-field::placeholder {
+      color: rgba(143, 146, 152, 0.6);
+      font-weight: 400;
+    }
+
+    .input-field:-webkit-autofill,
+    .input-field:-webkit-autofill:hover,
+    .input-field:-webkit-autofill:focus {
+      -webkit-text-fill-color: var(--text);
+      -webkit-box-shadow: 0 0 0px 1000px #16181c inset;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+
+    .toggle-password {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 12px 16px 12px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--muted);
+      transition: color var(--transition-smooth);
+      flex-shrink: 0;
+      border-radius: 0 var(--radius-input) var(--radius-input) 0;
+    }
+
+    .toggle-password:hover { color: var(--gold); }
+
+    .toggle-password:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: -2px;
+      border-radius: 8px;
+    }
+
+    .toggle-password svg { width: 18px; height: 18px; display: block; }
+
+    .error-message {
+      font-size: 0.72rem;
+      color: var(--error);
+      min-height: 16px;
+      padding-left: 4px;
+      letter-spacing: 0.01em;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity var(--transition-smooth), transform var(--transition-smooth);
+    }
+
+    .error-message.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============================================
+       FORGOT PASSWORD
+       ============================================ */
+    .forgot-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: -6px;
+      margin-bottom: clamp(18px, 3.5vw, 24px);
+      animation: elemFadeIn 0.6s 0.5s both;
+    }
+
+    .forgot-link {
+      background: none;
+      border: none;
+      font-family: var(--font-sans);
+      font-size: 0.78rem;
+      color: var(--gold);
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      padding: 4px 2px;
+      border-radius: 4px;
+      transition: color var(--transition-smooth);
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 4px;
+    }
+
+    .forgot-link:hover {
+      color: #dfc9a8;
+      text-decoration-color: var(--gold-dark);
+    }
+
+    .forgot-link:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
+    }
+
+    /* ============================================
+       SIGN IN BUTTON
+       ============================================ */
+    .btn-signin {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px 20px;
+      font-family: var(--font-sans);
+      font-size: clamp(0.9rem, 3vw, 1rem);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #1a1c1f;
+      background: linear-gradient(145deg, #d8c4a8 0%, #c8aa82 40%, #b8976d 100%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: var(--radius-btn);
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+      box-shadow: 0 8px 20px -6px rgba(200, 170, 130, 0.25), 0 0 0 0.5px rgba(0, 0, 0, 0.2) inset;
+      position: relative;
+      overflow: hidden;
+      animation: elemFadeIn 0.6s 0.55s both;
+      user-select: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn-signin::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.2) 0%, transparent 50%);
+      pointer-events: none;
+      border-radius: inherit;
+    }
+
+    .btn-signin:hover {
+      background: linear-gradient(145deg, #e0cfb6 0%, #d0b58e 40%, #c09f75 100%);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 28px -8px rgba(200, 170, 130, 0.4), 0 0 0 0.5px rgba(0, 0, 0, 0.2) inset;
+    }
+
+    .btn-signin:active {
+      transform: translateY(0px);
+      box-shadow: 0 4px 12px -4px rgba(200, 170, 130, 0.3), 0 0 0 0.5px rgba(0, 0, 0, 0.25) inset;
+    }
+
+    .btn-signin:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 3px;
+    }
+
+    .btn-signin:disabled {
+      opacity: 0.65;
+      pointer-events: none;
+      transform: none;
+    }
+
+    .btn-signin .arrow-icon {
+      display: flex;
+      align-items: center;
+      transition: transform var(--transition-smooth);
+    }
+
+    .btn-signin:hover .arrow-icon { transform: translateX(3px); }
+
+    .btn-signin .arrow-icon svg { width: 18px; height: 18px; display: block; }
+
+    /* ============================================
+       DIVIDER
+       ============================================ */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: clamp(20px, 4vw, 28px) 0 clamp(16px, 3.5vw, 22px);
+      animation: elemFadeIn 0.6s 0.6s both;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.09), transparent);
+    }
+
+    .divider-text {
+      font-size: 0.7rem;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    /* ============================================
+       SOCIAL LOGIN
+       ============================================ */
+    .social-row {
+      display: flex;
+      justify-content: center;
+      gap: clamp(12px, 3vw, 16px);
+      margin-bottom: clamp(22px, 4vw, 28px);
+      animation: elemFadeIn 0.6s 0.65s both;
+    }
+
+    .social-btn {
+      flex: 1;
+      max-width: 100px;
+      aspect-ratio: 1 / 0.8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(22, 24, 28, 0.75);
+      border: 1px solid var(--border-input);
+      border-radius: 14px;
+      cursor: pointer;
+      transition: all var(--transition-smooth);
+      color: var(--silver);
+      padding: 12px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .social-btn:hover {
+      background: rgba(35, 38, 45, 0.9);
+      border-color: rgba(200, 170, 130, 0.25);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px -6px rgba(0, 0, 0, 0.5);
+      color: var(--text);
+    }
+
+    .social-btn:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 6px -2px rgba(0, 0, 0, 0.4);
+    }
+
+    .social-btn:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
+    }
+
+    .social-btn svg {
+      width: 22px;
+      height: 22px;
+      display: block;
+      transition: transform var(--transition-smooth);
+    }
+
+    .social-btn:hover svg { transform: scale(1.1); }
+
+    /* ============================================
+       BOTTOM ACCOUNT
+       ============================================ */
+    .bottom-account {
+      text-align: center;
+      font-size: clamp(0.78rem, 2.6vw, 0.85rem);
+      color: var(--muted);
+      animation: elemFadeIn 0.6s 0.7s both;
+      line-height: 1.5;
+    }
+
+    .bottom-account .signup-link {
+      background: none;
+      border: none;
+      font-family: var(--font-sans);
+      font-size: inherit;
+      color: var(--gold);
+      font-weight: 600;
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      padding: 4px 6px;
+      border-radius: 6px;
+      transition: color var(--transition-smooth), background var(--transition-smooth);
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-underline-offset: 3px;
+    }
+
+    .bottom-account .signup-link:hover {
+      color: #dfc9a8;
+      text-decoration-color: var(--gold-dark);
+      background: rgba(200, 170, 130, 0.06);
+    }
+
+    .bottom-account .signup-link:focus-visible {
+      outline: 2px solid var(--gold);
+      outline-offset: 2px;
+    }
+
+    /* ============================================
+       STATUS TOAST
+       ============================================ */
+    .status-toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: rgba(22, 24, 28, 0.95);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--border-light);
+      border-radius: 40px;
+      padding: 12px 24px;
+      font-size: 0.82rem;
+      color: var(--text);
+      letter-spacing: 0.02em;
+      box-shadow: 0 16px 32px -8px rgba(0, 0, 0, 0.7);
+      z-index: 100;
+      opacity: 0;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.4s ease;
+      pointer-events: none;
+      white-space: nowrap;
+      max-width: 90vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .status-toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .status-toast.gold-border {
+      border-color: rgba(200, 170, 130, 0.4);
+    }
+
+    /* ============================================
+       REGISTRATION MODE
+       ============================================ */
+    .login-card.register-mode .card-header h1 .gold {
+      color: var(--silver);
+    }
+
+    .login-card.register-mode .card-header h1 .gold::after {
+      content: ' Up';
+      color: var(--gold);
+    }
+
+    /* ============================================
+       RESPONSIVE
+       ============================================ */
+    @media (max-width: 380px) {
+      .page { padding: 12px; }
+      .login-card { padding: 20px 16px 24px; }
+      .social-btn { padding: 10px; }
+      .social-btn svg { width: 18px; height: 18px; }
+    }
+
+    @media (min-width: 768px) {
+      .page { max-width: 440px; padding: 24px; }
+      .login-card { padding: 36px 32px 34px; }
+    }
+
+    @media (min-width: 1024px) {
+      .page { max-width: 460px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================
+       BACKGROUND GAMBAR
+       ============================================ -->
+  <div class="bg-layer" aria-hidden="true"></div>
+
+  <!-- ============================================
+       PAGE
+       ============================================ -->
+  <main class="page">
+
+    <!-- LOGO -->
+    <div class="logo-area" aria-hidden="true">
+      <svg class="logo-svg" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="metalGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#e8e8ea"/>
+            <stop offset="25%" stop-color="#b0b3b8"/>
+            <stop offset="50%" stop-color="#d4d6da"/>
+            <stop offset="75%" stop-color="#8a8d92"/>
+            <stop offset="100%" stop-color="#c0c3c8"/>
+          </linearGradient>
+          <linearGradient id="metalGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#9ea1a6"/>
+            <stop offset="40%" stop-color="#e0e2e6"/>
+            <stop offset="70%" stop-color="#7a7d82"/>
+            <stop offset="100%" stop-color="#b8bbc0"/>
+          </linearGradient>
+          <linearGradient id="metalDark" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#4a4d52"/>
+            <stop offset="50%" stop-color="#2e3136"/>
+            <stop offset="100%" stop-color="#55585d"/>
+          </linearGradient>
+          <linearGradient id="bevelLight" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.35"/>
+            <stop offset="50%" stop-color="#ffffff" stop-opacity="0.05"/>
+            <stop offset="100%" stop-color="#ffffff" stop-opacity="0.2"/>
+          </linearGradient>
+        </defs>
+
+        <g transform="translate(50,50)">
+          <polygon points="0,-44 38,-14 38,14 0,44 -38,14 -38,-14" fill="url(#metalDark)" stroke="#6a6d72" stroke-width="0.6"/>
+          <polygon points="0,-40 34,-13 34,13 0,40 -34,13 -34,-13" fill="url(#metalGrad1)" opacity="0.9"/>
+          <polygon points="0,-26 22,-8 22,8 0,26 -22,8 -22,-8" fill="url(#metalGrad2)"/>
+          <polygon points="0,-16 13,-5 13,5 0,16 -13,5 -13,-5" fill="url(#metalDark)" opacity="0.85"/>
+          <line x1="0" y1="-40" x2="0" y2="-16" stroke="url(#bevelLight)" stroke-width="1.2" stroke-linecap="round" opacity="0.7"/>
+          <line x1="34" y1="-13" x2="13" y2="-5" stroke="url(#bevelLight)" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+          <line x1="-34" y1="-13" x2="-13" y2="-5" stroke="url(#bevelLight)" stroke-width="1" stroke-linecap="round" opacity="0.5"/>
+          <circle cx="0" cy="0" r="4" fill="#d4d6da" opacity="0.15"/>
+        </g>
+      </svg>
+    </div>
+
+    <!-- LOGIN CARD -->
+    <section class="login-card" id="loginCard">
+
+      <header class="card-header">
+        <h1>Welcome <span class="gold">Back</span></h1>
+        <p class="subtitle">Sign in to continue your engineering journey</p>
+      </header>
+
+      <form id="loginForm" novalidate>
+
+        <!-- EMAIL -->
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <div class="input-wrapper" id="emailWrapper">
+            <span class="input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="M22 7l-10 7L2 7"/>
+              </svg>
+            </span>
+            <input class="input-field" type="email" id="email" name="email" placeholder="Enter your email" autocomplete="email" aria-label="Email address" aria-describedby="emailError" />
+          </div>
+          <span class="error-message" id="emailError" role="alert"></span>
+        </div>
+
+        <!-- PASSWORD -->
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper" id="passwordWrapper">
+            <span class="input-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </span>
+            <input class="input-field" type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" aria-label="Password" aria-describedby="passwordError" />
+            <button type="button" class="toggle-password" id="togglePassword" aria-label="Show password" aria-pressed="false">
+              <svg id="eyeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <svg id="eyeOffIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                <path d="M14.12 14.12a3 3 0 1 1-4.24-4.24"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            </button>
+          </div>
+          <span class="error-message" id="passwordError" role="alert"></span>
+        </div>
+
+        <!-- FORGOT -->
+        <div class="forgot-row">
+          <button type="button" class="forgot-link" id="forgotLink">Forgot Password?</button>
+        </div>
+
+        <!-- SIGN IN BUTTON -->
+        <button type="submit" class="btn-signin" id="signinBtn">
+          <span id="signinBtnText">Sign In</span>
+          <span class="arrow-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" y1="12" x2="19" y2="12"/>
+              <polyline points="12 5 19 12 12 19"/>
+            </svg>
+          </span>
+        </button>
+
+      </form>
+
+      <!-- DIVIDER -->
+      <div class="divider" role="separator" aria-label="or continue with">
+        <span class="divider-line"></span>
+        <span class="divider-text">or continue with</span>
+        <span class="divider-line"></span>
+      </div>
+
+      <!-- SOCIAL -->
+      <div class="social-row">
+        <button type="button" class="social-btn" id="googleBtn" aria-label="Sign in with Google">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
+            <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+            <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18A10.96 10.96 0 0 0 1 12c0 1.77.42 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/>
+            <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+          </svg>
+        </button>
+        <button type="button" class="social-btn" id="githubBtn" aria-label="Sign in with GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11.05 11.05 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.69 5.4-5.25 5.68.41.36.78 1.06.78 2.14v3.17c0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/>
+          </svg>
+        </button>
+        <button type="button" class="social-btn" id="linkedinBtn" aria-label="Sign in with LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.34V9h3.42v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- BOTTOM -->
+      <div class="bottom-account">
+        Don't have an account?
+        <button type="button" class="signup-link" id="signupLink">Sign Up</button>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- TOAST -->
+  <div class="status-toast" id="statusToast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      /* DOM ELEMENTS */
+      const loginForm = document.getElementById('loginForm');
+      const emailInput = document.getElementById('email');
+      const passwordInput = document.getElementById('password');
+      const emailWrapper = document.getElementById('emailWrapper');
+      const passwordWrapper = document.getElementById('passwordWrapper');
+      const emailError = document.getElementById('emailError');
+      const passwordError = document.getElementById('passwordError');
+      const togglePassword = document.getElementById('togglePassword');
+      const eyeIcon = document.getElementById('eyeIcon');
+      const eyeOffIcon = document.getElementById('eyeOffIcon');
+      const signinBtn = document.getElementById('signinBtn');
+      const signinBtnText = document.getElementById('signinBtnText');
+      const forgotLink = document.getElementById('forgotLink');
+      const signupLink = document.getElementById('signupLink');
+      const googleBtn = document.getElementById('googleBtn');
+      const githubBtn = document.getElementById('githubBtn');
+      const linkedinBtn = document.getElementById('linkedinBtn');
+      const statusToast = document.getElementById('statusToast');
+      const loginCard = document.getElementById('loginCard');
+
+      let toastTimer = null;
+
+      /* TOAST */
+      function showToast(message, isGold = false) {
+        if (toastTimer) clearTimeout(toastTimer);
+        statusToast.textContent = message;
+        statusToast.classList.toggle('gold-border', isGold);
+        statusToast.classList.add('show');
+        toastTimer = setTimeout(() => {
+          statusToast.classList.remove('show');
+        }, 2800);
+      }
+
+      /* PASSWORD TOGGLE */
+      togglePassword.addEventListener('click', function() {
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        eyeIcon.style.display = isPassword ? 'none' : 'block';
+        eyeOffIcon.style.display = isPassword ? 'block' : 'none';
+        this.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+        this.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
+        passwordInput.focus();
+      });
+
+      /* ERROR HELPERS */
+      function setError(wrapper, errorEl, message) {
+        wrapper.classList.add('error');
+        errorEl.textContent = message;
+        errorEl.classList.add('visible');
+      }
+      function clearError(wrapper, errorEl) {
+        wrapper.classList.remove('error');
+        errorEl.textContent = '';
+        errorEl.classList.remove('visible');
+      }
+      function isValidEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+
+      emailInput.addEventListener('input', () => clearError(emailWrapper, emailError));
+      passwordInput.addEventListener('input', () => clearError(passwordWrapper, passwordError));
+
+      /* SUBMIT */
+      loginForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        let valid = true;
+        clearError(emailWrapper, emailError);
+        clearError(passwordWrapper, passwordError);
+
+        const emailVal = emailInput.value.trim();
+        if (!emailVal) {
+          setError(emailWrapper, emailError, 'Email address is required.');
+          valid = false;
+        } else if (!isValidEmail(emailVal)) {
+          setError(emailWrapper, emailError, 'Please enter a valid email address.');
+          valid = false;
+        }
+
+        const passVal = passwordInput.value;
+        if (!passVal) {
+          setError(passwordWrapper, passwordError, 'Password is required.');
+          valid = false;
+        } else if (passVal.length < 4) {
+          setError(passwordWrapper, passwordError, 'Password must be at least 4 characters.');
+          valid = false;
+        }
+
+        if (!valid) {
+          loginCard.style.transition = 'transform 0.15s ease';
+          loginCard.style.transform = 'translateX(-4px)';
+          setTimeout(() => { loginCard.style.transform = 'translateX(4px)'; }, 80);
+          setTimeout(() => { loginCard.style.transform = 'translateX(0)'; }, 160);
+          setTimeout(() => { loginCard.style.transition = ''; }, 200);
+          return;
+        }
+
+        signinBtn.disabled = true;
+        signinBtnText.textContent = 'Signing in...';
+
+        setTimeout(() => {
+          signinBtnText.textContent = 'Sign in successful';
+          showToast('✓ Sign in successful', true);
+          setTimeout(() => {
+            signinBtnText.textContent = 'Sign In';
+            signinBtn.disabled = false;
+          }, 1400);
+        }, 900);
+      });
+
+      /* FORGOT */
+      forgotLink.addEventListener('click', function() {
+        showToast('Password reset link sent to your email', true);
+        emailInput.focus();
+      });
+
+      /* SOCIAL */
+      googleBtn.addEventListener('click', () => showToast('Google sign-in selected'));
+      githubBtn.addEventListener('click', () => showToast('GitHub sign-in selected'));
+      linkedinBtn.addEventListener('click', () => showToast('LinkedIn sign-in selected'));
+
+      /* SIGN UP */
+      signupLink.addEventListener('click', function() {
+        const isRegister = loginCard.classList.toggle('register-mode');
+        if (isRegister) {
+          showToast('Registration mode — create your account', true);
+          signinBtnText.textContent = 'Create Account';
+          const subtitle = loginCard.querySelector('.subtitle');
+          if (subtitle) subtitle.textContent = 'Join the engineering network — start your journey';
+          this.textContent = 'Sign In';
+        } else {
+          showToast('Returned to sign in', true);
+          signinBtnText.textContent = 'Sign In';
+          const subtitle = loginCard.querySelector('.subtitle');
+          if (subtitle) subtitle.textContent = 'Sign in to continue your engineering journey';
+          this.textContent = 'Sign Up';
+        }
+        clearError(emailWrapper, emailError);
+        clearError(passwordWrapper, passwordError);
+      });
+
+      /* KEYBOARD */
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && statusToast.classList.contains('show')) {
+          statusToast.classList.remove('show');
+        }
+      });
+
+      window.addEventListener('load', function() {
+        setTimeout(() => {
+          emailInput.blur();
+          passwordInput.blur();
+        }, 200);
+      });
+
+    })();
+  </script>
+</body>
+</html>
