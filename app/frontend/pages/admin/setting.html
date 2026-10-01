@@ -1,0 +1,117 @@
+{% extends "admin/base-admin.html" %}
+{% block title %}Pengaturan — Akashic{% endblock %}
+{% block page_title %}Pengaturan{% endblock %}
+{% block admin_content %}
+<div class="admin-grid even">
+  <section class="box" aria-labelledby="cfg-title">
+    <div class="box-head"><h2 id="cfg-title">Status sistem</h2></div>
+    <div class="box-body">
+      <dl class="cfg" id="cfg"><dt>Memuat...</dt><dd></dd></dl>
+      <p class="small muted" style="margin-top:14px">Konfigurasi rahasia (kunci VAPID, SMTP, database) diatur melalui file <code>.env</code> di server dan tidak ditampilkan di sini.</p>
+    </div>
+  </section>
+  <section class="box" aria-labelledby="adm-title">
+    <div class="box-head"><h2 id="adm-title">Admin</h2></div>
+    <div class="box-body">
+      <p class="small">Tambahkan admin lain untuk membantu mengelola konten. Setiap admin memiliki akses penuh ke dasbor.</p>
+      <a class="btn ghost sm" href="/auth/register">+ Daftarkan admin baru</a>
+    </div>
+  </section>
+</div>
+
+<section class="box" aria-labelledby="cat-title">
+  <div class="box-head"><h2 id="cat-title">Kategori</h2><button class="btn sm" id="cat-add" type="button">+ Kategori baru</button></div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Nama</th><th>Slug</th><th>Status</th><th><span class="sr-only">Aksi</span></th></tr></thead>
+      <tbody id="cat-rows"></tbody>
+    </table>
+  </div>
+</section>
+
+<section class="box" aria-labelledby="log-title">
+  <div class="box-head"><h2 id="log-title">Activity log</h2><button class="btn ghost xs" id="log-refresh" type="button">Muat ulang</button></div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Waktu</th><th>Admin</th><th>Aksi</th><th>Keterangan</th></tr></thead>
+      <tbody id="log-rows"></tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
+{% block admin_scripts %}
+<script>
+(async () => {
+  const { api, h, fmt } = window.Akashic;
+  const A = window.Admin;
+  const $ = (id) => document.getElementById(id);
+
+  async function loadConfig() {
+    try {
+      const s = await api.get('/api/admin/settings');
+      const row = (k, v) => [h('dt', null, k), h('dd', null, v)];
+      const on = (ok, yes, no) => h('span', `badge ${ok ? 'success' : 'muted'}`, ok ? yes : no);
+      $('cfg').replaceChildren(
+        ...row('Lingkungan', h('code', null, s.environment)),
+        ...row('Web Push (VAPID)', on(s.push_enabled, 'Aktif', 'Belum diatur')),
+        ...row('Email reset (SMTP)', on(s.mail_enabled, 'Aktif', 'Belum diatur')),
+        ...row('News collector', on(s.news_collector_enabled, `Tiap ${s.news_collect_interval_minutes} menit`, 'Nonaktif')),
+        ...row('Sumber RSS aktif', `${s.sources.filter((x) => x.status === 'ACTIVE').length} dari ${s.sources.length}`),
+        ...row('Durasi sesi admin', `${s.session_lifetime_minutes} menit`));
+    } catch (err) { if (!A.handleAuthError(err)) $('cfg').replaceChildren(h('dt', null, err.message)); }
+  }
+
+  async function loadCategories() {
+    A.loadingRow($('cat-rows'));
+    try {
+      const rows = await A.categories(true);
+      A.renderRows($('cat-rows'), rows, (c) => h('tr', null,
+        A.titleCell(c.name, c.description || ''), h('td', null, h('code', null, c.slug)), h('td', null, A.badge(c.status)),
+        A.actions(A.actionBtn('Edit', () => editCategory(c)), A.actionBtn('Hapus', () => removeCategory(c), 'btn danger xs'))),
+      'Belum ada kategori.');
+    } catch (err) { if (!A.handleAuthError(err)) A.renderRows($('cat-rows'), [], null, err.message); }
+  }
+
+  async function editCategory(c) {
+    const saved = await A.formDialog({
+      title: c ? 'Edit kategori' : 'Kategori baru',
+      values: c || {},
+      fields: [
+        { name: 'name', label: 'Nama', required: true, maxlength: 100 },
+        { name: 'status', label: 'Status', type: 'select', required: true, options: A.statusOptions(['ACTIVE', 'INACTIVE']), default: 'ACTIVE' },
+        { name: 'description', label: 'Deskripsi', type: 'textarea', rows: 3, maxlength: 1000, full: true },
+      ],
+      onSubmit: async (data) => {
+        const res = c ? await api.put(`/api/categories/${c.id}`, data) : await api.post('/api/categories', data);
+        window.Akashic.toast(res.message, 'success');
+        return res.data;
+      },
+    });
+    if (saved) loadCategories();
+  }
+
+  async function removeCategory(c) {
+    if (!(await A.confirm(`Hapus kategori “${c.name}”? Kategori yang masih dipakai informasi tidak dapat dihapus.`, { okText: 'Hapus' }))) return;
+    try { await A.run(api.del(`/api/categories/${c.id}`), { success: true }); loadCategories(); } catch (_) { /* toast */ }
+  }
+
+  async function loadLog() {
+    A.loadingRow($('log-rows'));
+    try {
+      const rows = await api.get('/api/admin/activity', { limit: 100 });
+      A.renderRows($('log-rows'), rows, (l) => h('tr', null,
+        h('td', null, fmt.dateTime(l.created_at)), h('td', null, l.username || 'sistem'),
+        h('td', null, h('span', 'badge muted', l.action)), h('td', null, l.description || '-')),
+      'Belum ada aktivitas.');
+    } catch (err) { if (!A.handleAuthError(err)) A.renderRows($('log-rows'), [], null, err.message); }
+  }
+
+  try { await A.init(); } catch (_) { return; }
+  $('cat-add').addEventListener('click', () => editCategory(null));
+  $('log-refresh').addEventListener('click', loadLog);
+  loadConfig();
+  loadCategories();
+  loadLog();
+})();
+</script>
+{% endblock %}

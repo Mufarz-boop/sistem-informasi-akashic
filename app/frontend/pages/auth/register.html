@@ -1,0 +1,87 @@
+{% extends "auth/base-auth.html" %}
+{% block title %}Daftar Admin — Akashic{% endblock %}
+{% block auth_content %}
+<h1 id="reg-title">Daftar admin</h1>
+<p id="reg-intro">Memeriksa status pendaftaran...</p>
+<form id="register-form" novalidate hidden>
+  <div id="reg-alert" role="alert" hidden></div>
+  <div class="field"><label for="full_name">Nama lengkap</label><input type="text" id="full_name" name="full_name" autocomplete="name" required maxlength="150"></div>
+  <div class="field"><label for="username">Username</label><input type="text" id="username" name="username" autocomplete="username" required minlength="3" maxlength="50" pattern="[A-Za-z0-9_.\-]+"><span class="hint">3–50 karakter: huruf, angka, titik, garis bawah, atau tanda hubung.</span></div>
+  <div class="field"><label for="email">Email</label><input type="email" id="email" name="email" autocomplete="email" required maxlength="150"></div>
+  <div class="field">
+    <label for="password">Password</label>
+    <div class="pw-wrap"><input type="password" id="password" name="password" autocomplete="new-password" required minlength="8" maxlength="128"><button class="pw-toggle" type="button" data-pw-toggle="password" aria-pressed="false">Tampilkan</button></div>
+    <span class="hint">Minimal 8 karakter, mengandung huruf dan angka.</span>
+  </div>
+  <div class="field"><label for="password_confirmation">Konfirmasi password</label><input type="password" id="password_confirmation" name="password_confirmation" autocomplete="new-password" required maxlength="128"></div>
+  <button class="btn block" type="submit" id="reg-btn">Daftarkan admin</button>
+</form>
+<div id="reg-closed" class="alert info" hidden>Pendaftaran admin baru hanya dapat dilakukan oleh admin yang sudah masuk. <a href="/auth/login?next=/auth/register">Masuk sebagai admin</a>.</div>
+<p class="alt">Sudah punya akun? <a href="/auth/login">Masuk</a></p>
+{% endblock %}
+{% block auth_scripts %}
+<script>
+(() => {
+  const { api, setBusy } = window.Akashic;
+  const form = document.getElementById('register-form');
+  const alertBox = document.getElementById('reg-alert');
+  let creatorMode = false;
+
+  async function init() {
+    try {
+      const s = await api.get('/api/auth/status');
+      if (s.logged_in) {
+        const me = await api.get('/api/auth/me');
+        api.setCsrf(me.csrf_token);
+        creatorMode = true;
+        document.getElementById('reg-intro').textContent = `Anda masuk sebagai ${me.admin.username}. Buat akun untuk admin lain.`;
+        form.hidden = false;
+      } else if (!s.has_admin) {
+        document.getElementById('reg-title').textContent = 'Buat admin pertama';
+        document.getElementById('reg-intro').textContent = 'Belum ada admin. Akun pertama ini akan menjadi pengelola Akashic.';
+        form.hidden = false;
+      } else {
+        document.getElementById('reg-intro').textContent = 'Akashic tidak memerlukan akun untuk pengguna publik.';
+        document.getElementById('reg-closed').hidden = false;
+      }
+    } catch (err) {
+      document.getElementById('reg-intro').textContent = err.message;
+    }
+  }
+
+  function validate(data) {
+    if (!data.full_name || !data.username || !data.email || !data.password) return 'Semua kolom wajib diisi.';
+    if (!/^[A-Za-z0-9_.-]{3,50}$/.test(data.username)) return 'Username tidak valid.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) return 'Format email tidak valid.';
+    if (data.password.length < 8 || !/[A-Za-z]/.test(data.password) || !/\d/.test(data.password)) return 'Password minimal 8 karakter dan mengandung huruf serta angka.';
+    if (data.password !== data.password_confirmation) return 'Konfirmasi password tidak sama.';
+    return '';
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries(new FormData(form));
+    Object.keys(data).forEach((k) => { if (!k.startsWith('password')) data[k] = data[k].trim(); });
+    const problem = validate(data);
+    if (problem) { window.AuthForm.alert(alertBox, problem); return; }
+    const btn = document.getElementById('reg-btn');
+    setBusy(btn, true, 'Menyimpan...');
+    try {
+      const res = await api.post('/api/auth/register', data);
+      if (creatorMode) {
+        window.AuthForm.alert(alertBox, res.message, 'success');
+        form.reset();
+        setBusy(btn, false);
+      } else {
+        location.replace('/admin/dashboard');
+      }
+    } catch (err) {
+      window.AuthForm.alert(alertBox, err.message);
+      setBusy(btn, false);
+    }
+  });
+
+  init();
+})();
+</script>
+{% endblock %}

@@ -474,3 +474,25 @@ CREATE TABLE activity_logs (
     INDEX idx_activity_action (action),
     INDEX idx_activity_created (created_at)
 ) ENGINE=InnoDB;
+
+-- ============================================================
+-- CATATAN IMPLEMENTASI
+-- Skema final yang dipakai aplikasi ada di
+-- backend/database/db_akashic.sql. Perbedaan dari rancangan di atas:
+--
+-- * password_resets   : tabel baru untuk token reset password
+--                       (disimpan sebagai hash SHA-256, sekali pakai,
+--                       memiliki expired_at).
+-- * regions.geometry  : GEOMETRY SRID 4326 (Polygon/MultiPolygon),
+--                       urutan koordinat GeoJSON [longitude, latitude].
+-- * news_sources      : last_checked_at dan last_error untuk memantau
+--                       sumber RSS yang gagal tanpa menghentikan Flask.
+-- * news.status       : PENDING -> APPROVED/REJECTED/ARCHIVED; hanya
+--                       APPROVED yang tampil di feed publik.
+-- * activity_logs     : ditambah entity_type dan entity_id.
+-- * Data awal         : wilayah Indonesia > Aceh > Kota Langsa > 5
+--                       kecamatan (polygon perkiraan), kategori,
+--                       region keywords, dan sumber RSS.
+--
+-- Koordinat pengunjung TIDAK disimpan di tabel mana pun.
+-- ============================================================

@@ -1,0 +1,36 @@
+{% extends "landing/base.html" %}
+{% block title %}Disclaimer — Akashic{% endblock %}
+{% block content %}
+<section class="page-top" aria-labelledby="page-title">
+  <div class="wrap">
+    <div class="eyebrow">Akashic / Legal</div>
+    <h1 id="page-title">Disclaimer</h1>
+    <p class="lead">Ketentuan penggunaan informasi, data lokasi, dan berita eksternal di Akashic.</p>
+  </div>
+</section>
+<section style="padding-top:0">
+  <div class="wrap prose">
+    <h2>Akurasi informasi</h2>
+    <p>Informasi dan event diterbitkan oleh admin Akashic dan dapat berubah sewaktu-waktu. Untuk keputusan penting, selalu konfirmasi kepada instansi atau penyelenggara terkait.</p>
+
+    <h2>Berita eksternal</h2>
+    <p>Berita dikumpulkan otomatis dari RSS pihak ketiga, ditampilkan sebagai ringkasan, dan selalu menautkan ke sumber aslinya. Hak cipta berita tetap milik penerbit masing-masing. Akashic tidak bertanggung jawab atas isi situs pihak ketiga.</p>
+    <p>Kaitan berita dengan wilayah ditentukan dari cakupan sumber atau kecocokan kata kunci wilayah, sehingga bersifat perkiraan. Berita hanya tampil setelah disetujui admin.</p>
+
+    <h2>Lokasi dan batas wilayah</h2>
+    <p>Penentuan wilayah bergantung pada akurasi lokasi perangkat dan data polygon. Batas wilayah dapat berupa penyederhanaan dari data terbuka (misalnya OpenStreetMap) dan tidak dimaksudkan sebagai batas administratif resmi.</p>
+    <p>Hasil di dekat batas wilayah ditandai sebagai perkiraan. Anda dapat memilih wilayah secara manual kapan saja.</p>
+
+    <h2>Privasi</h2>
+    <ul>
+      <li>Akashic tidak memerlukan akun publik.</li>
+      <li>Koordinat tidak disimpan di server; hanya dipakai selama satu permintaan.</li>
+      <li>Langganan notifikasi hanya menyimpan endpoint push browser dan wilayah (opsional), tanpa identitas.</li>
+      <li>Anda dapat mencabut izin lokasi dan notifikasi melalui pengaturan browser.</li>
+    </ul>
+
+    <h2>Ketersediaan layanan</h2>
+    <p>Akashic disediakan “sebagaimana adanya”. Gangguan pada sumber berita, layanan push browser, atau jaringan dapat memengaruhi ketersediaan fitur tertentu.</p>
+  </div>
+</section>
+{% endblock %}

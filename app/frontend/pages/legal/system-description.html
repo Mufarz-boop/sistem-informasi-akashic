@@ -1,0 +1,99 @@
+{% extends "landing/base.html" %}
+{% block title %}Deskripsi Sistem — Akashic{% endblock %}
+{% block content %}
+<section class="page-top" aria-labelledby="page-title">
+  <div class="wrap">
+    <div class="eyebrow">Akashic / Sistem</div>
+    <h1 id="page-title">Deskripsi sistem Akashic.</h1>
+    <p class="lead">Arsitektur, alur data, dan komponen utama Location-Based Information System Akashic.</p>
+  </div>
+</section>
+<section style="padding-top:0">
+  <div class="wrap two-col">
+    <ul class="toc" aria-label="Daftar isi">
+      <li><a href="#arsitektur">Arsitektur</a></li>
+      <li><a href="#alur">Alur lokasi</a></li>
+      <li><a href="#region">Region Engine</a></li>
+      <li><a href="#feed">Feed Engine</a></li>
+      <li><a href="#news">News Collector</a></li>
+      <li><a href="#push">Notification Engine</a></li>
+      <li><a href="#admin">Admin &amp; keamanan</a></li>
+      <li><a href="#api">REST API</a></li>
+    </ul>
+    <div class="prose">
+      <h2 id="arsitektur" style="margin-top:0">Arsitektur</h2>
+      <div class="arch">Browser
+   ↓
+Frontend HTML / CSS / JavaScript
+   ↓  Fetch API (JSON)
+Flask Backend API
+   ↓
+Services
+   ├── Location Engine      validasi koordinat
+   ├── Region Engine        polygon → wilayah
+   ├── Feed Engine          gabungan konten
+   ├── News Collector       RSS terjadwal
+   └── Notification Engine  Web Push (VAPID)
+   ↓
+Models
+   ↓
+MySQL Database (GEOMETRY SRID 4326)</div>
+
+      <h2 id="alur">Alur lokasi</h2>
+      <ol>
+        <li>Pengguna menekan “Aktifkan Lokasi”; browser meminta izin Geolocation.</li>
+        <li><code>location.js</code> mengirim <code>latitude</code>, <code>longitude</code>, dan <code>accuracy</code> ke <code>POST /api/location/detect</code>.</li>
+        <li>Location Engine memvalidasi rentang koordinat dan akurasi.</li>
+        <li>Region Engine mencari polygon yang memuat titik dan mengembalikan wilayah beserta hierarkinya.</li>
+        <li>Frontend meminta <code>GET /api/feed?region_id=…</code> dan menampilkan hasilnya.</li>
+      </ol>
+      <p>Koordinat tidak disimpan. Jika izin ditolak, frontend tetap memuat feed umum.</p>
+
+      <h2 id="region">Region Engine</h2>
+      <p>Batas wilayah disimpan sebagai Polygon/MultiPolygon. Saat aplikasi berjalan, polygon aktif dimuat ke memori dan disiapkan dengan Shapely (<em>prepared geometry</em>). Titik dicocokkan dengan <code>covers()</code>; bila beberapa wilayah cocok, dipilih yang paling dalam di hierarki lalu yang terkecil luasnya.</p>
+      <p>Tingkat keyakinan bernilai <code>high</code> bila seluruh lingkaran akurasi berada di dalam wilayah, <code>approximate</code> bila menyentuh batas, dan <code>unknown</code> bila akurasi tidak tersedia.</p>
+
+      <h2 id="feed">Feed Engine</h2>
+      <p>Feed menggabungkan informasi yang dipublikasikan dan belum kedaluwarsa, event yang belum selesai, serta berita berstatus <code>APPROVED</code>. Relevansi wilayah mencakup wilayah terpilih, wilayah induknya, dan sub-wilayahnya. Feed mendukung pencarian, filter jenis, kategori, wilayah, rentang tanggal, pengurutan, dan paginasi.</p>
+
+      <h2 id="news">News Collector</h2>
+      <p>Setiap 15 menit (dapat diatur), APScheduler mengambil RSS dari sumber aktif. Berita baru dideduplikasi berdasarkan hash URL/GUID dan disimpan berstatus <code>PENDING</code>. Wilayah ditentukan secara konservatif: dari cakupan sumber, atau dari kata kunci wilayah yang muncul di judul. Kegagalan satu sumber dicatat dan tidak menghentikan Flask.</p>
+      <table>
+        <thead><tr><th>Status</th><th>Arti</th></tr></thead>
+        <tbody>
+          <tr><td><code>PENDING</code></td><td>Menunggu moderasi admin</td></tr>
+          <tr><td><code>APPROVED</code></td><td>Tampil di feed publik</td></tr>
+          <tr><td><code>REJECTED</code></td><td>Ditolak, tidak tampil</td></tr>
+          <tr><td><code>ARCHIVED</code></td><td>Diarsipkan</td></tr>
+        </tbody>
+      </table>
+
+      <h2 id="push">Notification Engine</h2>
+      <p>Browser mendaftarkan Service Worker dan membuat PushSubscription dengan kunci publik VAPID. Saat informasi, event, atau berita dipublikasikan, notifikasi dikirim ke langganan di wilayah tersebut dan wilayah turunannya. Langganan yang kedaluwarsa (HTTP 404/410) dinonaktifkan otomatis.</p>
+
+      <h2 id="admin">Admin &amp; keamanan</h2>
+      <ul>
+        <li>Password di-hash (PBKDF2/scrypt melalui Werkzeug), tanpa password default.</li>
+        <li>Sesi berbasis cookie <code>HttpOnly</code> + <code>SameSite</code>, dengan token CSRF untuk setiap perubahan data.</li>
+        <li>Pembatasan percobaan login dan token reset password sekali pakai yang disimpan dalam bentuk hash.</li>
+        <li>Seluruh query memakai parameter (prepared statement) dan setiap aksi admin dicatat di activity log.</li>
+      </ul>
+
+      <h2 id="api">REST API</h2>
+      <p>Semua respons memakai format <code>{"success", "data", "message"}</code>.</p>
+      <table>
+        <thead><tr><th>Endpoint</th><th>Fungsi</th></tr></thead>
+        <tbody>
+          <tr><td><code>POST /api/location/detect</code></td><td>Koordinat → wilayah</td></tr>
+          <tr><td><code>GET /api/feed</code></td><td>Feed gabungan</td></tr>
+          <tr><td><code>GET /api/information</code>, <code>/api/events</code>, <code>/api/news</code></td><td>Daftar konten (CRUD untuk admin)</td></tr>
+          <tr><td><code>GET /api/regions</code>, <code>/api/regions/tree</code></td><td>Wilayah dan hierarki</td></tr>
+          <tr><td><code>POST /api/notifications/subscribe</code></td><td>Langganan Web Push</td></tr>
+          <tr><td><code>POST /api/auth/login</code></td><td>Login admin</td></tr>
+          <tr><td><code>GET /api/health</code></td><td>Status aplikasi &amp; database</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endblock %}

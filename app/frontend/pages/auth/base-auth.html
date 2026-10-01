@@ -1,0 +1,51 @@
+{% extends "landing/base.html" %}
+{% block body_class %}auth-body{% endblock %}
+{% block head %}<meta name="robots" content="noindex">{% endblock %}
+{% block body %}
+<div class="auth-shell">
+  <aside class="auth-art" aria-hidden="true">
+    <a class="logo" href="/">
+      <svg viewBox="0 0 32 32"><ellipse cx="16" cy="16" rx="13" ry="6" transform="rotate(-25 16 16)"/><path d="M16 5l9 7-3 11H10L7 12z"/><circle cx="16" cy="16" r="2.5" fill="var(--amber)" stroke="none"/></svg>
+      <span><b>AKASHIC</b><small>Admin Console</small></span>
+    </a>
+    <div>
+      <h2>Kelola informasi untuk setiap wilayah.</h2>
+      <p>Terbitkan informasi, jadwalkan event, moderasi berita eksternal, dan atur batas wilayah dari satu dasbor.</p>
+    </div>
+    <p class="small">“Informasi yang hadir di tempat yang tepat.”</p>
+    <svg class="bg" viewBox="0 0 520 300"><ellipse cx="300" cy="140" rx="200" ry="110"/><ellipse cx="300" cy="140" rx="140" ry="76"/><ellipse cx="300" cy="140" rx="80" ry="40"/><path d="M120 60L330 20 490 100 470 240 250 280 100 200z"/></svg>
+  </aside>
+  <main class="auth-main" id="main-content">
+    <div class="auth-card">
+      <a class="small muted" href="/">← Kembali ke beranda</a>
+      {% block auth_content %}{% endblock %}
+    </div>
+  </main>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+/* Tombol tampilkan/sembunyikan password. */
+document.querySelectorAll('[data-pw-toggle]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const input = document.getElementById(btn.dataset.pwToggle);
+    const show = input.type === 'password';
+    input.type = show ? 'text' : 'password';
+    btn.textContent = show ? 'Sembunyikan' : 'Tampilkan';
+    btn.setAttribute('aria-pressed', String(show));
+  });
+});
+/* Menampilkan pesan error per-field atau umum. */
+window.AuthForm = {
+  alert(el, message, kind = 'error') {
+    el.className = `alert ${kind}`;
+    el.textContent = message;
+    el.hidden = !message;
+  },
+  safeNext(value, fallback) {
+    return value && value.startsWith('/') && !value.startsWith('//') ? value : fallback;
+  },
+};
+</script>
+{% block auth_scripts %}{% endblock %}
+{% endblock %}

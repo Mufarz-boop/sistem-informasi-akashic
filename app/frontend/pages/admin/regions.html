@@ -1,0 +1,159 @@
+{% extends "admin/base-admin.html" %}
+{% block title %}Kelola Wilayah — Akashic{% endblock %}
+{% block page_title %}Wilayah{% endblock %}
+{% block admin_content %}
+<div class="admin-grid">
+  <section class="box" aria-labelledby="tree-title">
+    <div class="box-head"><h2 id="tree-title">Hierarki wilayah</h2><button class="btn sm" id="add-btn" type="button">+ Wilayah baru</button></div>
+    <div class="box-body"><ul class="htree" id="tree"><li>Memuat...</li></ul></div>
+  </section>
+  <section class="box" aria-labelledby="test-title">
+    <div class="box-head"><h2 id="test-title">Uji deteksi wilayah</h2></div>
+    <form class="box-body form-grid" id="test-form">
+      <div class="field"><label for="t-lat">Latitude</label><input type="number" id="t-lat" step="any" min="-90" max="90" required value="4.4683"></div>
+      <div class="field"><label for="t-lng">Longitude</label><input type="number" id="t-lng" step="any" min="-180" max="180" required value="97.9683"></div>
+      <div class="form-actions full"><button class="btn ghost sm" type="submit">Deteksi</button></div>
+      <p class="full small" id="test-result" aria-live="polite">Masukkan koordinat untuk memeriksa wilayah yang terdeteksi Region Engine.</p>
+    </form>
+  </section>
+</div>
+
+<section class="box" aria-labelledby="list-title">
+  <div class="box-head">
+    <h2 id="list-title">Daftar wilayah</h2>
+    <div class="box-tools">
+      <input type="search" id="q" placeholder="Cari nama atau kode..." aria-label="Cari wilayah" maxlength="100">
+      <select id="f-type" aria-label="Filter tipe"><option value="">Semua tipe</option></select>
+      <select id="f-status" aria-label="Filter status"><option value="">Semua status</option><option value="ACTIVE">Aktif</option><option value="INACTIVE">Nonaktif</option></select>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Nama</th><th>Kode</th><th>Tipe</th><th>Induk</th><th>Polygon</th><th>Status</th><th><span class="sr-only">Aksi</span></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
+{% block admin_scripts %}
+<script>
+(async () => {
+  const { api, h, label, debounce } = window.Akashic;
+  const A = window.Admin;
+  const $ = (id) => document.getElementById(id);
+  const TYPES = ['COUNTRY', 'PROVINCE', 'REGENCY', 'CITY', 'DISTRICT', 'VILLAGE', 'LOCAL'];
+  const typeOptions = TYPES.map((t) => ({ value: t, label: label(t) }));
+
+  function renderTree(nodes) {
+    return nodes.map((n) => h('li', null,
+      h('button', { type: 'button', class: `node${n.status === 'INACTIVE' ? ' inactive' : ''}`, onclick: () => edit(n.id) }, n.name, h('small', null, label(n.type))),
+      n.children && n.children.length ? h('ul', null, renderTree(n.children)) : null));
+  }
+
+  async function loadTree() {
+    try {
+      const nodes = await api.get('/api/regions/tree');
+      $('tree').replaceChildren(...(nodes.length ? renderTree(nodes) : [h('li', null, 'Belum ada wilayah.')]));
+    } catch (err) {
+      if (!A.handleAuthError(err)) $('tree').replaceChildren(h('li', null, err.message));
+    }
+  }
+
+  async function loadList() {
+    A.loadingRow($('rows'));
+    try {
+      const rows = await api.get('/api/regions', { q: $('q').value.trim(), type: $('f-type').value, status: $('f-status').value });
+      A.renderRows($('rows'), rows, (r) => h('tr', null,
+        A.titleCell(r.name, r.description ? r.description.slice(0, 80) : ''),
+        h('td', null, h('code', null, r.code)),
+        h('td', null, label(r.type)),
+        h('td', null, r.parent_name || '-'),
+        h('td', null, r.has_geometry ? h('span', 'badge success', 'Ada') : h('span', 'badge amber', 'Belum')),
+        h('td', null, A.badge(r.status)),
+        A.actions(A.actionBtn('Edit', () => edit(r.id)), A.actionBtn('Hapus', () => remove(r), 'btn danger xs'))),
+      'Tidak ada wilayah untuk filter ini.');
+    } catch (err) {
+      if (!A.handleAuthError(err)) A.renderRows($('rows'), [], null, err.message);
+    }
+  }
+
+  function refresh() { A.regions(true).catch(() => {}); loadTree(); loadList(); }
+
+  async function edit(id) {
+    let values = { geometry_text: '', keywords_text: '' };
+    if (id) {
+      try {
+        const r = await api.get(`/api/regions/${id}`, { geometry: 1 });
+        values = { ...r, geometry_text: r.geometry ? JSON.stringify(r.geometry) : '', keywords_text: (r.keywords || []).join(', ') };
+      } catch (err) { A.run(Promise.reject(err)).catch(() => {}); return; }
+    }
+    const parentOptions = async () => (await A.regionOptions()).filter((o) => String(o.value) !== String(id));
+    const saved = await A.formDialog({
+      title: id ? `Edit wilayah: ${values.name}` : 'Wilayah baru',
+      values,
+      fields: [
+        { name: 'name', label: 'Nama wilayah', required: true, maxlength: 150 },
+        { name: 'code', label: 'Kode', required: true, maxlength: 50, hint: 'Unik, mis. kode BPS: 11.74.01' },
+        { name: 'type', label: 'Tipe', type: 'select', required: true, options: typeOptions, placeholder: '— Pilih tipe —' },
+        { name: 'parent_id', label: 'Wilayah induk', type: 'select', numeric: true, options: parentOptions, placeholder: '— Tanpa induk (akar) —' },
+        { name: 'status', label: 'Status', type: 'select', required: true, options: A.statusOptions(['ACTIVE', 'INACTIVE']), default: 'ACTIVE' },
+        { name: 'keywords_text', label: 'Kata kunci berita', maxlength: 2000, hint: 'Pisahkan dengan koma. Dipakai News Collector mencocokkan berita.' },
+        { name: 'description', label: 'Deskripsi', type: 'textarea', rows: 2, maxlength: 5000, full: true },
+        { name: 'geometry_text', label: 'Polygon (GeoJSON)', type: 'textarea', rows: 6, full: true, placeholder: '{"type":"Polygon","coordinates":[[[97.9,4.4],[98.0,4.4],[98.0,4.5],[97.9,4.4]]]}', hint: 'Polygon/MultiPolygon/Feature, urutan [longitude, latitude], SRID 4326. Kosongkan untuk menghapus polygon.' },
+      ],
+      extra: (form) => {
+        const file = h('input', { type: 'file', accept: '.geojson,.json,application/geo+json,application/json', 'aria-label': 'Unggah file GeoJSON' });
+        file.addEventListener('change', async () => {
+          if (!file.files[0]) return;
+          form.elements.geometry_text.value = await file.files[0].text();
+        });
+        form.elements.geometry_text.closest('.field').append(h('label', 'small', 'atau unggah file: ', file));
+      },
+      onSubmit: async (data) => {
+        let geometry = null;
+        if (data.geometry_text) {
+          try { geometry = JSON.parse(data.geometry_text); } catch (_) { throw new Error('GeoJSON tidak valid (bukan JSON).'); }
+          if (geometry.type === 'FeatureCollection') {
+            if (!geometry.features || geometry.features.length !== 1) throw new Error('FeatureCollection harus berisi tepat satu feature.');
+            geometry = geometry.features[0];
+          }
+        }
+        const body = {
+          name: data.name, code: data.code, type: data.type, parent_id: data.parent_id,
+          status: data.status, description: data.description,
+          keywords: data.keywords_text || '', geometry,
+        };
+        const res = id ? await api.put(`/api/regions/${id}`, body) : await api.post('/api/regions', body);
+        window.Akashic.toast(res.message, 'success');
+        return res.data;
+      },
+    });
+    if (saved) refresh();
+  }
+
+  async function remove(r) {
+    if (!(await A.confirm(`Hapus wilayah “${r.name}”? Wilayah yang masih dipakai informasi/event tidak dapat dihapus.`, { okText: 'Hapus' }))) return;
+    try { await A.run(api.del(`/api/regions/${r.id}`), { success: true }); refresh(); } catch (_) { /* toast */ }
+  }
+
+  $('test-form').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const out = $('test-result');
+    out.textContent = 'Mendeteksi...';
+    try {
+      const res = await api.post('/api/location/detect', { latitude: Number($('t-lat').value), longitude: Number($('t-lng').value) });
+      const d = res.data;
+      out.textContent = d.region ? `${res.message} Hierarki: ${d.hierarchy.map((x) => x.name).join(' › ')}.` : res.message;
+    } catch (err) { out.textContent = err.message; }
+  });
+
+  try { await A.init(); } catch (_) { return; }
+  typeOptions.forEach((o) => $('f-type').append(h('option', { value: o.value }, o.label)));
+  $('q').addEventListener('input', debounce(loadList, 350));
+  ['f-type', 'f-status'].forEach((id) => $(id).addEventListener('change', loadList));
+  $('add-btn').addEventListener('click', () => edit(null));
+  loadTree();
+  loadList();
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,173 @@
+{% extends "admin/base-admin.html" %}
+{% block title %}Moderasi Berita — Akashic{% endblock %}
+{% block page_title %}Berita eksternal{% endblock %}
+{% block admin_content %}
+<div class="alert info">Berita dari RSS masuk berstatus <strong>Menunggu</strong> dan baru tampil di feed publik setelah <strong>Disetujui</strong>. Periksa kaitan wilayah sebelum menyetujui.</div>
+<section class="box" aria-labelledby="list-title">
+  <div class="box-head">
+    <h2 id="list-title">Moderasi berita</h2>
+    <div class="box-tools">
+      <input type="search" id="q" placeholder="Cari judul..." aria-label="Cari berita" maxlength="100">
+      <select id="f-status" aria-label="Filter status"><option value="">Semua status</option></select>
+      <select id="f-source" aria-label="Filter sumber"><option value="">Semua sumber</option></select>
+      <select id="f-region" aria-label="Filter wilayah"></select>
+      <button class="btn sm" id="collect-btn" type="button">Ambil berita sekarang</button>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Judul</th><th>Sumber</th><th>Wilayah</th><th>Terbit</th><th>Status</th><th><span class="sr-only">Aksi</span></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="box-foot" id="foot"></div>
+</section>
+
+<section class="box" aria-labelledby="src-title">
+  <div class="box-head">
+    <h2 id="src-title">Sumber RSS</h2>
+    <button class="btn ghost sm" id="src-add" type="button">+ Sumber baru</button>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Nama</th><th>Cakupan wilayah</th><th>Berita</th><th>Terakhir diambil</th><th>Status</th><th><span class="sr-only">Aksi</span></th></tr></thead>
+      <tbody id="src-rows"></tbody>
+    </table>
+  </div>
+</section>
+{% endblock %}
+{% block admin_scripts %}
+<script>
+(async () => {
+  const { api, h, fmt, debounce, setBusy } = window.Akashic;
+  const A = window.Admin;
+  const $ = (id) => document.getElementById(id);
+  const STATUSES = ['PENDING', 'APPROVED', 'REJECTED', 'ARCHIVED'];
+  const METHOD = { SOURCE: 'cakupan sumber', KEYWORD: 'kata kunci', MANUAL: 'manual' };
+  let page = 1;
+
+  async function load(to = page) {
+    page = to;
+    A.loadingRow($('rows'));
+    try {
+      const data = await api.get('/api/news', {
+        q: $('q').value.trim(), status: $('f-status').value, source_id: $('f-source').value,
+        region_id: $('f-region').value, page, per_page: 15,
+      });
+      A.renderRows($('rows'), data.items, (it) => h('tr', null,
+        h('td', 'title-cell', h('strong', null, h('a', { href: it.source_url, target: '_blank', rel: 'noopener noreferrer nofollow' }, it.title)), it.summary ? h('small', null, it.summary.slice(0, 110)) : null),
+        h('td', null, it.source_name || '-'),
+        h('td', null, it.region_name || h('span', 'muted', 'Umum'), it.relevance_method ? h('small', 'muted', h('br'), METHOD[it.relevance_method] || '') : null),
+        h('td', null, fmt.dateTime(it.published_at || it.discovered_at)),
+        h('td', null, A.badge(it.status)),
+        A.actions(
+          it.status !== 'APPROVED' ? A.actionBtn('Setujui', () => moderate(it, 'APPROVED'), 'btn teal xs') : null,
+          it.status === 'PENDING' ? A.actionBtn('Tolak', () => moderate(it, 'REJECTED')) : null,
+          A.actionBtn('Edit', () => edit(it.id)),
+          A.actionBtn('Hapus', () => remove(it), 'btn danger xs'))),
+      'Tidak ada berita untuk filter ini.');
+      A.pager($('foot'), data, load);
+    } catch (err) {
+      if (!A.handleAuthError(err)) A.renderRows($('rows'), [], null, err.message);
+    }
+  }
+
+  async function moderate(it, status) {
+    try { await A.run(api.put(`/api/news/${it.id}`, { status }), { success: status === 'APPROVED' ? 'Berita disetujui dan tampil di feed.' : 'Berita ditolak.' }); load(); } catch (_) { /* toast */ }
+  }
+
+  async function edit(id) {
+    let values;
+    try { values = await api.get(`/api/news/${id}`); } catch (err) { A.run(Promise.reject(err)).catch(() => {}); return; }
+    const saved = await A.formDialog({
+      title: 'Edit & moderasi berita',
+      values,
+      fields: [
+        { name: 'title', label: 'Judul', required: true, maxlength: 500, full: true },
+        { name: 'region_id', label: 'Wilayah', type: 'select', numeric: true, options: A.regionOptions, placeholder: '— Umum (tanpa wilayah) —' },
+        { name: 'category_id', label: 'Kategori', type: 'select', numeric: true, options: A.categoryOptions },
+        { name: 'status', label: 'Status', type: 'select', required: true, options: A.statusOptions(STATUSES) },
+        { name: 'summary', label: 'Ringkasan', type: 'textarea', rows: 4, maxlength: 2000, full: true },
+      ],
+      extra: (form) => form.prepend(h('p', 'small', 'Sumber: ', h('a', { href: values.source_url, target: '_blank', rel: 'noopener noreferrer nofollow' }, values.source_name || values.source_url))),
+      onSubmit: async (data) => {
+        const res = await api.put(`/api/news/${id}`, data);
+        window.Akashic.toast(res.message, 'success');
+        return res.data;
+      },
+    });
+    if (saved) load();
+  }
+
+  async function remove(it) {
+    if (!(await A.confirm(`Hapus berita “${it.title}”? Berita dapat masuk kembali saat RSS diambil jika masih ada di sumber; gunakan status Ditolak untuk menyembunyikannya.`, { okText: 'Hapus' }))) return;
+    try { await A.run(api.del(`/api/news/${it.id}`), { success: true }); load(); } catch (_) { /* toast */ }
+  }
+
+  /* ----- Sumber RSS ----- */
+  const sourceFields = [
+    { name: 'name', label: 'Nama sumber', required: true, maxlength: 150 },
+    { name: 'status', label: 'Status', type: 'select', required: true, options: A.statusOptions(['ACTIVE', 'INACTIVE']), default: 'ACTIVE' },
+    { name: 'website_url', label: 'Website', type: 'url', required: true, maxlength: 500, full: true, placeholder: 'https://...' },
+    { name: 'rss_url', label: 'URL RSS', type: 'url', required: true, maxlength: 500, full: true, placeholder: 'https://.../rss.xml' },
+    { name: 'region_id', label: 'Cakupan wilayah', type: 'select', numeric: true, options: A.regionOptions, placeholder: '— Nasional / umum —', hint: 'Berita sumber lokal otomatis dikaitkan ke wilayah ini.' },
+    { name: 'category_id', label: 'Kategori default', type: 'select', numeric: true, options: A.categoryOptions },
+  ];
+
+  async function loadSources() {
+    A.loadingRow($('src-rows'));
+    try {
+      const sources = await api.get('/api/news/sources');
+      const filter = $('f-source');
+      const current = filter.value;
+      A.fillSelect(filter, sources.map((s) => ({ value: s.id, label: s.name })), 'Semua sumber');
+      filter.value = current;
+      A.renderRows($('src-rows'), sources, (s) => h('tr', null,
+        A.titleCell(s.name, s.rss_url),
+        h('td', null, s.region_name || 'Nasional / umum'),
+        h('td', null, s.news_count),
+        h('td', null, s.last_checked_at ? fmt.dateTime(s.last_checked_at) : 'Belum pernah', s.last_error ? h('small', { class: 'muted', title: s.last_error }, h('br'), 'Gagal: ', s.last_error.slice(0, 60)) : null),
+        h('td', null, A.badge(s.status)),
+        A.actions(A.actionBtn('Edit', () => editSource(s)), A.actionBtn('Hapus', () => removeSource(s), 'btn danger xs'))),
+      'Belum ada sumber RSS.');
+    } catch (err) {
+      if (!A.handleAuthError(err)) A.renderRows($('src-rows'), [], null, err.message);
+    }
+  }
+
+  async function editSource(s) {
+    const saved = await A.formDialog({
+      title: s ? 'Edit sumber RSS' : 'Sumber RSS baru',
+      fields: sourceFields, values: s || {},
+      onSubmit: async (data) => {
+        const res = s ? await api.put(`/api/news/sources/${s.id}`, data) : await api.post('/api/news/sources', data);
+        window.Akashic.toast(res.message, 'success');
+        return res.data;
+      },
+    });
+    if (saved) loadSources();
+  }
+
+  async function removeSource(s) {
+    if (!(await A.confirm(`Hapus sumber “${s.name}” beserta ${s.news_count} beritanya?`, { okText: 'Hapus' }))) return;
+    try { await A.run(api.del(`/api/news/sources/${s.id}`), { success: true }); loadSources(); load(1); } catch (_) { /* toast */ }
+  }
+
+  try { await A.init(); } catch (_) { return; }
+  A.statusOptions(STATUSES).forEach((o) => $('f-status').append(h('option', { value: o.value }, o.label)));
+  const initialStatus = new URLSearchParams(location.search).get('status');
+  if (STATUSES.includes(initialStatus)) $('f-status').value = initialStatus;
+  try { A.fillSelect($('f-region'), await A.regionOptions(), 'Semua wilayah'); } catch (_) { /* opsional */ }
+  $('q').addEventListener('input', debounce(() => load(1), 350));
+  ['f-status', 'f-source', 'f-region'].forEach((id) => $(id).addEventListener('change', () => load(1)));
+  $('src-add').addEventListener('click', () => editSource(null));
+  $('collect-btn').addEventListener('click', async () => {
+    setBusy($('collect-btn'), true, 'Mengambil...');
+    try { await A.run(api.post('/api/news/collect'), { success: true }); load(1); loadSources(); } catch (_) { /* toast */ }
+    setBusy($('collect-btn'), false);
+  });
+  loadSources();
+  load(1);
+})();
+</script>
+{% endblock %}

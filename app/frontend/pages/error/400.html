@@ -1,0 +1,15 @@
+{% extends "landing/base.html" %}
+{% block title %}{{ status | default(400) }} — Akashic{% endblock %}
+{% block content %}
+<section class="error-page" aria-labelledby="error-title">
+  <div class="wrap">
+    <div class="code" aria-hidden="true">{{ status | default(400) }}</div>
+    <h1 id="error-title">{{ title | default('Halaman tidak dapat ditampilkan') }}</h1>
+    <p class="lead">{{ message | default('Permintaan tidak valid atau halaman tidak ditemukan.') }}</p>
+    <div class="cta-row" style="margin-top:28px">
+      <a class="btn" href="/">Kembali ke Beranda</a>
+      <a class="btn ghost" href="/information">Jelajahi Informasi</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

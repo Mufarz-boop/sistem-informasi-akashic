@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id" class="no-js">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Akashic — Informasi yang hadir di tempat yang tepat{% endblock %}</title>
+<meta name="description" content="{% block description %}Akashic adalah Location-Based Information System: informasi, event, dan berita yang relevan berdasarkan wilayah Anda, tanpa akun dan tanpa aplikasi.{% endblock %}">
+<meta name="theme-color" content="#0F1E2B">
+<link rel="icon" href="/static/img/icon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/style.css">
+{% block head %}{% endblock %}
+</head>
+<body class="{% block body_class %}{% endblock %}">
+{% block body %}
+<a class="skip" href="#main-content">Lewati ke konten</a>
+
+<header class="site-header">
+  <div class="wrap bar">
+    <a class="logo" href="/" aria-label="Akashic, ke halaman utama">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="16" cy="16" rx="13" ry="6" transform="rotate(-25 16 16)"/><path d="M16 5l9 7-3 11H10L7 12z"/><circle cx="16" cy="16" r="2.5" fill="var(--amber)" stroke="none"/><circle cx="25" cy="12" r="1.6" fill="var(--teal)" stroke="none"/></svg>
+      <span><b>AKASHIC</b><small>Location-Based Information System</small></span>
+    </a>
+    <nav id="site-nav" class="site-nav" aria-label="Navigasi utama">
+      <ul>
+        {% set nav = [('/', 'home', 'Beranda'), ('/information', 'information', 'Informasi'), ('/about', 'about', 'Tentang'), ('/system-description', 'system', 'Sistem'), ('/contact', 'contact', 'Kontak')] %}
+        {% for href, key, text in nav %}
+        <li><a href="{{ href }}"{% if active_page == key %} aria-current="page"{% endif %}>{{ text }}</a></li>
+        {% endfor %}
+      </ul>
+    </nav>
+    <div class="nav-actions">
+      <span class="chip" id="region-chip" aria-live="polite"><i></i><span>Lokasi belum aktif</span></span>
+      {% block nav_cta %}<a class="btn sm" href="/information">Jelajahi</a>{% endblock %}
+      <button class="menu-btn" id="menu-btn" type="button" aria-expanded="false" aria-controls="site-nav">Menu</button>
+    </div>
+  </div>
+</header>
+
+<main id="main-content">
+{% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot">
+      <div class="brand">
+        <b>AKASHIC</b>
+        <p>Location-Based Information System</p>
+        <p><em>“Informasi yang hadir di tempat yang tepat.”</em></p>
+      </div>
+      <div>
+        <h4>Jelajahi</h4>
+        <ul>
+          <li><a href="/information?type=information">Informasi</a></li>
+          <li><a href="/information?type=event">Event</a></li>
+          <li><a href="/information?type=news">Berita</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Akashic</h4>
+        <ul>
+          <li><a href="/about">Tentang</a></li>
+          <li><a href="/system-description">Deskripsi Sistem</a></li>
+          <li><a href="/about#privacy">Privasi Lokasi</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="/contact">Kontak</a></li>
+          <li><a href="/disclaimer">Disclaimer</a></li>
+          <li><a href="/auth/login">Masuk Admin</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="copy"><span>© 2026 Akashic</span><span>Lokasi adalah konteks, bukan identitas.</span></div>
+  </div>
+</footer>
+{% endblock %}
+
+<script src="/static/js/api.js"></script>
+<script src="/static/js/location.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
