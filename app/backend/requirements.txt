@@ -1,0 +1,14 @@
+# Akashic — Location-Based Information System
+# Python dependencies
+
+Flask
+Flask-Cors
+mysql-connector-python
+python-dotenv
+Werkzeug
+requests
+feedparser
+APScheduler
+Shapely
+pywebpush
+cryptography
