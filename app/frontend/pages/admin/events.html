@@ -1,0 +1,104 @@
+{% extends "admin/base-admin.html" %}
+{% block title %}Kelola Event — Akashic{% endblock %}
+{% block page_title %}Event{% endblock %}
+{% block admin_content %}
+<section class="box" aria-labelledby="list-title">
+  <div class="box-head">
+    <h2 id="list-title">Daftar event</h2>
+    <div class="box-tools">
+      <input type="search" id="q" placeholder="Cari judul atau lokasi..." aria-label="Cari event" maxlength="100">
+      <select id="f-status" aria-label="Filter status"><option value="">Semua status</option></select>
+      <select id="f-region" aria-label="Filter wilayah"></select>
+      <select id="f-sort" aria-label="Urutkan"><option value="newest">Terbaru dibuat</option><option value="upcoming">Jadwal terdekat</option><option value="title">Judul A–Z</option></select>
+      <button class="btn sm" id="add-btn" type="button">+ Event baru</button>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Judul</th><th>Wilayah</th><th>Waktu</th><th>Lokasi</th><th>Status</th><th><span class="sr-only">Aksi</span></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="box-foot" id="foot"></div>
+</section>
+{% endblock %}
+{% block admin_scripts %}
+<script>
+(async () => {
+  const { api, h, fmt, debounce } = window.Akashic;
+  const A = window.Admin;
+  const $ = (id) => document.getElementById(id);
+  const STATUSES = ['DRAFT', 'PUBLISHED', 'CANCELLED', 'ARCHIVED'];
+  let page = 1;
+
+  const fields = [
+    { name: 'title', label: 'Judul event', required: true, maxlength: 255, full: true },
+    { name: 'region_id', label: 'Wilayah', type: 'select', required: true, numeric: true, options: A.regionOptions, placeholder: '— Pilih wilayah —' },
+    { name: 'category_id', label: 'Kategori', type: 'select', numeric: true, options: A.categoryOptions },
+    { name: 'start_at', label: 'Waktu mulai', type: 'datetime', required: true },
+    { name: 'end_at', label: 'Waktu selesai', type: 'datetime' },
+    { name: 'location_name', label: 'Nama lokasi', maxlength: 255, full: true, placeholder: 'mis. Lapangan Merdeka Langsa' },
+    { name: 'latitude', label: 'Latitude', type: 'number', step: 'any', min: -90, max: 90, hint: 'Opsional, isi bersama longitude.' },
+    { name: 'longitude', label: 'Longitude', type: 'number', step: 'any', min: -180, max: 180 },
+    { name: 'status', label: 'Status', type: 'select', required: true, options: A.statusOptions(STATUSES), default: 'DRAFT', hint: 'Status “Terbit” mengirim notifikasi ke pelanggan wilayah.' },
+    { name: 'description', label: 'Deskripsi', type: 'textarea', rows: 6, full: true },
+  ];
+
+  async function load(to = page) {
+    page = to;
+    A.loadingRow($('rows'));
+    try {
+      const data = await api.get('/api/events', {
+        q: $('q').value.trim(), status: $('f-status').value, region_id: $('f-region').value,
+        sort: $('f-sort').value, page, per_page: 15,
+      });
+      A.renderRows($('rows'), data.items, (it) => h('tr', null,
+        A.titleCell(it.title, it.category_name || ''),
+        h('td', null, it.region_name),
+        h('td', null, fmt.dateTime(it.start_at), it.end_at ? h('small', 'muted', h('br'), `s/d ${fmt.dateTime(it.end_at)}`) : null),
+        h('td', null, it.location_name || '-'),
+        h('td', null, A.badge(it.status)),
+        A.actions(
+          it.status === 'PUBLISHED' ? h('a', { class: 'btn ghost xs', href: `/information?type=event&id=${it.id}`, target: '_blank' }, 'Lihat') : null,
+          A.actionBtn('Edit', () => edit(it.id)),
+          A.actionBtn('Hapus', () => remove(it), 'btn danger xs'))),
+      'Belum ada event. Klik “+ Event baru” untuk membuat.');
+      A.pager($('foot'), data, load);
+    } catch (err) {
+      if (!A.handleAuthError(err)) A.renderRows($('rows'), [], null, err.message);
+    }
+  }
+
+  async function edit(id) {
+    let values = {};
+    if (id) {
+      try { values = await api.get(`/api/events/${id}`); } catch (err) { A.run(Promise.reject(err)).catch(() => {}); return; }
+    }
+    const saved = await A.formDialog({
+      title: id ? 'Edit event' : 'Event baru',
+      fields, values,
+      onSubmit: async (data) => {
+        const res = id ? await api.put(`/api/events/${id}`, data) : await api.post('/api/events', data);
+        window.Akashic.toast(res.message, 'success');
+        return res.data;
+      },
+    });
+    if (saved) load(id ? page : 1);
+  }
+
+  async function remove(it) {
+    if (!(await A.confirm(`Hapus event “${it.title}”?`, { okText: 'Hapus' }))) return;
+    try { await A.run(api.del(`/api/events/${it.id}`), { success: true }); load(); } catch (_) { /* toast */ }
+  }
+
+  try { await A.init(); } catch (_) { return; }
+  A.statusOptions(STATUSES).forEach((o) => $('f-status').append(h('option', { value: o.value }, o.label)));
+  try { A.fillSelect($('f-region'), await A.regionOptions(), 'Semua wilayah'); } catch (_) { /* opsional */ }
+  $('q').addEventListener('input', debounce(() => load(1), 350));
+  ['f-status', 'f-region', 'f-sort'].forEach((id) => $(id).addEventListener('change', () => load(1)));
+  $('add-btn').addEventListener('click', () => edit(null));
+  load(1);
+  if (new URLSearchParams(location.search).get('new') === '1') edit(null);
+})();
+</script>
+{% endblock %}

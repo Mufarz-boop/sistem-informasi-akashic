@@ -1,0 +1,15 @@
+{% extends "landing/base.html" %}
+{% block title %}{{ status | default(500) }} — Akashic{% endblock %}
+{% block content %}
+<section class="error-page" aria-labelledby="error-title">
+  <div class="wrap">
+    <div class="code" aria-hidden="true">{{ status | default(500) }}</div>
+    <h1 id="error-title">{{ title | default('Terjadi kesalahan pada server') }}</h1>
+    <p class="lead">{{ message | default('Kami sedang mengalami gangguan. Silakan coba beberapa saat lagi.') }}</p>
+    <div class="cta-row" style="margin-top:28px">
+      <a class="btn" href="/">Kembali ke Beranda</a>
+      <a class="btn ghost" href="/information">Jelajahi Informasi</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

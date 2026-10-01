@@ -1,0 +1,107 @@
+{% extends "admin/base-admin.html" %}
+{% block title %}Kelola Informasi — Akashic{% endblock %}
+{% block page_title %}Informasi{% endblock %}
+{% block admin_content %}
+<section class="box" aria-labelledby="list-title">
+  <div class="box-head">
+    <h2 id="list-title">Daftar informasi</h2>
+    <div class="box-tools">
+      <input type="search" id="q" placeholder="Cari judul..." aria-label="Cari informasi" maxlength="100">
+      <select id="f-status" aria-label="Filter status"><option value="">Semua status</option></select>
+      <select id="f-category" aria-label="Filter kategori"></select>
+      <select id="f-region" aria-label="Filter wilayah"></select>
+      <button class="btn sm" id="add-btn" type="button">+ Informasi baru</button>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table class="table">
+      <thead><tr><th>Judul</th><th>Wilayah</th><th>Kategori</th><th>Prioritas</th><th>Status</th><th>Publikasi</th><th><span class="sr-only">Aksi</span></th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="box-foot" id="foot"></div>
+</section>
+{% endblock %}
+{% block admin_scripts %}
+<script>
+(async () => {
+  const { api, h, fmt, debounce } = window.Akashic;
+  const A = window.Admin;
+  const $ = (id) => document.getElementById(id);
+  const STATUSES = ['DRAFT', 'PUBLISHED', 'EXPIRED', 'ARCHIVED'];
+  const PRIORITIES = ['LOW', 'NORMAL', 'HIGH', 'CRITICAL'];
+  let page = 1;
+
+  const fields = [
+    { name: 'title', label: 'Judul', required: true, maxlength: 255, full: true },
+    { name: 'region_id', label: 'Wilayah', type: 'select', required: true, numeric: true, options: A.regionOptions, placeholder: '— Pilih wilayah —' },
+    { name: 'category_id', label: 'Kategori', type: 'select', required: true, numeric: true, options: A.categoryOptions, placeholder: '— Pilih kategori —' },
+    { name: 'priority', label: 'Prioritas', type: 'select', required: true, options: A.statusOptions(PRIORITIES), default: 'NORMAL' },
+    { name: 'status', label: 'Status', type: 'select', required: true, options: A.statusOptions(STATUSES), default: 'DRAFT', hint: 'Status “Terbit” mengirim notifikasi ke pelanggan wilayah.' },
+    { name: 'published_at', label: 'Tanggal publikasi', type: 'datetime', hint: 'Kosongkan untuk memakai waktu saat diterbitkan.' },
+    { name: 'expired_at', label: 'Berlaku sampai', type: 'datetime', hint: 'Opsional. Setelah lewat, informasi tidak tampil.' },
+    { name: 'summary', label: 'Ringkasan', type: 'textarea', rows: 2, maxlength: 1000, full: true },
+    { name: 'content', label: 'Isi informasi', type: 'textarea', rows: 8, required: true, full: true },
+    { name: 'image', label: 'URL gambar', type: 'url', maxlength: 500, full: true, placeholder: 'https://...' },
+  ];
+
+  async function load(to = page) {
+    page = to;
+    A.loadingRow($('rows'));
+    try {
+      const data = await api.get('/api/information', {
+        q: $('q').value.trim(), status: $('f-status').value, category_id: $('f-category').value,
+        region_id: $('f-region').value, page, per_page: 15,
+      });
+      A.renderRows($('rows'), data.items, (it) => h('tr', null,
+        A.titleCell(it.title, it.summary ? it.summary.slice(0, 90) : ''),
+        h('td', null, it.region_name), h('td', null, it.category_name),
+        h('td', null, A.badge(it.priority)), h('td', null, A.badge(it.status)),
+        h('td', null, fmt.date(it.published_at || it.created_at)),
+        A.actions(
+          it.status === 'PUBLISHED' ? h('a', { class: 'btn ghost xs', href: `/information?type=information&id=${it.id}`, target: '_blank' }, 'Lihat') : null,
+          A.actionBtn('Edit', () => edit(it.id)),
+          A.actionBtn('Hapus', () => remove(it), 'btn danger xs'))),
+      'Belum ada informasi. Klik “+ Informasi baru” untuk membuat.');
+      A.pager($('foot'), data, load);
+    } catch (err) {
+      if (!A.handleAuthError(err)) A.renderRows($('rows'), [], null, err.message);
+    }
+  }
+
+  async function edit(id) {
+    let values = {};
+    if (id) {
+      try { values = await api.get(`/api/information/${id}`); } catch (err) { A.run(Promise.reject(err)).catch(() => {}); return; }
+    }
+    const saved = await A.formDialog({
+      title: id ? 'Edit informasi' : 'Informasi baru',
+      fields, values,
+      onSubmit: async (data) => {
+        const res = id ? await api.put(`/api/information/${id}`, data) : await api.post('/api/information', data);
+        window.Akashic.toast(res.message, 'success');
+        return res.data;
+      },
+    });
+    if (saved) load(id ? page : 1);
+  }
+
+  async function remove(it) {
+    if (!(await A.confirm(`Hapus informasi “${it.title}”? Tindakan ini tidak dapat dibatalkan.`, { okText: 'Hapus' }))) return;
+    try { await A.run(api.del(`/api/information/${it.id}`), { success: true }); load(); } catch (_) { /* toast */ }
+  }
+
+  try { await A.init(); } catch (_) { return; }
+  A.statusOptions(STATUSES).forEach((o) => $('f-status').append(h('option', { value: o.value }, o.label)));
+  try {
+    A.fillSelect($('f-category'), await A.categoryOptions(), 'Semua kategori');
+    A.fillSelect($('f-region'), await A.regionOptions(), 'Semua wilayah');
+  } catch (_) { /* filter opsional */ }
+  $('q').addEventListener('input', debounce(() => load(1), 350));
+  ['f-status', 'f-category', 'f-region'].forEach((id) => $(id).addEventListener('change', () => load(1)));
+  $('add-btn').addEventListener('click', () => edit(null));
+  load(1);
+  if (new URLSearchParams(location.search).get('new') === '1') edit(null);
+})();
+</script>
+{% endblock %}

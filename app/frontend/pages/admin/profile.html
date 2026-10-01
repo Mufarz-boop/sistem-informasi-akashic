@@ -1,0 +1,74 @@
+{% extends "admin/base-admin.html" %}
+{% block title %}Profil Admin — Akashic{% endblock %}
+{% block page_title %}Profil{% endblock %}
+{% block admin_content %}
+<div class="admin-grid even">
+  <section class="box" aria-labelledby="p-title">
+    <div class="box-head"><h2 id="p-title">Data akun</h2></div>
+    <form class="box-body form-grid" id="profile-form" novalidate>
+      <div id="p-alert" class="full" role="alert" hidden></div>
+      <div class="field full"><label for="full_name">Nama lengkap</label><input type="text" id="full_name" name="full_name" required maxlength="150" autocomplete="name"></div>
+      <div class="field"><label for="username">Username</label><input type="text" id="username" name="username" required minlength="3" maxlength="50" autocomplete="username"></div>
+      <div class="field"><label for="email">Email</label><input type="email" id="email" name="email" required maxlength="150" autocomplete="email"></div>
+      <p class="full small muted" id="p-meta"></p>
+      <div class="form-actions full"><button class="btn sm" type="submit" id="p-btn">Simpan profil</button></div>
+    </form>
+  </section>
+  <section class="box" aria-labelledby="pw-title">
+    <div class="box-head"><h2 id="pw-title">Ubah password</h2></div>
+    <form class="box-body form-grid" id="pw-form" novalidate>
+      <div id="pw-alert" class="full" role="alert" hidden></div>
+      <div class="field full"><label for="current_password">Password saat ini</label><input type="password" id="current_password" name="current_password" required maxlength="128" autocomplete="current-password"></div>
+      <div class="field"><label for="new_password">Password baru</label><input type="password" id="new_password" name="new_password" required minlength="8" maxlength="128" autocomplete="new-password"><span class="hint">Minimal 8 karakter, huruf dan angka.</span></div>
+      <div class="field"><label for="password_confirmation">Konfirmasi</label><input type="password" id="password_confirmation" name="password_confirmation" required maxlength="128" autocomplete="new-password"></div>
+      <div class="form-actions full"><button class="btn sm" type="submit" id="pw-btn">Ubah password</button></div>
+    </form>
+  </section>
+</div>
+{% endblock %}
+{% block admin_scripts %}
+<script>
+(async () => {
+  const { api, fmt, setBusy } = window.Akashic;
+  const A = window.Admin;
+  const $ = (id) => document.getElementById(id);
+  const say = (el, msg, kind = 'error') => { el.className = `full alert ${kind}`; el.textContent = msg; el.hidden = !msg; };
+
+  let admin;
+  try { admin = await A.init(); } catch (_) { return; }
+  const pf = $('profile-form');
+  pf.full_name.value = admin.full_name || '';
+  pf.username.value = admin.username;
+  pf.email.value = admin.email;
+  $('p-meta').textContent = `Terdaftar ${fmt.date(admin.created_at)}${admin.last_login ? ` · Login terakhir ${fmt.dateTime(admin.last_login)}` : ''}`;
+
+  pf.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const body = { full_name: pf.full_name.value.trim(), username: pf.username.value.trim(), email: pf.email.value.trim() };
+    if (!body.full_name || !body.username || !body.email) { say($('p-alert'), 'Semua kolom wajib diisi.'); return; }
+    setBusy($('p-btn'), true, 'Menyimpan...');
+    try {
+      const res = await api.put('/api/auth/profile', body);
+      say($('p-alert'), res.message, 'success');
+      document.querySelectorAll('[data-admin-name]').forEach((n) => { n.textContent = body.full_name; });
+    } catch (err) { if (!A.handleAuthError(err)) say($('p-alert'), err.message); }
+    setBusy($('p-btn'), false);
+  });
+
+  const pw = $('pw-form');
+  pw.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const body = { current_password: pw.current_password.value, new_password: pw.new_password.value, password_confirmation: pw.password_confirmation.value };
+    if (body.new_password.length < 8 || !/[A-Za-z]/.test(body.new_password) || !/\d/.test(body.new_password)) { say($('pw-alert'), 'Password baru minimal 8 karakter dan mengandung huruf serta angka.'); return; }
+    if (body.new_password !== body.password_confirmation) { say($('pw-alert'), 'Konfirmasi password tidak sama.'); return; }
+    setBusy($('pw-btn'), true, 'Menyimpan...');
+    try {
+      const res = await api.put('/api/auth/password', body);
+      say($('pw-alert'), res.message, 'success');
+      pw.reset();
+    } catch (err) { if (!A.handleAuthError(err)) say($('pw-alert'), err.message); }
+    setBusy($('pw-btn'), false);
+  });
+})();
+</script>
+{% endblock %}

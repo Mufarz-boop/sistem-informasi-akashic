@@ -1,0 +1,58 @@
+{% extends "landing/base.html" %}
+{% block title %}Kontak — Akashic{% endblock %}
+{% block content %}
+<section class="page-top" aria-labelledby="page-title">
+  <div class="wrap">
+    <div class="eyebrow">Akashic / Kontak</div>
+    <h1 id="page-title">Hubungi pengelola Akashic.</h1>
+    <p class="lead">Laporkan informasi yang keliru, usulkan wilayah baru, atau tanyakan cara kerja Akashic.</p>
+  </div>
+</section>
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="info-grid">
+      <div class="panel">
+        <h3>Koreksi informasi</h3>
+        <p>Jika menemukan informasi, event, atau berita yang tidak akurat, sertakan judul konten dan tautannya (misalnya <code>/information?type=news&amp;id=12</code>).</p>
+      </div>
+      <div class="panel">
+        <h3>Usulan wilayah</h3>
+        <p>Akashic memakai batas polygon. Usulan wilayah baru sebaiknya disertai sumber batas wilayah (GeoJSON atau peta resmi).</p>
+      </div>
+      <div class="panel">
+        <h3>Kode sumber</h3>
+        <p>Akashic dikembangkan secara terbuka. Laporan teknis dan kontribusi dapat dikirim melalui <a href="https://github.com/Mufarz-boop/sistem-informasi-akashic/issues" target="_blank" rel="noopener noreferrer">GitHub Issues</a>.</p>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:20px">
+      <h3>Kirim pesan</h3>
+      <p>Formulir ini menyiapkan email di aplikasi email Anda; Akashic tidak menyimpan isi pesan.</p>
+      <form id="contact-form" class="form-grid" style="margin-top:18px">
+        <div class="field"><label for="c-name">Nama</label><input type="text" id="c-name" required maxlength="100" autocomplete="name"></div>
+        <div class="field"><label for="c-topic">Topik</label><select id="c-topic"><option>Koreksi informasi</option><option>Usulan wilayah</option><option>Pertanyaan umum</option><option>Laporan teknis</option></select></div>
+        <div class="field full"><label for="c-message">Pesan</label><textarea id="c-message" required maxlength="2000"></textarea></div>
+        <div class="form-actions full"><button class="btn" type="submit">Siapkan email</button></div>
+      </form>
+    </div>
+  </div>
+</section>
+{% endblock %}
+{% block scripts %}
+<script>
+document.getElementById('contact-form').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const name = document.getElementById('c-name').value.trim();
+  const topic = document.getElementById('c-topic').value;
+  const message = document.getElementById('c-message').value.trim();
+  if (!name || !message) return;
+  const subject = encodeURIComponent(`[Akashic] ${topic}`);
+  const body = encodeURIComponent(`${message}\n\n— ${name}`);
+  const to = {{ contact_email | tojson }};
+  if (!to) {
+    window.Akashic.toast('Email pengelola belum dikonfigurasi. Silakan gunakan GitHub Issues.', 'error');
+    return;
+  }
+  window.location.href = `mailto:${encodeURIComponent(to)}?subject=${subject}&body=${body}`;
+});
+</script>
+{% endblock %}

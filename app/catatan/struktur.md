@@ -1,37 +1,46 @@
+```
 app/
-    akashic-venv/
+    akashic-venv/                 # virtualenv lokal (tidak di-commit)
     backend/
         database/
             __init__.py
-            connection.py
-            db_akashic.sql
+            connection.py         # connection pool MySQL + helper transaksi
+            db_akashic.sql        # skema + data awal
         models/
             __init__.py
-            admins_model.py
+            admin_model.py
             category_model.py
             event_model.py
             information_model.py
             news_model.py
             notification_model.py
-            push_subscription.py
+            push_subscription_model.py
             region_model.py
         routes/
-            __init__.py
-            auth_routes.py
+            __init__.py           # registrasi blueprint
+            admin_routes.py       # dashboard, activity log, settings, kategori
+            auth_routes.py        # login, logout, register, reset password, profil
             event_routes.py
             information_routes.py
-            location_routes.py
-            news_routes.py
+            location_routes.py    # /api/location/detect, /api/feed
+            news_routes.py        # berita, moderasi, sumber RSS, collect
             notification_routes.py
+            page_routes.py        # render halaman HTML
             region_routes.py
         services/
-            feed_engine.py
-            location_engine.py
-            news_collector.py
-            notification_engine.py
-            region_engine.py
-        app.py
-        config.py
+            feed_engine.py        # gabungan information + event + news
+            location_engine.py    # validasi koordinat sementara
+            news_collector.py     # RSS + scheduler
+            notification_engine.py# Web Push
+            region_engine.py      # Polygon/MultiPolygon (Shapely)
+        utils/
+            api.py                # amplop respons JSON + APIError
+            mailer.py             # SMTP opsional
+            security.py           # sesi admin, CSRF, rate limit login
+            validators.py
+        app.py                    # application factory + entrypoint
+        config.py                 # konfigurasi dari .env
+        manage.py                 # CLI: create-admin, generate-vapid, collect-news
         requirements.txt
     catatan/
         database.md
@@ -40,15 +49,19 @@ app/
     frontend/
         assets/
             css/
-                style.css
-            image/
+                style.css         # design system bersama
+            img/
+                icon.svg
             js/
-                feed.js
-                location.js
-                push.js
-            service_worker.js
+                admin.js          # helper dasbor admin (tabel, form, dialog)
+                api.js            # fetch wrapper, util DOM, toast
+                feed.js           # render feed + detail
+                location.js       # Geolocation API → /api/location/detect
+                push.js           # Web Push subscription
+            service_worker.js     # dilayani di /service_worker.js
         pages/
             admin/
+                base-admin.html
                 dashboard-admin.html
                 events.html
                 information.html
@@ -57,6 +70,7 @@ app/
                 regions.html
                 setting.html
             auth/
+                base-auth.html
                 forgot-password.html
                 login.html
                 register.html
@@ -73,6 +87,8 @@ app/
                 contact.html
                 disclaimer.html
                 system-description.html
-    .env
+    .env                          # konfigurasi lokal (tidak di-commit)
+    .env.example
     .gitignore
     README.md
+```

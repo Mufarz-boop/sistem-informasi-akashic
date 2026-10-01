@@ -1,0 +1,81 @@
+{% extends "admin/base-admin.html" %}
+{% block title %}Dashboard Admin — Akashic{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block admin_content %}
+<div class="stat-grid" aria-live="polite">
+  <a class="stat" href="/admin/information"><span>Total informasi</span><strong id="t-information">–</strong></a>
+  <a class="stat" href="/admin/events"><span>Total event</span><strong id="t-events">–</strong></a>
+  <a class="stat" href="/admin/news"><span>Total berita</span><strong id="t-news">–</strong></a>
+  <a class="stat accent" href="/admin/news?status=PENDING"><span>Berita menunggu moderasi</span><strong id="t-pending">–</strong></a>
+  <a class="stat" href="/admin/regions"><span>Total wilayah</span><strong id="t-regions">–</strong></a>
+  <div class="stat"><span>Pelanggan notifikasi</span><strong id="t-push">–</strong></div>
+</div>
+
+<div class="admin-grid">
+  <section class="box" aria-labelledby="act-title">
+    <div class="box-head"><h2 id="act-title">Aktivitas terbaru</h2><button class="btn ghost xs" id="act-refresh" type="button">Muat ulang</button></div>
+    <ul class="activity" id="activity"><li>Memuat aktivitas...</li></ul>
+  </section>
+  <section class="box" aria-labelledby="quick-title">
+    <div class="box-head"><h2 id="quick-title">Aksi cepat</h2></div>
+    <div class="box-body quick">
+      <a class="btn sm block" href="/admin/information?new=1">+ Informasi baru</a>
+      <a class="btn sm block" href="/admin/events?new=1">+ Event baru</a>
+      <a class="btn ghost sm block" href="/admin/news?status=PENDING">Moderasi berita</a>
+      <button class="btn ghost sm block" id="collect-btn" type="button">Ambil berita RSS sekarang</button>
+      <dl class="cfg" id="cfg"></dl>
+    </div>
+  </section>
+</div>
+{% endblock %}
+{% block admin_scripts %}
+<script>
+(async () => {
+  const { api, h, fmt, setBusy } = window.Akashic;
+  const $ = (id) => document.getElementById(id);
+  const ACTION = { CREATE: 'success', UPDATE: 'muted', DELETE: 'danger', MODERATE: 'amber', LOGIN: 'muted', LOGOUT: 'muted', COLLECT: 'amber' };
+
+  async function load() {
+    try {
+      const d = await api.get('/api/admin/dashboard');
+      $('t-information').textContent = d.totals.information;
+      $('t-events').textContent = d.totals.events;
+      $('t-news').textContent = d.totals.news;
+      $('t-pending').textContent = d.totals.news_pending;
+      $('t-regions').textContent = d.totals.regions;
+      $('t-push').textContent = d.totals.push_subscriptions;
+      const list = $('activity');
+      if (!d.recent_activity.length) { list.replaceChildren(h('li', null, 'Belum ada aktivitas.')); return; }
+      list.replaceChildren(...d.recent_activity.map((a) => h('li', null,
+        h('span', `badge ${ACTION[a.action] || 'muted'}`, a.action),
+        h('span', null, a.description || '-', h('small', 'muted', ` · ${a.full_name || a.username || 'sistem'}`)),
+        h('time', { datetime: a.created_at, title: fmt.dateTime(a.created_at) }, fmt.ago(a.created_at)))));
+    } catch (err) {
+      if (!window.Admin.handleAuthError(err)) $('activity').replaceChildren(h('li', null, err.message));
+    }
+  }
+
+  async function loadConfig() {
+    try {
+      const s = await api.get('/api/admin/settings');
+      const row = (k, ok, text) => [h('dt', null, k), h('dd', null, h('span', `badge ${ok ? 'success' : 'muted'}`, text))];
+      $('cfg').replaceChildren(
+        ...row('Web Push', s.push_enabled, s.push_enabled ? 'Aktif' : 'Belum diatur'),
+        ...row('News collector', s.news_collector_enabled, s.news_collector_enabled ? `Tiap ${s.news_collect_interval_minutes} menit` : 'Nonaktif'),
+        ...row('Email (SMTP)', s.mail_enabled, s.mail_enabled ? 'Aktif' : 'Belum diatur'));
+    } catch (_) { /* opsional */ }
+  }
+
+  $('act-refresh').addEventListener('click', load);
+  $('collect-btn').addEventListener('click', async (e) => {
+    setBusy(e.currentTarget, true, 'Mengambil berita...');
+    try { await window.Admin.run(api.post('/api/news/collect'), { success: true }); load(); } catch (_) { /* toast */ }
+    setBusy($('collect-btn'), false);
+  });
+
+  try { await window.Admin.init(); } catch (_) { return; }
+  load();
+  loadConfig();
+})();
+</script>
+{% endblock %}
