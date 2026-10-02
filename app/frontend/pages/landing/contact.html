@@ -1,0 +1,700 @@
+{% extends "landing/base.html" %}
+
+{% block title %}Contact — Akashic{% endblock %}
+
+{% block meta_description %}Hubungi Akashic untuk pertanyaan, masukan, laporan, atau komunikasi mengenai sistem informasi berbasis lokasi.{% endblock %}
+
+{% block meta_keywords %}Akashic, contact Akashic, contact, feedback, information system{% endblock %}
+
+{% block body_class %}akashic-page akashic-contact{% endblock %}
+
+{% block head %}
+<style>
+  /* ==========================================================
+     AKASHIC — CONTACT
+     Semua class page-specific memakai prefix akashic-contact-
+     ========================================================== */
+
+  .akashic-contact-section {
+    overflow: hidden;
+    overflow: clip;
+    border-top: 1px solid var(--akashic-border);
+  }
+  .akashic-contact-surface { background: var(--akashic-surface); }
+  .akashic-contact-bg { position: absolute; inset: 0; pointer-events: none; opacity: .6; }
+  .akashic-contact-actions {
+    display: flex; flex-wrap: wrap; align-items: center;
+    gap: 12px 24px; margin-top: clamp(28px, 3vw, 44px);
+  }
+  .akashic-contact-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(28px, 6vw, 96px);
+    align-items: center;
+  }
+  .akashic-contact-split--top { align-items: start; }
+  .akashic-contact-prose { max-width: 52ch; display: grid; gap: 18px; }
+  .akashic-contact-prose p { font-size: clamp(1rem, 1.3vw, 1.125rem); color: var(--akashic-muted); }
+
+  /* ---------- SVG shared ---------- */
+  .akashic-contact-svg { display: block; width: 100%; height: auto; color: var(--akashic-ivory); overflow: visible; }
+  .akashic-contact-svg text { font-family: var(--akashic-mono); font-size: 14px; letter-spacing: .14em; fill: currentColor; }
+  .akashic-contact-svg .akashic-contact-svg-small { font-size: 11px; opacity: .6; }
+  .akashic-contact-svg-stroke { fill: none; stroke: currentColor; stroke-width: 1.2; }
+  .akashic-contact-svg-faint { fill: none; stroke: currentColor; stroke-width: .8; opacity: .14; }
+  .akashic-contact-svg-blue { fill: none; stroke: var(--akashic-blue); stroke-width: 1; opacity: .45; }
+  .akashic-contact-svg-dash { fill: none; stroke: currentColor; stroke-width: 1.1; stroke-dasharray: 4 6; opacity: .5; }
+  .akashic-contact-svg-accent { fill: none; stroke: var(--akashic-accent); stroke-width: 1.6; }
+  .akashic-contact-svg-fill-accent { fill: var(--akashic-accent); }
+  .akashic-contact-svg-fill-soft { fill: var(--akashic-surface-soft); stroke: currentColor; stroke-width: 1; stroke-opacity: .35; }
+  .akashic-contact-svg-fill-region { fill: rgba(184, 107, 67, .1); stroke: var(--akashic-accent); stroke-width: 1.6; }
+
+  .js .akashic-contact-draw .akashic-contact-line {
+    stroke-dasharray: 1; stroke-dashoffset: 1;
+    transition: stroke-dashoffset 1.8s var(--akashic-ease) .3s;
+  }
+  .js .akashic-contact-draw.is-visible .akashic-contact-line { stroke-dashoffset: 0; }
+
+  /* ==========================================================
+     01 HERO
+     ========================================================== */
+  .akashic-contact-hero {
+    position: relative; overflow: hidden; overflow: clip;
+    padding-block: clamp(40px, 6vw, 96px) clamp(56px, 8vw, 120px);
+  }
+  .akashic-contact-hero .akashic-container { position: relative; }
+  .akashic-contact-hero-title {
+    margin: 22px 0 26px;
+    font-size: clamp(2.8rem, 6.4vw, 6.6rem);
+    font-weight: 600; line-height: .98; letter-spacing: -.05em;
+    overflow-wrap: break-word;
+  }
+  .akashic-contact-hero-title span { display: block; }
+  .akashic-contact-hero-title span + span { color: var(--akashic-muted); }
+  .akashic-contact-hero-visual { max-width: 460px; width: 100%; margin-inline: auto; }
+
+  /* ==========================================================
+     02 INTRODUCTION
+     ========================================================== */
+  .akashic-contact-equation {
+    display: grid; margin-top: clamp(40px, 6vw, 88px);
+  }
+  .akashic-contact-equation li {
+    display: flex; align-items: baseline; gap: 18px;
+    padding: 12px 0; border-bottom: 1px solid var(--akashic-border);
+    font-size: clamp(2rem, 5.4vw, 5rem); font-weight: 600; letter-spacing: -.045em; line-height: 1.05;
+  }
+  .akashic-contact-equation li:first-child { border-top: 1px solid var(--akashic-border); }
+  .akashic-contact-equation li:last-child { color: var(--akashic-accent); }
+  .akashic-contact-equation .akashic-meta { min-width: 18px; }
+
+  /* ==========================================================
+     03 FORM
+     ========================================================== */
+  .akashic-contact-form-section { background: var(--akashic-surface); }
+  .akashic-contact-form-grid {
+    display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    gap: clamp(32px, 7vw, 120px); align-items: start;
+  }
+  .akashic-contact-form-aside { position: sticky; top: calc(var(--akashic-nav-h) + 32px); }
+  .akashic-contact-form-title {
+    font-size: clamp(2.2rem, 4.4vw, 4.4rem); font-weight: 600; line-height: 1; letter-spacing: -.045em;
+    margin: 18px 0 22px;
+  }
+  .akashic-contact-form-visual { max-width: 340px; width: 100%; margin-top: clamp(28px, 4vw, 56px); }
+
+  .akashic-contact-form {
+    padding: clamp(22px, 3.4vw, 48px);
+    background: var(--akashic-bg);
+    border: 1px solid var(--akashic-border-strong);
+    border-radius: 4px;
+    display: grid; gap: 28px;
+  }
+  .akashic-contact-form-head {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    padding-bottom: 18px; border-bottom: 1px solid var(--akashic-border);
+  }
+  .akashic-contact-field { display: grid; gap: 8px; }
+  .akashic-contact-field-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
+  .akashic-contact-label {
+    display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+    font-family: var(--akashic-mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
+    color: var(--akashic-ivory);
+  }
+  .akashic-contact-label small { font-size: 10px; letter-spacing: .12em; color: var(--akashic-muted); }
+  .akashic-contact-label small.akashic-contact-required { color: var(--akashic-accent); }
+  .akashic-contact-control {
+    width: 100%; min-height: 56px; padding: 14px 16px;
+    font: inherit; font-size: 16px; line-height: 1.5; color: var(--akashic-ivory);
+    background: rgba(255, 255, 255, .02);
+    border: 1px solid var(--akashic-border-strong); border-radius: 3px;
+    transition: border-color .25s ease, background-color .25s ease, box-shadow .25s ease;
+  }
+  .akashic-contact-control:hover { border-color: rgba(255, 255, 255, .4); }
+  .akashic-contact-control:focus-visible {
+    outline: 0; border-color: var(--akashic-accent);
+    box-shadow: 0 0 0 1px var(--akashic-accent); background: var(--akashic-surface);
+  }
+  .akashic-contact-field:focus-within .akashic-contact-label { color: var(--akashic-accent); }
+  textarea.akashic-contact-control { min-height: 200px; resize: vertical; }
+  select.akashic-contact-control {
+    appearance: none; -webkit-appearance: none; padding-right: 44px; cursor: pointer;
+    background-image: linear-gradient(45deg, transparent 50%, var(--akashic-muted) 50%), linear-gradient(135deg, var(--akashic-muted) 50%, transparent 50%);
+    background-position: calc(100% - 22px) 50%, calc(100% - 16px) 50%;
+    background-size: 6px 6px, 6px 6px; background-repeat: no-repeat;
+  }
+  select.akashic-contact-control option { background: var(--akashic-bg); color: var(--akashic-ivory); }
+  .akashic-contact-control.is-invalid,
+  .akashic-contact-control[aria-invalid="true"] { border-color: var(--akashic-accent); }
+  .akashic-contact-control.is-invalid:focus-visible { box-shadow: 0 0 0 1px var(--akashic-accent); }
+  .akashic-contact-hint { font-size: 13px; color: var(--akashic-muted); display: flex; justify-content: space-between; gap: 12px; }
+  .akashic-contact-error { display: none; font-size: 13px; color: var(--akashic-accent); }
+  .akashic-contact-field.is-invalid .akashic-contact-error { display: block; }
+  .akashic-contact-footer {
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px;
+    padding-top: 22px; border-top: 1px dashed var(--akashic-border-strong);
+  }
+  .akashic-contact-note { font-size: 13px; color: var(--akashic-muted); max-width: 42ch; }
+  .akashic-contact-fieldset { margin: 0; padding: 0; border: 0; min-width: 0; display: grid; gap: 28px; }
+  .akashic-contact-trap { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .akashic-contact-status {
+    padding: 16px 18px; border: 1px solid var(--akashic-border-strong); border-left: 3px solid var(--akashic-blue);
+    border-radius: 3px; background: rgba(255, 255, 255, .02); font-size: 15px;
+  }
+  .akashic-contact-status--error { border-left-color: var(--akashic-accent); }
+  .akashic-contact-status strong { display: block; margin-bottom: 6px; font-weight: 600; }
+  .akashic-contact-status ul { margin: 6px 0 0; color: var(--akashic-muted); font-size: 14px; }
+  .akashic-contact-status li + li { margin-top: 2px; }
+
+  /* ==========================================================
+     04 CHANNELS
+     ========================================================== */
+  .akashic-contact-channel-list { display: grid; }
+  .akashic-contact-channel {
+    display: grid; grid-template-columns: 56px minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(16px, 4vw, 64px); align-items: center;
+    padding: clamp(24px, 3vw, 40px) 0;
+    border-top: 1px solid var(--akashic-border-strong);
+  }
+  .akashic-contact-channel:last-child { border-bottom: 1px solid var(--akashic-border-strong); }
+  .akashic-contact-channel-glyph { width: 40px; height: 40px; color: var(--akashic-ivory); }
+  .akashic-contact-channel:nth-child(even) { padding-left: clamp(0px, 5vw, 80px); }
+  .akashic-contact-channel h3 { font-size: clamp(1.6rem, 3.4vw, 3.2rem); font-weight: 600; letter-spacing: -.045em; line-height: 1; }
+  .akashic-contact-channel p { color: var(--akashic-muted); max-width: 38ch; }
+
+  /* ==========================================================
+     05 RESPONSE
+     ========================================================== */
+  .akashic-contact-response-title { font-size: clamp(2.4rem, 5.4vw, 5.4rem); font-weight: 600; line-height: 1; letter-spacing: -.05em; }
+  .akashic-contact-response-title span { display: block; color: var(--akashic-muted); }
+  .akashic-contact-principles { display: grid; }
+  .akashic-contact-principle {
+    display: grid; grid-template-columns: minmax(60px, 120px) minmax(0, 1fr);
+    gap: clamp(12px, 3vw, 40px); align-items: baseline;
+    padding: clamp(20px, 2.6vw, 32px) 0; border-top: 1px solid var(--akashic-border-strong);
+  }
+  .akashic-contact-principle:last-child { border-bottom: 1px solid var(--akashic-border-strong); }
+  .akashic-contact-principle-num {
+    font-size: clamp(2.4rem, 5vw, 4.6rem); font-weight: 600; line-height: .9; letter-spacing: -.06em;
+    color: transparent; -webkit-text-stroke: 1px rgba(242, 239, 232, .35);
+  }
+  .akashic-contact-principle h3 { font-family: var(--akashic-mono); font-size: 13px; font-weight: 500; letter-spacing: .24em; margin-bottom: 6px; }
+  .akashic-contact-principle p { color: var(--akashic-muted); font-size: 15px; }
+
+  /* ==========================================================
+     06 PRIVACY (quiet)
+     ========================================================== */
+  .akashic-contact-privacy-title { font-size: clamp(2rem, 4.2vw, 4.2rem); font-weight: 600; line-height: 1.04; letter-spacing: -.045em; margin-bottom: 24px; }
+  .akashic-contact-privacy-points { display: grid; margin-top: 28px; }
+  .akashic-contact-privacy-points li {
+    display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 10px;
+    padding: 14px 0; border-bottom: 1px solid var(--akashic-border); font-size: 15px;
+  }
+  .akashic-contact-privacy-points li:first-child { border-top: 1px solid var(--akashic-border); }
+  .akashic-contact-privacy-points .akashic-meta { padding-top: 3px; }
+  .akashic-contact-boundary { max-width: 520px; width: 100%; margin-inline: auto; }
+
+  /* ==========================================================
+     07-09 CONNECTIONS
+     ========================================================== */
+  .akashic-contact-connections-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .akashic-contact-connection {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 14px;
+    padding: clamp(24px, 3vw, 40px) clamp(16px, 2.4vw, 36px) clamp(24px, 3vw, 40px) 0;
+  }
+  .akashic-contact-connection + .akashic-contact-connection { padding-left: clamp(16px, 2.4vw, 36px); border-left: 1px solid var(--akashic-border); }
+  .akashic-contact-connection h2 { font-size: clamp(1.4rem, 2.4vw, 2.2rem); font-weight: 600; letter-spacing: -.035em; line-height: 1.1; }
+  .akashic-contact-connection p { font-size: 15px; color: var(--akashic-muted); max-width: 32ch; flex: 1; }
+
+  /* ==========================================================
+     10 FINAL
+     ========================================================== */
+  .akashic-contact-final { position: relative; text-align: center; padding-block: clamp(96px, 14vw, 220px); }
+  .akashic-contact-final .akashic-container { position: relative; z-index: 1; }
+  .akashic-contact-final-title { font-size: clamp(2.8rem, 8.4vw, 8.4rem); font-weight: 600; line-height: .96; letter-spacing: -.055em; }
+  .akashic-contact-final-title span { display: block; }
+  .akashic-contact-final-title span + span { color: var(--akashic-muted); }
+  .akashic-contact-final .akashic-section-heading { margin-bottom: 0; }
+  .akashic-contact-final .akashic-lead { margin-inline: auto; }
+  .akashic-contact-final .akashic-contact-actions { justify-content: center; }
+
+  /* ==========================================================
+     RESPONSIVE
+     ========================================================== */
+  @media (max-width: 1024px) {
+    .akashic-contact-split,
+    .akashic-contact-form-grid,
+    .akashic-contact-connections-list { grid-template-columns: minmax(0, 1fr); }
+    .akashic-contact-form-aside { position: static; }
+    .akashic-contact-connection { padding-right: 0; }
+    .akashic-contact-connection + .akashic-contact-connection { padding-left: 0; border-left: 0; border-top: 1px solid var(--akashic-border); }
+    .akashic-contact-channel { grid-template-columns: 48px minmax(0, 1fr); }
+    .akashic-contact-channel p { grid-column: 2; }
+    .akashic-contact-channel:nth-child(even) { padding-left: 0; }
+  }
+  @media (max-width: 767px) {
+    .akashic-contact-field-row { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+    .akashic-contact-actions .akashic-button,
+    .akashic-contact-footer .akashic-button { width: 100%; justify-content: center; }
+    .akashic-contact-hero .akashic-contour { opacity: .6; }
+    .akashic-contact-svg text { font-size: 17px; }
+    .akashic-contact-svg .akashic-contact-svg-small { display: none; }
+    .akashic-contact-principle { grid-template-columns: 56px minmax(0, 1fr); }
+  }
+
+  /* ==========================================================
+     REDUCED MOTION
+     ========================================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .js .akashic-contact-draw .akashic-contact-line { stroke-dasharray: none; stroke-dashoffset: 0; transition: none; }
+    .akashic-contact-control { transition: none; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- 01 — HERO -->
+<section class="akashic-contact-hero" aria-labelledby="contact-hero-title">
+  <div class="akashic-grid-bg akashic-grid-bg--fade akashic-contact-bg" aria-hidden="true"></div>
+  <div class="akashic-contour" aria-hidden="true"></div>
+
+  <div class="akashic-container">
+    <div class="akashic-contact-split">
+      <div>
+        <div class="akashic-section-heading akashic-reveal">
+          <span class="akashic-section-watermark" aria-hidden="true">Contact</span>
+          <p class="akashic-eyebrow">Contact / 01</p>
+          <h1 class="akashic-contact-hero-title" id="contact-hero-title">
+            <span>Let's talk</span>
+            <span>about Akashic.</span>
+          </h1>
+          <p class="akashic-lead">Pertanyaan, masukan, laporan, atau gagasan dapat menjadi bagian dari perkembangan Akashic.</p>
+        </div>
+        <div class="akashic-contact-actions akashic-reveal" style="--akashic-delay:.12s">
+          <a class="akashic-button akashic-button-primary" href="#contact-form">Start a Conversation</a>
+          <a class="akashic-button akashic-button-secondary" href="{{ url_for('index') }}">Back to Akashic</a>
+        </div>
+      </div>
+
+      <figure class="akashic-contact-hero-visual akashic-contact-draw akashic-reveal" style="--akashic-delay:.15s" aria-hidden="true">
+        <svg class="akashic-contact-svg" viewBox="0 0 460 520" focusable="false" xmlns="http://www.w3.org/2000/svg">
+          <path class="akashic-contact-svg-faint" d="M0 65H460M0 130H460M0 195H460M0 260H460M0 325H460M0 390H460M0 455H460M77 0V520M154 0V520M231 0V520M308 0V520M385 0V520"/>
+          <path class="akashic-contact-svg-stroke akashic-contact-line" pathLength="1" d="M230 70V170M230 270V420" style="opacity:.55"/>
+
+          <rect x="160" y="40" width="140" height="30" rx="3" class="akashic-contact-svg-fill-soft"/>
+          <text x="230" y="60" text-anchor="middle" style="font-size:12px">MESSAGE</text>
+
+          <ellipse cx="230" cy="220" rx="140" ry="90" class="akashic-contact-svg-blue" style="opacity:.3"/>
+          <ellipse cx="230" cy="220" rx="90" ry="58" class="akashic-contact-svg-blue" style="opacity:.45"/>
+          <path class="akashic-contact-svg-stroke" d="M230 190V250M200 220H260" style="opacity:.5"/>
+          <circle cx="230" cy="220" r="20" class="akashic-contact-svg-accent" style="opacity:.55"/>
+          <circle cx="230" cy="220" r="6" class="akashic-contact-svg-fill-accent"/>
+          <text x="256" y="190" style="font-size:12px">AKASHIC</text>
+
+          <rect x="160" y="420" width="140" height="30" rx="3" class="akashic-contact-svg-fill-region"/>
+          <text x="230" y="440" text-anchor="middle" style="font-size:12px">RESPONSE</text>
+
+          <text x="20" y="20" class="akashic-contact-svg-small">C·01</text>
+          <text x="400" y="508" class="akashic-contact-svg-small">C·03</text>
+        </svg>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 02 — INTRODUCTION -->
+<section class="akashic-section akashic-contact-section akashic-contact-introduction" aria-labelledby="contact-intro-title">
+  <div class="akashic-container">
+    <div class="akashic-section-heading akashic-reveal">
+      <span class="akashic-section-watermark" aria-hidden="true">Communication</span>
+      <h2 class="akashic-section-title" id="contact-intro-title">Every message needs context.</h2>
+    </div>
+
+    <div class="akashic-contact-prose akashic-reveal">
+      <p>Kontak yang baik dimulai dari konteks yang jelas. Karena itu Akashic menyediakan beberapa jalur komunikasi sesuai kebutuhan pengunjung.</p>
+    </div>
+
+    <ul class="akashic-contact-equation" aria-label="Message plus context plus response">
+      <li class="akashic-reveal"><span class="akashic-meta" aria-hidden="true">&nbsp;</span>MESSAGE</li>
+      <li class="akashic-reveal" style="--akashic-delay:.08s"><span class="akashic-meta" aria-hidden="true">+</span>CONTEXT</li>
+      <li class="akashic-reveal" style="--akashic-delay:.16s"><span class="akashic-meta" aria-hidden="true">+</span>RESPONSE</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 03 — CONTACT FORM -->
+<section id="contact-form" class="akashic-section akashic-contact-section akashic-contact-form-section" aria-labelledby="contact-form-title">
+  <div class="akashic-container">
+    <div class="akashic-contact-form-grid">
+      <div class="akashic-contact-form-aside">
+        <div class="akashic-reveal">
+          <span class="akashic-section-kicker">Letter desk</span>
+          <h2 class="akashic-contact-form-title" id="contact-form-title">Write to Akashic.</h2>
+          <div class="akashic-contact-prose">
+            <p>Pilih kategori, jelaskan konteksnya, lalu tulis pesan Anda. Kolom bertanda wajib harus diisi agar pesan dapat dipahami.</p>
+          </div>
+        </div>
+
+        <div class="akashic-contact-form-visual akashic-contact-draw akashic-reveal" aria-hidden="true">
+          <svg class="akashic-contact-svg" viewBox="0 0 340 180" focusable="false" xmlns="http://www.w3.org/2000/svg">
+            <path class="akashic-contact-svg-faint" d="M0 45H340M0 90H340M0 135H340M85 0V180M170 0V180M255 0V180"/>
+            <rect x="40" y="40" width="260" height="100" rx="3" class="akashic-contact-svg-dash"/>
+            <path class="akashic-contact-svg-stroke akashic-contact-line" pathLength="1" d="M40 40L170 100L300 40" style="opacity:.55"/>
+            <circle cx="170" cy="100" r="5" class="akashic-contact-svg-fill-accent"/>
+            <text x="40" y="168" class="akashic-contact-svg-small">NAME · EMAIL · CONTEXT · MESSAGE</text>
+          </svg>
+        </div>
+      </div>
+
+      <form class="akashic-contact-form akashic-reveal" id="akashic-contact-form" method="post" action="" aria-labelledby="contact-form-title" style="--akashic-delay:.1s">
+        <div class="akashic-contact-form-head">
+          <span class="akashic-meta">Message / 01</span>
+          <span class="akashic-meta"><span class="akashic-contact-required" style="color:var(--akashic-accent)">*</span> wajib diisi</span>
+        </div>
+
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+        <div class="akashic-contact-trap" aria-hidden="true">
+          <label for="contact-website">Website</label>
+          <input type="text" name="website" id="contact-website" tabindex="-1" autocomplete="off">
+        </div>
+
+        {% if status == 'sent' %}
+        <div class="akashic-contact-status" role="status" tabindex="-1" id="contact-status">
+          <strong>Pesan terkirim.</strong>
+          Terima kasih. Pesan Anda sudah diteruskan ke pengelola Akashic.
+        </div>
+        {% elif status %}
+        <div class="akashic-contact-status akashic-contact-status--error" role="alert" tabindex="-1" id="contact-status">
+          {% if status == 'invalid' %}
+          <strong>Pesan belum dapat dikirim.</strong>
+          <ul>{% for message in errors %}<li>{{ message }}</li>{% endfor %}</ul>
+          {% elif status == 'rate' %}
+          <strong>Terlalu banyak percobaan.</strong>
+          Silakan coba lagi beberapa menit lagi.
+          {% elif status == 'csrf' %}
+          <strong>Sesi form kedaluwarsa.</strong>
+          Muat ulang halaman, lalu kirim kembali pesan Anda.
+          {% else %}
+          <strong>Pesan gagal dikirim.</strong>
+          Terjadi kendala pada layanan pengiriman. Pesan Anda masih ada di form, silakan coba lagi nanti.
+          {% endif %}
+        </div>
+        {% endif %}
+
+        <fieldset class="akashic-contact-fieldset">
+          <legend class="akashic-sr-only">Informasi pengirim</legend>
+          <div class="akashic-contact-field-row">
+            <div class="akashic-contact-field" data-field>
+              <label class="akashic-contact-label" for="contact-name"><span>Name</span><small class="akashic-contact-required">Required</small></label>
+              <input class="akashic-contact-control" type="text" name="name" id="contact-name" autocomplete="name" value="{{ form.name }}" maxlength="100" required aria-required="true" aria-describedby="contact-name-error">
+              <p class="akashic-contact-error" id="contact-name-error"></p>
+            </div>
+            <div class="akashic-contact-field" data-field>
+              <label class="akashic-contact-label" for="contact-email"><span>Email</span><small class="akashic-contact-required">Required</small></label>
+              <input class="akashic-contact-control" type="email" name="email" id="contact-email" autocomplete="email" value="{{ form.email }}" maxlength="254" required aria-required="true" aria-describedby="contact-email-error">
+              <p class="akashic-contact-error" id="contact-email-error"></p>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset class="akashic-contact-fieldset">
+          <legend class="akashic-sr-only">Konteks pesan</legend>
+          <div class="akashic-contact-field" data-field>
+            <label class="akashic-contact-label" for="contact-category"><span>Category</span><small class="akashic-contact-required">Required</small></label>
+            <select class="akashic-contact-control" name="category" id="contact-category" required aria-required="true" aria-describedby="contact-category-error">
+              <option value="" disabled{% if not form.category %} selected{% endif %}>Select a category</option>
+              <option value="general"{% if form.category == 'general' %} selected{% endif %}>General Question</option>
+              <option value="feedback"{% if form.category == 'feedback' %} selected{% endif %}>Feedback</option>
+              <option value="technical"{% if form.category == 'technical' %} selected{% endif %}>Technical Issue</option>
+              <option value="content"{% if form.category == 'content' %} selected{% endif %}>Content / Information</option>
+              <option value="privacy"{% if form.category == 'privacy' %} selected{% endif %}>Privacy</option>
+              <option value="other"{% if form.category == 'other' %} selected{% endif %}>Other</option>
+            </select>
+            <p class="akashic-contact-error" id="contact-category-error"></p>
+          </div>
+
+          <div class="akashic-contact-field" data-field>
+            <label class="akashic-contact-label" for="contact-subject"><span>Subject</span><small>Optional</small></label>
+            <input class="akashic-contact-control" type="text" name="subject" id="contact-subject" autocomplete="off" value="{{ form.subject }}" maxlength="150">
+          </div>
+        </fieldset>
+
+        <div class="akashic-contact-field" data-field>
+          <label class="akashic-contact-label" for="contact-message"><span>Message</span><small class="akashic-contact-required">Required</small></label>
+          <textarea class="akashic-contact-control" name="message" id="contact-message" rows="8" required aria-required="true" maxlength="5000" aria-describedby="contact-message-hint contact-message-error">{{ form.message }}</textarea>
+          <p class="akashic-contact-hint" id="contact-message-hint"><span>Jelaskan konteks dan detail yang relevan.</span><span data-contact-count aria-hidden="true"></span></p>
+          <p class="akashic-contact-error" id="contact-message-error"></p>
+        </div>
+
+        <div class="akashic-contact-footer">
+          <p class="akashic-contact-note">Pesan dikirim melalui email ke pengelola Akashic. Form ini tidak meminta lokasi.</p>
+          <button class="akashic-button akashic-button-primary" type="submit">Send Message</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- 04 — CONTACT CHANNELS -->
+<section class="akashic-section akashic-contact-section akashic-contact-channels" aria-labelledby="contact-channels-title">
+  <div class="akashic-container">
+    <div class="akashic-section-heading akashic-reveal">
+      <span class="akashic-section-watermark" aria-hidden="true">Channels</span>
+      <h2 class="akashic-section-title" id="contact-channels-title">Choose your context.</h2>
+    </div>
+
+    <div class="akashic-contact-channel-list">
+      <article class="akashic-contact-channel akashic-reveal">
+        <svg class="akashic-contact-channel-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><path d="M6 20H32M24 12l8 8-8 8" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h3>General</h3>
+        <p>Pertanyaan umum mengenai Akashic.</p>
+      </article>
+      <article class="akashic-contact-channel akashic-reveal">
+        <svg class="akashic-contact-channel-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><path d="M10 30L30 10M15 10H30V25" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h3>Feedback</h3>
+        <p>Saran mengenai pengalaman dan desain sistem.</p>
+      </article>
+      <article class="akashic-contact-channel akashic-reveal">
+        <svg class="akashic-contact-channel-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><rect x="9" y="9" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+        <h3>Technical</h3>
+        <p>Masalah atau perilaku teknis yang ditemukan.</p>
+      </article>
+      <article class="akashic-contact-channel akashic-reveal">
+        <svg class="akashic-contact-channel-glyph" viewBox="0 0 40 40" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg"><path d="M20 7L33 20L20 33L7 20Z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        <h3>Privacy</h3>
+        <p>Pertanyaan mengenai penggunaan location context dan privacy.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 05 — RESPONSE EXPECTATION -->
+<section class="akashic-section akashic-contact-section akashic-contact-surface akashic-contact-response" aria-labelledby="contact-response-title">
+  <div class="akashic-container">
+    <div class="akashic-contact-split akashic-contact-split--top">
+      <div>
+        <div class="akashic-section-heading akashic-reveal">
+          <span class="akashic-section-watermark" aria-hidden="true">Response</span>
+          <h2 class="akashic-contact-response-title" id="contact-response-title">Clear message.<span>Clear context.</span></h2>
+        </div>
+        <div class="akashic-contact-prose akashic-reveal">
+          <p>Berikan informasi yang cukup agar pesan dapat dipahami dengan konteks yang tepat.</p>
+        </div>
+      </div>
+
+      <ol class="akashic-contact-principles">
+        <li class="akashic-contact-principle akashic-reveal"><span class="akashic-contact-principle-num" aria-hidden="true">01</span><div><h3>CONTEXT</h3><p>Jelaskan hal yang ingin disampaikan.</p></div></li>
+        <li class="akashic-contact-principle akashic-reveal" style="--akashic-delay:.08s"><span class="akashic-contact-principle-num" aria-hidden="true">02</span><div><h3>DETAIL</h3><p>Tambahkan detail yang relevan.</p></div></li>
+        <li class="akashic-contact-principle akashic-reveal" style="--akashic-delay:.16s"><span class="akashic-contact-principle-num" aria-hidden="true">03</span><div><h3>CLARITY</h3><p>Gunakan pesan yang singkat dan jelas.</p></div></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- 06 — PRIVACY -->
+<section class="akashic-section akashic-contact-section akashic-contact-privacy" aria-labelledby="contact-privacy-title">
+  <div class="akashic-container">
+    <div class="akashic-contact-split">
+      <div>
+        <div class="akashic-section-heading akashic-reveal">
+          <span class="akashic-section-watermark" aria-hidden="true">Privacy</span>
+          <h2 class="akashic-contact-privacy-title" id="contact-privacy-title">Your message is separate<br>from your location.</h2>
+        </div>
+        <div class="akashic-contact-prose akashic-reveal">
+          <p>Form kontak tidak membutuhkan akses lokasi browser.</p>
+        </div>
+        <ul class="akashic-contact-privacy-points akashic-reveal">
+          <li><span class="akashic-meta">01</span><span>Halaman contact tidak meminta geolocation.</span></li>
+          <li><span class="akashic-meta">02</span><span>Form tidak membutuhkan location permission.</span></li>
+          <li><span class="akashic-meta">03</span><span>Anda dapat menghubungi Akashic tanpa memberikan lokasi.</span></li>
+        </ul>
+        <div class="akashic-contact-actions akashic-reveal">
+          <a class="akashic-link" href="{{ url_for('privacy') }}">Read Privacy <svg class="akashic-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg></a>
+        </div>
+      </div>
+
+      <figure class="akashic-contact-boundary akashic-contact-draw akashic-reveal" style="--akashic-delay:.1s" aria-hidden="true">
+        <svg class="akashic-contact-svg" viewBox="0 0 520 360" focusable="false" xmlns="http://www.w3.org/2000/svg">
+          <path class="akashic-contact-svg-faint" d="M0 60H520M0 120H520M0 180H520M0 240H520M0 300H520M65 0V360M130 0V360M195 0V360M260 0V360M325 0V360M390 0V360M455 0V360"/>
+          <rect x="20" y="30" width="250" height="300" rx="3" class="akashic-contact-svg-dash"/>
+          <text x="40" y="62">MESSAGE</text>
+          <path class="akashic-contact-svg-stroke akashic-contact-line" pathLength="1" d="M50 76V300M50 130H80M50 190H80M50 250H80M50 300H80" style="opacity:.5"/>
+          <text x="92" y="135" style="font-size:12px">NAME</text>
+          <text x="92" y="195" style="font-size:12px">EMAIL</text>
+          <text x="92" y="255" style="font-size:12px">CONTEXT</text>
+          <text x="92" y="305" style="font-size:12px">MESSAGE</text>
+
+          <text x="305" y="178" style="font-size:22px">≠</text>
+
+          <circle cx="430" cy="180" r="26" class="akashic-contact-svg-accent" style="opacity:.45"/>
+          <circle cx="430" cy="180" r="6" class="akashic-contact-svg-fill-accent"/>
+          <path class="akashic-contact-svg-stroke" d="M430 140V220M390 180H470" style="opacity:.4"/>
+          <text x="430" y="250" text-anchor="middle" style="font-size:12px">LOCATION</text>
+        </svg>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- 07–09 — CONNECTIONS -->
+<section class="akashic-section akashic-contact-section akashic-contact-surface akashic-contact-connections" aria-label="Halaman terkait">
+  <div class="akashic-container">
+    <div class="akashic-contact-connections-list">
+      <div class="akashic-contact-connection akashic-contact-about akashic-reveal">
+        <span class="akashic-meta">About</span>
+        <h2>Need to understand the system first?</h2>
+        <p>Pelajari konsep dan arsitektur Akashic sebelum mengirim pesan.</p>
+        <a class="akashic-link" href="{{ url_for('about') }}">About Akashic <svg class="akashic-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg></a>
+      </div>
+      <div class="akashic-contact-connection akashic-contact-information akashic-reveal" style="--akashic-delay:.08s">
+        <span class="akashic-meta">Information</span>
+        <h2>Looking for information?</h2>
+        <p>Jika Anda ingin memahami bagaimana informasi dikaitkan dengan wilayah, lihat Information.</p>
+        <a class="akashic-link" href="{{ url_for('information') }}">Explore Information <svg class="akashic-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg></a>
+      </div>
+      <div class="akashic-contact-connection akashic-contact-location akashic-reveal" style="--akashic-delay:.16s">
+        <span class="akashic-meta">Location</span>
+        <h2>Want to explore location context?</h2>
+        <p>Pengalaman berbasis lokasi tersedia dari halaman utama Akashic.</p>
+        <a class="akashic-link" href="{{ url_for('index') }}#location">Explore Location <svg class="akashic-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 10 — FINAL CTA -->
+<section class="akashic-contact-section akashic-contact-final" aria-labelledby="contact-final-title">
+  <div class="akashic-grid-bg akashic-grid-bg--fade akashic-contact-bg" aria-hidden="true"></div>
+  <div class="akashic-contour" aria-hidden="true"></div>
+  <div class="akashic-container">
+    <div class="akashic-section-heading akashic-reveal">
+      <span class="akashic-section-watermark" aria-hidden="true">Connect</span>
+      <h2 class="akashic-contact-final-title" id="contact-final-title">
+        <span>Every system begins</span>
+        <span>with a conversation.</span>
+      </h2>
+    </div>
+    <p class="akashic-lead akashic-reveal" style="--akashic-delay:.1s">Akashic dibangun untuk menghubungkan tempat, konteks, dan informasi. Masukan yang jelas membantu sistem berkembang dengan arah yang lebih baik.</p>
+    <div class="akashic-contact-actions akashic-reveal" style="--akashic-delay:.18s">
+      <a class="akashic-button akashic-button-primary" href="{{ url_for('index') }}">Back to Akashic</a>
+      <a class="akashic-button akashic-button-secondary" href="{{ url_for('information') }}">Explore Information</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  (function () {
+    'use strict';
+
+    /* Progressive enhancement saja: native validation tetap bekerja tanpa JS.
+       Tidak ada fetch, geolocation, atau pengiriman data dari skrip ini. */
+    function init() {
+      var form = document.getElementById('akashic-contact-form');
+      if (!form) { return; }
+
+      var messages = {
+        name: 'Isi nama Anda.',
+        email: 'Isi alamat email Anda.',
+        emailInvalid: 'Gunakan format email yang valid.',
+        category: 'Pilih salah satu kategori.',
+        message: 'Tulis pesan Anda.'
+      };
+
+      function messageFor(control) {
+        var v = control.validity;
+        if (v.valueMissing) {
+          return messages[control.name] || 'Kolom ini wajib diisi.';
+        }
+        if (v.typeMismatch || v.patternMismatch) { return messages.emailInvalid; }
+        return control.validationMessage;
+      }
+
+      function setState(control, invalid) {
+        var field = control.closest('[data-field]');
+        var error = document.getElementById(control.id + '-error');
+        control.classList.toggle('is-invalid', invalid);
+        if (field) { field.classList.toggle('is-invalid', invalid); }
+        if (invalid) {
+          control.setAttribute('aria-invalid', 'true');
+          if (error) { error.textContent = messageFor(control); }
+        } else {
+          control.removeAttribute('aria-invalid');
+          if (error) { error.textContent = ''; }
+        }
+      }
+
+      var controls = form.querySelectorAll('input, select, textarea');
+
+      /* Pesan inline menggantikan bubble browser; validasi tetap dari atribut HTML. */
+      form.noValidate = true;
+
+      form.addEventListener('submit', function (event) {
+        var firstInvalid = null;
+        controls.forEach(function (control) {
+          var invalid = !control.checkValidity();
+          setState(control, invalid);
+          if (invalid && !firstInvalid) { firstInvalid = control; }
+        });
+        if (firstInvalid) {
+          event.preventDefault();
+          firstInvalid.focus();
+        }
+      });
+
+      controls.forEach(function (control) {
+        function revalidate() {
+          if (control.classList.contains('is-invalid')) { setState(control, !control.checkValidity()); }
+        }
+        control.addEventListener('input', revalidate);
+        control.addEventListener('change', revalidate);
+        control.addEventListener('blur', function () {
+          if (control.hasAttribute('required') && control.value !== '') { setState(control, !control.checkValidity()); }
+        });
+      });
+
+      /* Fokus ke pesan status (sukses/gagal) setelah halaman dimuat ulang */
+      var status = document.getElementById('contact-status');
+      if (status) { status.focus({ preventScroll: false }); }
+
+      /* Character count */
+      var textarea = document.getElementById('contact-message');
+      var count = form.querySelector('[data-contact-count]');
+      if (textarea && count) {
+        var update = function () { count.textContent = textarea.value.length + ' karakter'; };
+        textarea.addEventListener('input', update);
+        update();
+      }
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
+{% endblock %}

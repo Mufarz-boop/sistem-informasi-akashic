@@ -1,0 +1,1319 @@
+{% extends "landing/base.html" %}
+
+{% block title %}Akashic — Informasi yang hadir di tempat yang tepat.{% endblock %}
+
+{% block meta_description %}Akashic menghubungkan lokasi, wilayah, dan informasi agar informasi dapat hadir sesuai konteks tempatnya.{% endblock %}
+
+{% block meta_keywords %}Akashic, location based information system, sistem informasi berbasis lokasi, informasi wilayah, regional information{% endblock %}
+
+{% block body_class %}akashic-page akashic-home{% endblock %}
+
+{% block head %}
+<style>
+  /* ==========================================================
+     AKASHIC — HOMEPAGE
+     Semua class page-specific memakai prefix akashic-home-
+     ========================================================== */
+
+  .akashic-home-section {
+    overflow: hidden;
+    overflow: clip;
+  }
+
+  .akashic-home-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: .7;
+  }
+
+  .akashic-home-muted { color: var(--akashic-muted); }
+  .akashic-home-accent { color: var(--akashic-accent); }
+
+  .akashic-home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: clamp(28px, 3vw, 44px);
+  }
+
+  /* ---------- SVG shared ---------- */
+  .akashic-home-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    color: var(--akashic-ivory);
+    overflow: visible;
+  }
+  .akashic-home-svg text {
+    font-family: var(--akashic-mono);
+    font-size: 14px;
+    letter-spacing: .16em;
+    fill: currentColor;
+  }
+  .akashic-home-svg .akashic-home-svg-small { font-size: 11px; opacity: .6; }
+  .akashic-home-svg-stroke { fill: none; stroke: currentColor; stroke-width: 1.2; }
+  .akashic-home-svg-faint  { fill: none; stroke: currentColor; stroke-width: .8; opacity: .16; }
+  .akashic-home-svg-blue   { fill: none; stroke: var(--akashic-blue); stroke-width: 1; opacity: .5; }
+  .akashic-home-svg-dash   { fill: none; stroke: currentColor; stroke-width: 1.1; stroke-dasharray: 4 6; opacity: .55; }
+  .akashic-home-svg-accent { fill: none; stroke: var(--akashic-accent); stroke-width: 1.6; }
+  .akashic-home-svg-fill-accent { fill: var(--akashic-accent); }
+  .akashic-home-svg-fill-soft { fill: var(--akashic-surface-soft); stroke: currentColor; stroke-width: 1; stroke-opacity: .35; }
+  .akashic-home-svg-fill-region { fill: rgba(184, 107, 67, .1); stroke: var(--akashic-accent); stroke-width: 1.6; }
+  .akashic-home-svg-fill-ivory { fill: var(--akashic-ivory); }
+  .akashic-home-svg .akashic-home-svg-ink { fill: var(--akashic-ink); }
+
+  .js .akashic-home-draw .akashic-home-line {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 1.8s var(--akashic-ease) .3s;
+  }
+  .js .akashic-home-draw.is-visible .akashic-home-line { stroke-dashoffset: 0; }
+
+  /* ==========================================================
+     01 HERO
+     ========================================================== */
+  .akashic-home-hero {
+    position: relative;
+    overflow: hidden;
+    overflow: clip;
+    padding-block: clamp(40px, 6vw, 96px) clamp(40px, 5vw, 72px);
+  }
+  .akashic-home-hero .akashic-container { position: relative; }
+  .akashic-home-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: center;
+  }
+  .akashic-home-hero-title {
+    margin: 26px 0 28px;
+    font-size: clamp(2.6rem, 5.4vw, 5.6rem);
+    font-weight: 600;
+    line-height: .98;
+    letter-spacing: -.045em;
+    overflow-wrap: break-word;
+  }
+  .akashic-home-hero-title span { display: block; }
+  .akashic-home-hero-title span + span { color: var(--akashic-muted); }
+  .akashic-home-hero-visual { position: relative; }
+  .akashic-home-hero-meta {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    margin-top: clamp(40px, 6vw, 88px);
+    border-top: 1px solid var(--akashic-border);
+  }
+  .akashic-home-hero-meta li {
+    padding: 18px 16px 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .akashic-home-hero-meta li:not(:first-child) {
+    padding-left: 20px;
+    border-left: 1px solid var(--akashic-border);
+  }
+  .akashic-home-hero-meta strong {
+    font-family: var(--akashic-mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--akashic-ivory);
+  }
+
+  /* ==========================================================
+     02 INTRODUCTION
+     ========================================================== */
+  .akashic-home-introduction { border-top: 1px solid var(--akashic-border); }
+  .akashic-home-intro-copy {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(24px, 5vw, 80px);
+    align-items: start;
+  }
+  .akashic-home-intro-copy p:first-child { font-size: clamp(1.1rem, 1.6vw, 1.5rem); line-height: 1.5; color: var(--akashic-ivory); max-width: 34ch; }
+  .akashic-home-flow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px clamp(10px, 2vw, 28px);
+    margin-top: clamp(56px, 8vw, 120px);
+    padding-top: clamp(24px, 3vw, 40px);
+    border-top: 1px solid var(--akashic-border);
+  }
+  .akashic-home-flow-item {
+    font-size: clamp(1.6rem, 4.4vw, 4.4rem);
+    font-weight: 600;
+    letter-spacing: -.035em;
+    line-height: 1.1;
+    opacity: calc(.3 + var(--i, 0) * .23);
+  }
+  .akashic-home-flow-item:last-of-type { color: var(--akashic-accent); }
+  .akashic-home-flow-arrow {
+    width: clamp(18px, 2.6vw, 36px);
+    height: clamp(18px, 2.6vw, 36px);
+    color: var(--akashic-muted);
+    flex: none;
+  }
+
+  /* ==========================================================
+     03 PROCESS
+     ========================================================== */
+  .akashic-home-process { background: var(--akashic-surface); border-top: 1px solid var(--akashic-border); }
+  .akashic-home-process-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(24px, 3vw, 48px);
+    position: relative;
+  }
+  .akashic-home-process-item {
+    position: relative;
+    padding-top: 36px;
+    border-top: 1px solid var(--akashic-border-strong);
+  }
+  .akashic-home-process-item .akashic-node { position: absolute; top: -4px; left: 0; }
+  .akashic-home-process-num {
+    display: block;
+    font-size: clamp(3.5rem, 7vw, 7rem);
+    font-weight: 600;
+    line-height: .9;
+    letter-spacing: -.06em;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(242, 239, 232, .35);
+    margin-bottom: 28px;
+  }
+  .akashic-home-process-item h3 {
+    font-family: var(--akashic-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: .22em;
+    color: var(--akashic-ivory);
+    margin-bottom: 12px;
+  }
+  .akashic-home-process-item p { font-size: 15px; color: var(--akashic-muted); max-width: 28ch; }
+
+  /* ==========================================================
+     04 LOCATION
+     ========================================================== */
+  .akashic-home-location { border-top: 1px solid var(--akashic-border); }
+  .akashic-home-location-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+    gap: clamp(32px, 6vw, 96px);
+    align-items: center;
+  }
+  .akashic-home-location-panel {
+    margin-top: clamp(28px, 3vw, 44px);
+    padding: clamp(22px, 3vw, 36px);
+    background: var(--akashic-surface);
+    border: 1px solid var(--akashic-border-strong);
+    border-radius: 4px;
+    position: relative;
+  }
+  .akashic-home-panel-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-bottom: 18px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--akashic-border);
+  }
+  .akashic-home-panel-state {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--akashic-mono);
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--akashic-ivory);
+  }
+  .akashic-home-panel-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--akashic-muted);
+    flex: none;
+    transition: background-color .3s ease;
+  }
+  [data-state="detected"] > .akashic-home-panel-top .akashic-home-panel-dot { background: var(--akashic-blue); }
+  [data-state="requesting"] > .akashic-home-panel-top .akashic-home-panel-dot { background: var(--akashic-accent); }
+  [data-state="error"] > .akashic-home-panel-top .akashic-home-panel-dot,
+  [data-state="unsupported"] > .akashic-home-panel-top .akashic-home-panel-dot { background: var(--akashic-accent); }
+  .akashic-home-panel-title {
+    font-size: clamp(1.25rem, 2vw, 1.75rem);
+    font-weight: 500;
+    letter-spacing: -.02em;
+    line-height: 1.25;
+    margin-bottom: 10px;
+  }
+  .akashic-home-panel-text { font-size: 15px; color: var(--akashic-muted); max-width: 46ch; }
+  .akashic-home-panel-action { margin-top: 26px; }
+  .akashic-home-panel-action .akashic-button[disabled],
+  .akashic-home-panel-action .akashic-button[aria-disabled="true"] { opacity: .55; cursor: default; }
+  .akashic-home-panel-region {
+    margin-top: 26px;
+    padding-top: 22px;
+    border-top: 1px dashed var(--akashic-border-strong);
+  }
+  .akashic-home-panel-region[hidden] { display: none; }
+  .akashic-home-panel-region-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--akashic-mono);
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--akashic-ivory);
+    margin-bottom: 8px;
+  }
+  .akashic-home-privacy-note {
+    margin-top: 22px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 18px;
+    font-size: 13px;
+    color: var(--akashic-muted);
+  }
+  .akashic-home-privacy-note a { color: var(--akashic-ivory); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+
+  /* ==========================================================
+     05 REGION
+     ========================================================== */
+  .akashic-home-region { background: var(--akashic-surface); border-top: 1px solid var(--akashic-border); }
+  .akashic-home-region-grid {
+    display: grid;
+    grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr);
+    gap: clamp(28px, 5vw, 80px);
+    align-items: center;
+  }
+  .akashic-home-chain { margin-top: 36px; display: grid; }
+  .akashic-home-chain li {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-block: 14px;
+    font-family: var(--akashic-mono);
+    font-size: 12px;
+    letter-spacing: .22em;
+    color: var(--akashic-ivory);
+  }
+  .akashic-home-chain li:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    left: 3px; top: calc(50% + 10px);
+    width: 1px; height: 28px;
+    background: var(--akashic-border-strong);
+  }
+  .akashic-home-region-visual { position: relative; margin-right: calc(var(--akashic-pad) * -.6); }
+
+  /* ==========================================================
+     06 INFORMATION
+     ========================================================== */
+  .akashic-home-information { border-top: 1px solid var(--akashic-border); }
+  .akashic-home-info-visual { max-width: 980px; margin: 0 auto clamp(32px, 5vw, 72px); }
+  .akashic-home-info-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(20px, 3vw, 48px);
+  }
+  .akashic-home-info-item { padding-top: 24px; border-top: 1px solid var(--akashic-border-strong); }
+  .akashic-home-info-item .akashic-meta { display: block; margin-bottom: 18px; }
+  .akashic-home-info-item h3 {
+    font-size: clamp(1.4rem, 2.4vw, 2.1rem);
+    font-weight: 600;
+    letter-spacing: -.03em;
+    margin-bottom: 10px;
+  }
+  .akashic-home-info-item p { font-size: 15px; color: var(--akashic-muted); max-width: 32ch; }
+
+  /* ==========================================================
+     07 RELEVANCE (light section)
+     ========================================================== */
+  .akashic-home-relevance-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, .9fr);
+    gap: clamp(32px, 6vw, 96px);
+    align-items: center;
+  }
+  .akashic-home-relevance-title {
+    font-size: clamp(2.8rem, 6.4vw, 7rem);
+    font-weight: 600;
+    line-height: .96;
+    letter-spacing: -.05em;
+    margin-bottom: 28px;
+  }
+  .akashic-home-relevance-title span { display: block; color: var(--akashic-muted); }
+  .akashic-home-funnel { display: grid; justify-items: start; gap: 0; }
+  .akashic-home-funnel li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 76px;
+    padding: 16px 22px;
+    font-family: var(--akashic-mono);
+    font-size: 11px;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    border: 1px solid rgba(17, 20, 23, .3);
+    border-radius: 3px;
+  }
+  .akashic-home-funnel li:nth-child(1) { width: 100%; border-style: dashed; }
+  .akashic-home-funnel li:nth-child(3) { width: 62%; }
+  .akashic-home-funnel li:nth-child(5) { width: 34%; min-width: 190px; background: var(--akashic-ink); color: var(--akashic-ivory); border-color: var(--akashic-ink); }
+  .akashic-home-funnel-link {
+    width: 1px !important;
+    min-height: 32px !important;
+    height: 32px;
+    margin-left: 28px;
+    padding: 0 !important;
+    border: 0 !important;
+    border-left: 1px solid rgba(17, 20, 23, .35) !important;
+    border-radius: 0 !important;
+  }
+
+  /* ==========================================================
+     08 SUBSCRIPTION
+     ========================================================== */
+  .akashic-home-subscription { background: var(--akashic-surface); border-top: 1px solid var(--akashic-border); }
+  .akashic-home-subscription-grid {
+    display: grid;
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 6vw, 96px);
+    align-items: center;
+  }
+  .akashic-home-subscription-panel {
+    padding: clamp(22px, 3vw, 36px);
+    background: var(--akashic-bg);
+    border: 1px solid var(--akashic-border-strong);
+    border-radius: 4px;
+  }
+  .akashic-home-subscription-rule {
+    margin-top: 26px;
+    padding-top: 20px;
+    border-top: 1px dashed var(--akashic-border-strong);
+    font-size: 14px;
+    color: var(--akashic-muted);
+  }
+
+  /* ==========================================================
+     09 PRIVACY
+     ========================================================== */
+  .akashic-home-privacy { border-top: 1px solid var(--akashic-border); }
+  .akashic-home-privacy-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(28px, 6vw, 96px);
+    align-items: start;
+  }
+  .akashic-home-privacy-list li {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    gap: 12px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--akashic-border);
+    font-size: clamp(1rem, 1.4vw, 1.2rem);
+    color: var(--akashic-ivory);
+  }
+  .akashic-home-privacy-list li:first-child { border-top: 1px solid var(--akashic-border); }
+  .akashic-home-privacy-list .akashic-meta { padding-top: 5px; }
+  .akashic-home-links { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; margin-top: 32px; }
+
+  /* ==========================================================
+     10 FEATURES
+     ========================================================== */
+  .akashic-home-features { background: var(--akashic-surface); border-top: 1px solid var(--akashic-border); }
+  .akashic-home-features-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(28px, 6vw, 96px);
+    align-items: start;
+  }
+  .akashic-home-features-head { position: sticky; top: calc(var(--akashic-nav-h) + 32px); }
+  .akashic-home-feature {
+    display: grid;
+    grid-template-columns: 56px minmax(0, 1fr);
+    gap: 16px;
+    padding: clamp(24px, 3vw, 40px) 0;
+    border-top: 1px solid var(--akashic-border-strong);
+  }
+  .akashic-home-feature:last-child { border-bottom: 1px solid var(--akashic-border-strong); }
+  .akashic-home-feature:nth-child(even) { padding-left: clamp(0px, 4vw, 64px); }
+  .akashic-home-feature h3 {
+    font-size: clamp(1.4rem, 2.6vw, 2.5rem);
+    font-weight: 600;
+    letter-spacing: -.035em;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+  .akashic-home-feature p { font-size: 15px; color: var(--akashic-muted); max-width: 36ch; }
+
+  /* ==========================================================
+     11 PREVIEW
+     ========================================================== */
+  .akashic-home-preview { border-top: 1px solid var(--akashic-border); }
+  .akashic-home-preview-grid {
+    display: grid;
+    grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr);
+    gap: clamp(32px, 6vw, 96px);
+    align-items: center;
+  }
+  .akashic-home-preview-panel {
+    position: relative;
+    background: var(--akashic-surface);
+    border: 1px solid var(--akashic-border-strong);
+    border-radius: 4px;
+  }
+  .akashic-home-preview-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--akashic-border);
+  }
+  .akashic-home-preview-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+    gap: 16px;
+    align-items: baseline;
+    padding: clamp(18px, 2.4vw, 28px) 20px;
+    border-bottom: 1px solid var(--akashic-border);
+  }
+  .akashic-home-preview-row dt { font-family: var(--akashic-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--akashic-muted); }
+  .akashic-home-preview-row dd { margin: 0; font-size: clamp(1.1rem, 1.8vw, 1.5rem); font-weight: 500; letter-spacing: -.02em; }
+  .akashic-home-preview-note { padding: 14px 20px; }
+
+  /* ==========================================================
+     12 ABOUT
+     ========================================================== */
+  .akashic-home-about { background: var(--akashic-surface); border-top: 1px solid var(--akashic-border); }
+  .akashic-home-about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(28px, 6vw, 96px);
+    align-items: center;
+  }
+  .akashic-home-equation { display: grid; gap: 0; }
+  .akashic-home-equation li {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--akashic-border);
+    font-size: clamp(1.8rem, 4.4vw, 4rem);
+    font-weight: 600;
+    letter-spacing: -.04em;
+    line-height: 1.1;
+  }
+  .akashic-home-equation li:first-child { border-top: 1px solid var(--akashic-border); }
+  .akashic-home-equation li:last-child { color: var(--akashic-accent); }
+  .akashic-home-equation .akashic-meta { min-width: 18px; }
+
+  /* ==========================================================
+     13 FINAL
+     ========================================================== */
+  .akashic-home-final {
+    position: relative;
+    text-align: center;
+    padding-block: clamp(96px, 14vw, 220px);
+    border-top: 1px solid var(--akashic-border);
+  }
+  .akashic-home-final .akashic-container { position: relative; z-index: 1; }
+  .akashic-home-final-title {
+    font-size: clamp(2.8rem, 9vw, 9rem);
+    font-weight: 600;
+    line-height: .95;
+    letter-spacing: -.05em;
+    margin: 24px 0 28px;
+  }
+  .akashic-home-final-title span { display: block; }
+  .akashic-home-final-title span + span { color: var(--akashic-muted); }
+  .akashic-home-final .akashic-lead { margin-inline: auto; }
+  .akashic-home-final .akashic-home-actions { justify-content: center; }
+  .akashic-home-final .akashic-eyebrow::after { content: ""; width: 28px; height: 1px; background: currentColor; }
+
+  /* ==========================================================
+     RESPONSIVE
+     ========================================================== */
+  @media (max-width: 1024px) {
+    .akashic-home-hero-grid,
+    .akashic-home-location-grid,
+    .akashic-home-region-grid,
+    .akashic-home-relevance-grid,
+    .akashic-home-subscription-grid,
+    .akashic-home-privacy-grid,
+    .akashic-home-preview-grid,
+    .akashic-home-about-grid { grid-template-columns: minmax(0, 1fr); }
+    .akashic-home-features-grid { grid-template-columns: minmax(0, 1fr); }
+    .akashic-home-features-head { position: static; }
+    .akashic-home-hero-visual { max-width: 560px; margin-inline: auto; width: 100%; }
+    .akashic-home-region-visual { margin-right: 0; }
+    .akashic-home-process-list { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 48px; }
+    .akashic-home-intro-copy { grid-template-columns: minmax(0, 1fr); }
+    .akashic-home-subscription-visual { max-width: 520px; width: 100%; margin-inline: auto; }
+    .akashic-home-location-visual { max-width: 460px; width: 100%; margin-inline: auto; }
+  }
+  @media (max-width: 767px) {
+    .akashic-home-hero-meta { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 20px; }
+    .akashic-home-hero-meta li:nth-child(3) { padding-left: 0; border-left: 0; }
+    .akashic-home-process-list { grid-template-columns: minmax(0, 1fr); }
+    .akashic-home-info-list { grid-template-columns: minmax(0, 1fr); }
+    .akashic-home-actions .akashic-button { width: 100%; justify-content: center; }
+    .akashic-home-feature:nth-child(even) { padding-left: 0; }
+    .akashic-home-feature { grid-template-columns: 40px minmax(0, 1fr); }
+    .akashic-home-funnel li:nth-child(3) { width: 80%; }
+    .akashic-home-funnel li:nth-child(5) { width: 60%; }
+    .akashic-home-preview-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+    .akashic-home-hero .akashic-contour { opacity: .6; }
+    .akashic-home-svg { font-size: 12px; }
+    .akashic-home-svg text { font-size: 17px; }
+    .akashic-home-svg .akashic-home-svg-small { display: none; }
+  }
+  @media (max-width: 400px) {
+    .akashic-home-privacy-list li { grid-template-columns: 34px 1fr; }
+  }
+
+  /* ==========================================================
+     REDUCED MOTION
+     ========================================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .js .akashic-home-draw .akashic-home-line {
+      stroke-dasharray: none;
+      stroke-dashoffset: 0;
+      transition: none;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<!-- ==========================================================
+     01 — HERO
+     ========================================================== -->
+<section class="akashic-home-hero" aria-labelledby="home-hero-title">
+  <div class="akashic-grid-bg akashic-grid-bg--fade akashic-home-bg" aria-hidden="true"></div>
+  <div class="akashic-contour" aria-hidden="true"></div>
+
+  <div class="akashic-container">
+    <div class="akashic-home-hero-grid">
+      <div class="akashic-home-hero-copy">
+        <p class="akashic-eyebrow akashic-reveal">Location-Based Information System</p>
+        <h1 class="akashic-home-hero-title akashic-reveal" id="home-hero-title" style="--akashic-delay:.08s">
+          <span>Informasi yang hadir</span>
+          <span>di tempat yang tepat.</span>
+        </h1>
+        <p class="akashic-lead akashic-reveal" style="--akashic-delay:.16s">Akashic menghubungkan informasi dengan wilayah geografis, sehingga informasi dapat hadir sesuai konteks tempatnya.</p>
+        <div class="akashic-home-actions akashic-reveal" style="--akashic-delay:.24s">
+          <a class="akashic-button akashic-button-primary" href="{{ url_for('information') }}">Explore Information</a>
+          <a class="akashic-button akashic-button-secondary" href="#location">Set Your Location</a>
+        </div>
+      </div>
+
+      <figure class="akashic-home-hero-visual akashic-home-draw akashic-reveal" style="--akashic-delay:.2s" aria-hidden="true">
+        <svg class="akashic-home-svg" viewBox="0 0 600 600" focusable="false" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="20" width="560" height="560" class="akashic-home-svg-faint" style="opacity:.3"/>
+          <path class="akashic-home-svg-faint" d="M20 80H580M20 140H580M20 200H580M20 260H580M20 320H580M20 380H580M20 440H580M20 500H580M20 560H580M80 20V580M140 20V580M200 20V580M260 20V580M320 20V580M380 20V580M440 20V580M500 20V580M560 20V580"/>
+          <g transform="rotate(-12 360 300)">
+            <ellipse cx="360" cy="300" rx="215" ry="160" class="akashic-home-svg-blue" style="opacity:.25"/>
+            <ellipse cx="360" cy="300" rx="160" ry="120" class="akashic-home-svg-blue" style="opacity:.35"/>
+            <ellipse cx="360" cy="300" rx="110" ry="80" class="akashic-home-svg-blue"/>
+            <ellipse cx="360" cy="300" rx="60" ry="40" class="akashic-home-svg-blue"/>
+          </g>
+          <polygon points="150,210 270,140 430,170 500,290 450,420 300,470 170,400" class="akashic-home-svg-dash"/>
+          <polygon points="150,210 270,140 430,170 500,290 450,420 300,470 170,400" class="akashic-home-svg-accent akashic-home-line" pathLength="1" style="opacity:.8"/>
+
+          <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M320 310L430 195" style="opacity:.6"/>
+          <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M320 310L470 350" style="opacity:.6"/>
+          <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M320 310L235 385" style="opacity:.6"/>
+          <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M320 310L262 232" style="opacity:.6"/>
+
+          <circle cx="430" cy="195" r="6" class="akashic-home-svg-fill-soft"/>
+          <circle cx="470" cy="350" r="6" class="akashic-home-svg-fill-soft"/>
+          <circle cx="235" cy="385" r="6" class="akashic-home-svg-fill-soft"/>
+          <circle cx="262" cy="232" r="6" class="akashic-home-svg-fill-soft"/>
+
+          <path class="akashic-home-svg-stroke" d="M320 276V344M286 310H354" style="opacity:.5"/>
+          <circle cx="320" cy="310" r="22" class="akashic-home-svg-accent" style="opacity:.5"/>
+          <circle cx="320" cy="310" r="6" class="akashic-home-svg-fill-accent"/>
+
+          <text x="334" y="288">LOCATION</text>
+          <text x="104" y="196">REGION</text>
+          <text x="400" y="376">INFORMATION</text>
+          <text x="20" y="12" class="akashic-home-svg-small">X·01</text>
+          <text x="200" y="12" class="akashic-home-svg-small">X·02</text>
+          <text x="380" y="12" class="akashic-home-svg-small">X·03</text>
+          <text x="500" y="598" class="akashic-home-svg-small">Y·03</text>
+        </svg>
+      </figure>
+    </div>
+
+    <ul class="akashic-home-hero-meta akashic-reveal" style="--akashic-delay:.3s">
+      <li><strong>System</strong><span class="akashic-meta">/ 01</span></li>
+      <li><strong>Location</strong><span class="akashic-meta">/ 02</span></li>
+      <li><strong>Region</strong><span class="akashic-meta">/ 03</span></li>
+      <li><strong>Information</strong><span class="akashic-meta">/ 04</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==========================================================
+     02 — INTRODUCTION
+     ========================================================== -->
+<section class="akashic-section akashic-home-section akashic-home-introduction" aria-labelledby="home-intro-title">
+  <div class="akashic-container">
+    <div class="akashic-section-heading akashic-reveal">
+      <span class="akashic-section-watermark" aria-hidden="true">Akashic</span>
+      <span class="akashic-section-kicker">01 — Introduce</span>
+      <h2 class="akashic-section-title" id="home-intro-title">Bukan tentang melacak.<br>Tentang memahami tempat.</h2>
+    </div>
+
+    <div class="akashic-home-intro-copy">
+      <p class="akashic-reveal">Informasi sering tersedia dalam jumlah besar. Namun informasi yang tersedia belum tentu hadir dalam konteks tempat yang tepat.</p>
+      <p class="akashic-lead akashic-reveal" style="--akashic-delay:.1s">Akashic menggunakan lokasi sebagai konteks geografis untuk menentukan relevansi informasi.</p>
+    </div>
+
+    <div class="akashic-home-flow akashic-reveal" role="list" aria-label="Alur konsep Akashic">
+      <span class="akashic-home-flow-item" style="--i:0" role="listitem">Location</span>
+      <svg class="akashic-home-flow-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg>
+      <span class="akashic-home-flow-item" style="--i:1" role="listitem">Region</span>
+      <svg class="akashic-home-flow-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg>
+      <span class="akashic-home-flow-item" style="--i:2" role="listitem">Relevance</span>
+      <svg class="akashic-home-flow-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg>
+      <span class="akashic-home-flow-item" style="--i:3" role="listitem">Information</span>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     03 — HOW AKASHIC WORKS
+     ========================================================== -->
+<section class="akashic-section akashic-home-section akashic-home-process" aria-labelledby="home-process-title">
+  <div class="akashic-container">
+    <div class="akashic-section-heading akashic-reveal">
+      <span class="akashic-section-watermark" aria-hidden="true">Process</span>
+      <span class="akashic-section-kicker">02 — Explain</span>
+      <h2 class="akashic-section-title" id="home-process-title">How Akashic works.</h2>
+    </div>
+
+    <ol class="akashic-home-process-list">
+      <li class="akashic-home-process-item akashic-reveal">
+        <span class="akashic-node" aria-hidden="true"></span>
+        <span class="akashic-home-process-num" aria-hidden="true">01</span>
+        <h3>LOCATION</h3>
+        <p>Lokasi menjadi titik awal konteks geografis.</p>
+      </li>
+      <li class="akashic-home-process-item akashic-reveal" style="--akashic-delay:.1s">
+        <span class="akashic-node" aria-hidden="true"></span>
+        <span class="akashic-home-process-num" aria-hidden="true">02</span>
+        <h3>REGION</h3>
+        <p>Sistem menentukan wilayah yang relevan.</p>
+      </li>
+      <li class="akashic-home-process-item akashic-reveal" style="--akashic-delay:.2s">
+        <span class="akashic-node" aria-hidden="true"></span>
+        <span class="akashic-home-process-num" aria-hidden="true">03</span>
+        <h3>RELEVANCE</h3>
+        <p>Informasi dikaitkan dengan konteks wilayah.</p>
+      </li>
+      <li class="akashic-home-process-item akashic-reveal" style="--akashic-delay:.3s">
+        <span class="akashic-node" aria-hidden="true"></span>
+        <span class="akashic-home-process-num" aria-hidden="true">04</span>
+        <h3>INFORMATION</h3>
+        <p>Konten yang relevan dapat ditampilkan kepada pengguna.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<!-- ==========================================================
+     04 — LOCATION
+     ========================================================== -->
+<section id="location" class="akashic-section akashic-home-section akashic-home-location" aria-labelledby="home-location-title">
+  <div class="akashic-container">
+    <div class="akashic-home-location-grid">
+      <div>
+        <div class="akashic-section-heading akashic-reveal">
+          <span class="akashic-section-watermark" aria-hidden="true">Location</span>
+          <span class="akashic-section-kicker">03 — Location</span>
+          <h2 class="akashic-section-title" id="home-location-title">Start with where you are.</h2>
+        </div>
+        <p class="akashic-lead akashic-reveal">Lokasi membantu Akashic memahami konteks geografis Anda. Lokasi tidak menjadi tujuan sistem; ia menjadi konteks bagi informasi yang relevan.</p>
+
+        <div class="akashic-home-location-panel akashic-reveal" id="home-location-panel" data-state="idle">
+          <div class="akashic-home-panel-top">
+            <span class="akashic-home-panel-state"><span class="akashic-home-panel-dot" aria-hidden="true"></span><span data-location-label>Location</span></span>
+            <span class="akashic-meta">Step / 03</span>
+          </div>
+
+          <div role="status" aria-live="polite" id="home-location-status">
+            <p class="akashic-home-panel-title" data-location-title>Your location has not been set.</p>
+            <p class="akashic-home-panel-text" id="home-location-description" data-location-text>Allow Akashic to determine the region associated with your current location.</p>
+          </div>
+
+          <div class="akashic-home-panel-action">
+            <button type="button" class="akashic-button akashic-button-primary" id="home-location-button" aria-describedby="home-location-description" data-location-button>Set Your Location</button>
+          </div>
+
+          <div class="akashic-home-panel-region" data-location-region hidden>
+            <p class="akashic-home-panel-region-label"><span class="akashic-node akashic-node--blue" aria-hidden="true"></span>Region</p>
+            <p class="akashic-home-panel-title" data-location-region-title>Identifying...</p>
+            <p class="akashic-home-panel-text" data-location-region-text>Region identification will appear when the location service is connected.</p>
+          </div>
+        </div>
+
+        <p class="akashic-home-privacy-note akashic-reveal">
+          <span>Location is used as geographic context, not as a public identity.</span>
+          <a class="akashic-link" href="{{ url_for('privacy') }}">Privacy</a>
+        </p>
+      </div>
+
+      <div class="akashic-home-location-visual akashic-home-draw akashic-reveal" aria-hidden="true" style="--akashic-delay:.15s">
+        <svg class="akashic-home-svg" viewBox="0 0 520 560" focusable="false" xmlns="http://www.w3.org/2000/svg">
+          <path class="akashic-home-svg-faint" d="M0 70H520M0 140H520M0 210H520M0 280H520M0 350H520M0 420H520M0 490H520M65 0V560M130 0V560M195 0V560M260 0V560M325 0V560M390 0V560M455 0V560"/>
+          <rect x="40" y="50" width="340" height="460" rx="6" class="akashic-home-svg-dash"/>
+          <polygon points="95,170 200,110 320,140 350,260 290,380 160,400 100,300" class="akashic-home-svg-accent akashic-home-line" pathLength="1" style="opacity:.85"/>
+          <path class="akashic-home-svg-stroke" d="M215 190V290M165 240H265" style="opacity:.5"/>
+          <circle cx="215" cy="240" r="26" class="akashic-home-svg-accent" style="opacity:.45"/>
+          <circle cx="215" cy="240" r="6" class="akashic-home-svg-fill-accent"/>
+
+          <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M221 240H400" style="opacity:.5"/>
+          <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M350 260H400" style="opacity:.5"/>
+          <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M380 80H400" style="opacity:.5"/>
+          <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M400 80V430" style="opacity:.5"/>
+          <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M380 480H400" style="opacity:.5"/>
+          <circle cx="400" cy="240" r="3.5" class="akashic-home-svg-fill-ivory"/>
+          <circle cx="400" cy="260" r="3.5" class="akashic-home-svg-fill-ivory"/>
+          <circle cx="400" cy="80" r="3.5" class="akashic-home-svg-fill-ivory"/>
+          <text x="412" y="214">LOCATION</text>
+          <text x="412" y="232">POINT</text>
+          <text x="412" y="278">REGION</text>
+          <text x="412" y="296">BOUNDARY</text>
+          <text x="412" y="84">CURRENT</text>
+          <text x="412" y="102">CONTEXT</text>
+          <text x="40" y="540" class="akashic-home-svg-small">COORDINATE AXIS · CONCEPTUAL</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     05 — REGION
+     ========================================================== -->
+<section class="akashic-section akashic-home-section akashic-home-region" aria-labelledby="home-region-title">
+  <div class="akashic-container">
+    <div class="akashic-home-region-grid">
+      <div>
+        <div class="akashic-section-heading akashic-reveal">
+          <span class="akashic-section-watermark" aria-hidden="true">Region</span>
+          <span class="akashic-section-kicker">04 — Region</span>
+          <h2 class="akashic-section-title" id="home-region-title">Every place has a context.</h2>
+        </div>
+        <p class="akashic-lead akashic-reveal">Akashic tidak berhenti pada koordinat. Lokasi diterjemahkan menjadi konteks wilayah yang dapat digunakan untuk menentukan relevansi informasi.</p>
+        <ul class="akashic-home-chain akashic-reveal" aria-label="Location, region, context">
+          <li><span class="akashic-node" aria-hidden="true"></span>LOCATION</li>
+          <li><span class="akashic-node akashic-node--blue" aria-hidden="true"></span>REGION</li>
+          <li><span class="akashic-node" aria-hidden="true"></span>CONTEXT</li>
+        </ul>
+      </div>
+
+      <div class="akashic-home-region-visual akashic-home-draw akashic-reveal" aria-hidden="true" style="--akashic-delay:.1s">
+        <svg class="akashic-home-svg" viewBox="0 0 760 520" focusable="false" xmlns="http://www.w3.org/2000/svg">
+          <path class="akashic-home-svg-faint" d="M0 65H760M0 130H760M0 195H760M0 260H760M0 325H760M0 390H760M0 455H760M95 0V520M190 0V520M285 0V520M380 0V520M475 0V520M570 0V520M665 0V520"/>
+          <g transform="rotate(-8 400 260)">
+            <ellipse cx="400" cy="260" rx="330" ry="210" class="akashic-home-svg-blue" style="opacity:.2"/>
+            <ellipse cx="400" cy="260" rx="250" ry="160" class="akashic-home-svg-blue" style="opacity:.3"/>
+            <ellipse cx="400" cy="260" rx="170" ry="110" class="akashic-home-svg-blue" style="opacity:.4"/>
+          </g>
+          <polygon points="60,200 150,110 260,130 280,230 200,300 90,290" class="akashic-home-svg-stroke" style="opacity:.3"/>
+          <polygon points="280,230 260,130 380,90 470,150 450,250 360,290" class="akashic-home-svg-fill-region akashic-home-line" pathLength="1"/>
+          <polygon points="470,150 580,110 690,180 670,290 560,310 450,250" class="akashic-home-svg-stroke" style="opacity:.3"/>
+          <polygon points="200,300 280,230 360,290 340,400 230,430 150,370" class="akashic-home-svg-stroke" style="opacity:.3"/>
+          <polygon points="360,290 450,250 560,310 540,420 430,460 340,400" class="akashic-home-svg-stroke" style="opacity:.3"/>
+          <polygon points="215,95 380,40 520,110 590,260 480,330 330,350 240,300 230,180" class="akashic-home-svg-dash"/>
+
+          <path class="akashic-home-svg-stroke" d="M370 140V240M320 190H420" style="opacity:.5"/>
+          <circle cx="370" cy="190" r="24" class="akashic-home-svg-accent" style="opacity:.45"/>
+          <circle cx="370" cy="190" r="6" class="akashic-home-svg-fill-accent"/>
+          <circle cx="430" cy="230" r="4.5" class="akashic-home-svg-fill-soft"/>
+          <circle cx="310" cy="250" r="4.5" class="akashic-home-svg-fill-soft"/>
+
+          <path class="akashic-home-svg-stroke" d="M376 190H620M360 160L300 40" style="opacity:.4"/>
+          <text x="630" y="194">LOCATION</text>
+          <text x="248" y="32">REGION</text>
+          <text x="520" y="500">CONTEXT</text>
+          <path class="akashic-home-svg-stroke" d="M590 260L640 480H510" style="opacity:.4"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     06 — INFORMATION / EVENT / NEWS
+     ========================================================== -->
+<section class="akashic-section akashic-home-section akashic-home-information" aria-labelledby="home-information-title">
+  <div class="akashic-container">
+    <div class="akashic-section-heading akashic-reveal">
+      <span class="akashic-section-watermark" aria-hidden="true">Information</span>
+      <span class="akashic-section-kicker">05 — Information</span>
+      <h2 class="akashic-section-title" id="home-information-title">Information, in context.</h2>
+    </div>
+
+    <div class="akashic-home-info-visual akashic-home-draw akashic-reveal" aria-hidden="true">
+      <svg class="akashic-home-svg" viewBox="0 0 720 400" focusable="false" xmlns="http://www.w3.org/2000/svg">
+        <path class="akashic-home-svg-faint" d="M0 50H720M0 100H720M0 150H720M0 200H720M0 250H720M0 300H720M0 350H720M90 0V400M180 0V400M270 0V400M360 0V400M450 0V400M540 0V400M630 0V400"/>
+        <circle cx="360" cy="70" r="46" class="akashic-home-svg-blue" style="opacity:.35"/>
+        <circle cx="360" cy="70" r="28" class="akashic-home-svg-fill-region"/>
+        <circle cx="360" cy="70" r="5" class="akashic-home-svg-fill-accent"/>
+        <text x="360" y="22" text-anchor="middle">REGION</text>
+
+        <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M360 98V190H120V290" style="opacity:.55"/>
+        <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M360 190V290" style="opacity:.55"/>
+        <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M360 190H600V290" style="opacity:.55"/>
+
+        <rect x="30" y="290" width="180" height="64" rx="3" class="akashic-home-svg-fill-soft"/>
+        <rect x="270" y="290" width="180" height="64" rx="3" class="akashic-home-svg-fill-soft"/>
+        <rect x="510" y="290" width="180" height="64" rx="3" class="akashic-home-svg-fill-soft"/>
+        <text x="120" y="328" text-anchor="middle">INFORMATION</text>
+        <text x="360" y="328" text-anchor="middle">EVENT</text>
+        <text x="600" y="328" text-anchor="middle">NEWS</text>
+        <circle cx="360" cy="190" r="4" class="akashic-home-svg-fill-ivory"/>
+      </svg>
+    </div>
+
+    <div class="akashic-home-info-list">
+      <article class="akashic-home-info-item akashic-reveal">
+        <span class="akashic-meta">01</span>
+        <h3>INFORMATION</h3>
+        <p>Informasi yang dibuat dan dikelola dalam sistem Akashic.</p>
+      </article>
+      <article class="akashic-home-info-item akashic-reveal" style="--akashic-delay:.1s">
+        <span class="akashic-meta">02</span>
+        <h3>EVENT</h3>
+        <p>Peristiwa yang memiliki konteks waktu dan wilayah.</p>
+      </article>
+      <article class="akashic-home-info-item akashic-reveal" style="--akashic-delay:.2s">
+        <span class="akashic-meta">03</span>
+        <h3>NEWS</h3>
+        <p>Berita eksternal yang dapat dikaitkan dengan wilayah yang relevan.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     07 — RELEVANCE
+     ========================================================== -->
+<section class="akashic-section akashic-section--light akashic-home-section akashic-home-relevance" aria-labelledby="home-relevance-title">
+  <div class="akashic-container">
+    <div class="akashic-home-relevance-grid">
+      <div>
+        <div class="akashic-section-heading akashic-reveal">
+          <span class="akashic-section-watermark" aria-hidden="true">Relevance</span>
+          <span class="akashic-section-kicker">06 — Relevance</span>
+          <h2 class="akashic-home-relevance-title" id="home-relevance-title"><span>Not everything.</span>What matters here.</h2>
+        </div>
+        <p class="akashic-lead akashic-reveal">Akashic dirancang untuk membawa informasi ke dalam konteks wilayah, bukan sekadar menampilkan semuanya sekaligus.</p>
+      </div>
+
+      <ul class="akashic-home-funnel akashic-reveal" aria-label="Global information, region, relevant information" style="--akashic-delay:.1s">
+        <li>Global Information <span class="akashic-node" aria-hidden="true" style="background:currentColor"></span></li>
+        <li class="akashic-home-funnel-link" aria-hidden="true"></li>
+        <li>Region <span class="akashic-node" aria-hidden="true"></span></li>
+        <li class="akashic-home-funnel-link" aria-hidden="true"></li>
+        <li>Relevant Information</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     08 — SUBSCRIPTION
+     ========================================================== -->
+<section id="subscription" class="akashic-section akashic-home-section akashic-home-subscription" aria-labelledby="home-subscription-title">
+  <div class="akashic-container">
+    <div class="akashic-section-heading akashic-reveal">
+      <span class="akashic-section-watermark" aria-hidden="true">Subscription</span>
+      <span class="akashic-section-kicker">07 — Subscription</span>
+      <h2 class="akashic-section-title" id="home-subscription-title">Stay informed about your region.</h2>
+    </div>
+
+    <div class="akashic-home-subscription-grid">
+      <div class="akashic-home-subscription-visual akashic-home-draw akashic-reveal" aria-hidden="true">
+        <svg class="akashic-home-svg" viewBox="0 0 480 500" focusable="false" xmlns="http://www.w3.org/2000/svg">
+          <path class="akashic-home-svg-faint" d="M0 62H480M0 124H480M0 186H480M0 248H480M0 310H480M0 372H480M0 434H480M60 0V500M120 0V500M180 0V500M240 0V500M300 0V500M360 0V500M420 0V500"/>
+          <circle cx="240" cy="50" r="22" class="akashic-home-svg-fill-region"/>
+          <circle cx="240" cy="50" r="5" class="akashic-home-svg-fill-accent"/>
+          <text x="240" y="100" text-anchor="middle">CURRENT REGION</text>
+
+          <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M240 72V130H80V190" style="opacity:.55"/>
+          <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M240 130V190" style="opacity:.55"/>
+          <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M240 130H400V190" style="opacity:.55"/>
+          <circle cx="80" cy="200" r="6" class="akashic-home-svg-fill-soft"/>
+          <circle cx="240" cy="200" r="6" class="akashic-home-svg-fill-soft"/>
+          <circle cx="400" cy="200" r="6" class="akashic-home-svg-fill-soft"/>
+          <text x="80" y="236" text-anchor="middle" style="font-size:11px">INFORMATION</text>
+          <text x="240" y="236" text-anchor="middle" style="font-size:11px">EVENT</text>
+          <text x="400" y="236" text-anchor="middle" style="font-size:11px">UPDATES</text>
+
+          <path class="akashic-home-svg-stroke akashic-home-line" pathLength="1" d="M80 210V290H240V350M240 210V290M400 210V290H240" style="opacity:.55"/>
+          <rect x="140" y="350" width="200" height="64" rx="3" class="akashic-home-svg-accent" style="opacity:.8"/>
+          <text x="240" y="388" text-anchor="middle">SUBSCRIPTION</text>
+        </svg>
+      </div>
+
+      <div>
+        <p class="akashic-lead akashic-reveal">Subscription memungkinkan pengguna menerima informasi yang relevan dengan konteks wilayah mereka.</p>
+
+        <div class="akashic-home-subscription-panel akashic-reveal" id="home-subscription-panel" data-state="inactive" style="margin-top:32px">
+          <div class="akashic-home-panel-top">
+            <span class="akashic-home-panel-state"><span class="akashic-home-panel-dot" aria-hidden="true"></span><span data-subscription-label>Subscription</span></span>
+            <span class="akashic-meta">Step / 07</span>
+          </div>
+
+          <div role="status" aria-live="polite" id="home-subscription-status">
+            <p class="akashic-home-panel-title" data-subscription-title>Not active</p>
+            <p class="akashic-home-panel-text" id="home-subscription-description" data-subscription-text>Subscribe to receive relevant regional updates.</p>
+          </div>
+
+          <div class="akashic-home-panel-action">
+            <button type="button" class="akashic-button akashic-button-primary" id="home-subscription-button" aria-describedby="home-subscription-description" data-subscription-button>Subscribe to Updates</button>
+          </div>
+
+          <p class="akashic-home-subscription-rule">Relevansi subscription mengikuti konteks wilayah pengguna berdasarkan mekanisme sistem Akashic.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     09 — PRIVACY
+     ========================================================== -->
+<section class="akashic-section akashic-home-section akashic-home-privacy" aria-labelledby="home-privacy-title">
+  <div class="akashic-container">
+    <div class="akashic-home-privacy-grid">
+      <div>
+        <div class="akashic-section-heading akashic-reveal">
+          <span class="akashic-section-watermark" aria-hidden="true">Privacy</span>
+          <span class="akashic-section-kicker">08 — Privacy</span>
+          <h2 class="akashic-section-title" id="home-privacy-title">Location as context.<br>Not surveillance.</h2>
+        </div>
+        <div class="akashic-home-links akashic-reveal">
+          <a class="akashic-button akashic-button-secondary" href="{{ url_for('about') }}">Learn More</a>
+          <a class="akashic-link" href="{{ url_for('privacy') }}">Privacy</a>
+        </div>
+      </div>
+
+      <ul class="akashic-home-privacy-list">
+        <li class="akashic-reveal"><span class="akashic-meta">01</span><span>Lokasi digunakan sebagai konteks geografis.</span></li>
+        <li class="akashic-reveal" style="--akashic-delay:.05s"><span class="akashic-meta">02</span><span>Lokasi bukan identitas publik.</span></li>
+        <li class="akashic-reveal" style="--akashic-delay:.1s"><span class="akashic-meta">03</span><span>Lokasi tidak diminta secara otomatis.</span></li>
+        <li class="akashic-reveal" style="--akashic-delay:.15s"><span class="akashic-meta">04</span><span>Anda dapat menjelajah tanpa memberikan lokasi.</span></li>
+        <li class="akashic-reveal" style="--akashic-delay:.2s"><span class="akashic-meta">05</span><span>Interaksi lokasi dilakukan setelah tindakan Anda.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     10 — FEATURES
+     ========================================================== -->
+<section class="akashic-section akashic-home-section akashic-home-features" aria-labelledby="home-features-title">
+  <div class="akashic-container">
+    <div class="akashic-home-features-grid">
+      <div class="akashic-home-features-head">
+        <div class="akashic-section-heading akashic-reveal">
+          <span class="akashic-section-watermark" aria-hidden="true">Design</span>
+          <span class="akashic-section-kicker">Principles</span>
+          <h2 class="akashic-section-title" id="home-features-title">Designed around relevance.</h2>
+        </div>
+      </div>
+
+      <div>
+        <article class="akashic-home-feature akashic-reveal">
+          <span class="akashic-meta">01</span>
+          <div><h3>LOCATION-AWARE</h3><p>Location menjadi konteks geografis.</p></div>
+        </article>
+        <article class="akashic-home-feature akashic-reveal">
+          <span class="akashic-meta">02</span>
+          <div><h3>REGION-BASED</h3><p>Informasi dapat dikaitkan dengan wilayah.</p></div>
+        </article>
+        <article class="akashic-home-feature akashic-reveal">
+          <span class="akashic-meta">03</span>
+          <div><h3>CONTEXTUAL</h3><p>Konten dapat disesuaikan dengan konteks tempat.</p></div>
+        </article>
+        <article class="akashic-home-feature akashic-reveal">
+          <span class="akashic-meta">04</span>
+          <div><h3>PRIVACY-FIRST</h3><p>Lokasi tidak menjadi identitas utama pengguna.</p></div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     11 — INFORMATION PREVIEW
+     ========================================================== -->
+<section class="akashic-section akashic-home-section akashic-home-preview" aria-labelledby="home-preview-title">
+  <div class="akashic-container">
+    <div class="akashic-home-preview-grid">
+      <div>
+        <div class="akashic-section-heading akashic-reveal">
+          <span class="akashic-section-watermark" aria-hidden="true">Preview</span>
+          <span class="akashic-section-kicker">System View</span>
+          <h2 class="akashic-section-title" id="home-preview-title">See information in context.</h2>
+        </div>
+        <div class="akashic-home-links akashic-reveal">
+          <a class="akashic-button akashic-button-primary" href="{{ url_for('information') }}">Explore Information</a>
+        </div>
+      </div>
+
+      <div class="akashic-home-preview-panel akashic-reveal" style="--akashic-delay:.1s">
+        <span class="akashic-crosshair" aria-hidden="true" style="top:-11px;left:-11px"></span>
+        <span class="akashic-crosshair" aria-hidden="true" style="bottom:-11px;right:-11px"></span>
+        <div class="akashic-home-preview-bar">
+          <span class="akashic-home-panel-state"><span class="akashic-node akashic-node--blue" aria-hidden="true"></span>Conceptual View</span>
+          <span class="akashic-meta">Akashic / 01</span>
+        </div>
+        <dl style="margin:0">
+          <div class="akashic-home-preview-row"><dt>Region</dt><dd>Current Context</dd></div>
+          <div class="akashic-home-preview-row"><dt>Type</dt><dd>Information</dd></div>
+          <div class="akashic-home-preview-row"><dt>Relevance</dt><dd>Regional</dd></div>
+          <div class="akashic-home-preview-row" style="border-bottom:0"><dt>Status</dt><dd>Available</dd></div>
+        </dl>
+        <p class="akashic-meta akashic-home-preview-note" style="border-top:1px solid var(--akashic-border)">Ilustrasi konseptual. Tidak berasal dari data aktif.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     12 — ABOUT
+     ========================================================== -->
+<section class="akashic-section akashic-home-section akashic-home-about" aria-labelledby="home-about-title">
+  <div class="akashic-container">
+    <div class="akashic-home-about-grid">
+      <div>
+        <div class="akashic-section-heading akashic-reveal">
+          <span class="akashic-section-watermark" aria-hidden="true">About Akashic</span>
+          <span class="akashic-section-kicker">09 — About</span>
+          <h2 class="akashic-section-title" id="home-about-title">Why Akashic exists.</h2>
+        </div>
+        <p class="akashic-lead akashic-reveal">Informasi tersedia di banyak tempat. Akashic mencoba membuat hubungan antara tempat dan informasi menjadi lebih bermakna.</p>
+        <div class="akashic-home-links akashic-reveal">
+          <a class="akashic-link" href="{{ url_for('about') }}">Read About Akashic <svg class="akashic-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg></a>
+        </div>
+      </div>
+
+      <ul class="akashic-home-equation" aria-label="Place plus context plus information">
+        <li class="akashic-reveal"><span class="akashic-meta" aria-hidden="true">&nbsp;</span>PLACE</li>
+        <li class="akashic-reveal" style="--akashic-delay:.08s"><span class="akashic-meta" aria-hidden="true">+</span>CONTEXT</li>
+        <li class="akashic-reveal" style="--akashic-delay:.16s"><span class="akashic-meta" aria-hidden="true">+</span>INFORMATION</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     13 — FINAL CTA
+     ========================================================== -->
+<section class="akashic-home-final akashic-home-section" aria-labelledby="home-final-title">
+  <div class="akashic-grid-bg akashic-grid-bg--fade akashic-home-bg" aria-hidden="true"></div>
+  <div class="akashic-contour" aria-hidden="true"></div>
+  <div class="akashic-container">
+    <p class="akashic-eyebrow akashic-reveal">Explore</p>
+    <h2 class="akashic-home-final-title akashic-reveal" id="home-final-title" style="--akashic-delay:.08s">
+      <span>Setiap informasi</span>
+      <span>memiliki tempatnya.</span>
+    </h2>
+    <p class="akashic-lead akashic-reveal" style="--akashic-delay:.16s">Jelajahi bagaimana Akashic menghubungkan lokasi, wilayah, dan informasi dalam satu sistem.</p>
+    <div class="akashic-home-actions akashic-reveal" style="--akashic-delay:.24s">
+      <a class="akashic-button akashic-button-primary" href="{{ url_for('information') }}">Explore Information</a>
+      <a class="akashic-button akashic-button-secondary" href="{{ url_for('contact') }}">Contact Akashic</a>
+    </div>
+  </div>
+</section>
+
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+  (function () {
+    'use strict';
+
+    /* ------------------------------------------------------
+       Region service adapter.
+       Saat ini belum ada backend: resolve() mengembalikan null.
+       Ketika Region Engine tersambung, definisikan
+       window.AkashicRegionService = { resolve: function (position) { ... } }
+       yang mengembalikan Promise berisi { name: '...' }.
+       Posisi tidak disimpan di halaman ini.
+       ------------------------------------------------------ */
+    var defaultRegionService = {
+      resolve: function () { return Promise.resolve(null); }
+    };
+
+    function getRegionService() {
+      var custom = window.AkashicRegionService;
+      return (custom && typeof custom.resolve === 'function') ? custom : defaultRegionService;
+    }
+
+    /* ---------- Location ---------- */
+    function initLocationExperience() {
+      var panel = document.getElementById('home-location-panel');
+      var button = document.getElementById('home-location-button');
+      if (!panel || !button) { return; }
+
+      var els = {
+        label: panel.querySelector('[data-location-label]'),
+        title: panel.querySelector('[data-location-title]'),
+        text: panel.querySelector('[data-location-text]'),
+        region: panel.querySelector('[data-location-region]'),
+        regionTitle: panel.querySelector('[data-location-region-title]'),
+        regionText: panel.querySelector('[data-location-region-text]')
+      };
+
+      var copy = {
+        idle: {
+          label: 'Location',
+          title: 'Your location has not been set.',
+          text: 'Allow Akashic to determine the region associated with your current location.',
+          button: 'Set Your Location'
+        },
+        requesting: {
+          label: 'Requesting',
+          title: 'Waiting for your permission.',
+          text: 'Your browser may ask you to allow location access.',
+          button: 'Requesting...'
+        },
+        detected: {
+          label: 'Location Detected',
+          title: 'Location detected.',
+          text: 'Your geographic position has been detected.',
+          button: null
+        },
+        error: {
+          label: 'Location Unavailable',
+          title: 'Location unavailable.',
+          text: 'Location access was not granted.',
+          button: 'Try Again'
+        },
+        unsupported: {
+          label: 'Location Unavailable',
+          title: 'Location unavailable.',
+          text: 'Your browser does not provide location access.',
+          button: null
+        }
+      };
+
+      var state = 'idle';
+
+      function render(next, overrideText) {
+        state = next;
+        var c = copy[next];
+        panel.setAttribute('data-state', next);
+        els.label.textContent = c.label;
+        els.title.textContent = c.title;
+        els.text.textContent = overrideText || c.text;
+
+        if (c.button) {
+          button.hidden = false;
+          button.textContent = c.button;
+          button.disabled = (next === 'requesting');
+        } else {
+          button.hidden = true;
+        }
+
+        if (next === 'detected') {
+          els.region.hidden = false;
+          els.regionTitle.textContent = 'Identifying...';
+          els.regionText.textContent = 'Region identification will appear when the location service is connected.';
+        } else {
+          els.region.hidden = true;
+        }
+      }
+
+      function onSuccess(position) {
+        render('detected');
+        var service = getRegionService();
+        Promise.resolve(service.resolve(position)).then(function (result) {
+          if (result && typeof result.name === 'string' && result.name) {
+            els.regionTitle.textContent = result.name;
+            els.regionText.textContent = 'Region associated with your current location.';
+          }
+        }).catch(function () {
+          /* Biarkan pesan default: layanan wilayah belum tersambung. */
+        });
+      }
+
+      function onError(error) {
+        var denied = error && error.code === 1;
+        render('error', denied ? null : 'Your location could not be determined right now.');
+      }
+
+      button.addEventListener('click', function () {
+        if (state === 'requesting') { return; }
+
+        if (!('geolocation' in navigator)) {
+          render('unsupported');
+          return;
+        }
+
+        render('requesting');
+        navigator.geolocation.getCurrentPosition(onSuccess, onError, {
+          enableHighAccuracy: false,
+          timeout: 12000,
+          maximumAge: 300000
+        });
+      });
+
+      if (!('geolocation' in navigator)) {
+        /* Tidak meminta izin apa pun saat load; hanya menandai ketersediaan fitur. */
+        button.setAttribute('data-geolocation', 'unavailable');
+      }
+    }
+
+    /* ---------- Subscription ---------- */
+    function initSubscriptionExperience() {
+      var panel = document.getElementById('home-subscription-panel');
+      var button = document.getElementById('home-subscription-button');
+      if (!panel || !button) { return; }
+
+      var label = panel.querySelector('[data-subscription-label]');
+      var title = panel.querySelector('[data-subscription-title]');
+      var text = panel.querySelector('[data-subscription-text]');
+      var state = 'inactive';
+
+      button.addEventListener('click', function () {
+        if (state === 'unavailable') { return; }
+        state = 'unavailable';
+        panel.setAttribute('data-state', 'unavailable');
+        label.textContent = 'Subscription Service';
+        title.textContent = 'Service not connected.';
+        text.textContent = 'Subscription will be available when the service is connected.';
+        button.textContent = 'Service Not Connected';
+        button.setAttribute('aria-disabled', 'true');
+      });
+    }
+
+    function init() {
+      initLocationExperience();
+      initSubscriptionExperience();
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  })();
+</script>
+{% endblock %}
