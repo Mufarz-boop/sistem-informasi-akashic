@@ -46,6 +46,7 @@ app/
                 feed.js
                 location.js
                 push.js
+            video/
             service_worker.js
         pages/
             admin/
@@ -62,7 +63,7 @@ app/
                 register.html
                 reset-password.html
             error/
-                400.html
+                404.html
                 500.html
             landing/
                 about.html
