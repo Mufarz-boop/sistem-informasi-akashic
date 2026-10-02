@@ -1,199 +1,744 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex">
-<meta name="theme-color" content="#E9E9E9">
-<title>500 — Akashic</title>
-<style>
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#eeeeec">
+  <title>Maaf, terjadi gangguan | Akashic</title>
 
-/* ========== VARIABLES ========== */
-:root{
-  --bg:#E9E9E9;--bg-alt:#E2E2E4;
-  --dark:#4A4B50;--mid:#686970;--light:#92939A;--soft:#55565C;
-  --head:#62636A;--body:#686970;
-  --orange:#FF9418;--orange-dark:#EC8508;
-  --font:Manrope,Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
+  <style>
+    /* =========================================================
+       AKASHIC — SYSTEM INTERRUPTION (HTTP 500)
+       Standalone page. Semua class memakai prefix akashic-500.
+       ========================================================= */
 
-/* ========== GLOBAL ========== */
-*,*::before,*::after{box-sizing:border-box}
-body{margin:0;min-height:100vh;min-height:100dvh;display:grid;grid-template-rows:auto 1fr auto;font-family:var(--font);color:var(--body);overflow-x:hidden;
-  background:radial-gradient(60% 50% at 30% 45%,#EEEEEE,transparent 70%),linear-gradient(180deg,var(--bg),var(--bg-alt))}
-a{color:inherit;text-decoration:none}
-h1,p{margin:0}
-:focus-visible{outline:2px solid var(--dark);outline-offset:3px;border-radius:10px}
-.bar{display:flex;justify-content:space-between;align-items:center;gap:16px;width:100%;max-width:1100px;margin:0 auto;padding:24px 28px}
+    :root {
+      --akashic-500-bg: #eeeeec;
+      --akashic-500-charcoal: #444444;
+      --akashic-500-ink: #2f2f2f;
+      --akashic-500-muted: #6b6b6b;
+      --akashic-500-line: rgba(68, 68, 68, 0.07);
+      --akashic-500-orange: #f7931e;
+      --akashic-500-orange-deep: #a85a00;
+      --akashic-500-blue: #2f6f9f;
+      --akashic-500-ease: cubic-bezier(0.22, 1, 0.36, 1);
+      --akashic-500-serif: Georgia, "Times New Roman", Times, serif;
+      --akashic-500-sans: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
 
-/* ========== HEADER ========== */
-.brand{display:inline-flex;align-items:center;gap:10px;font-weight:800;font-size:13px;letter-spacing:.2em;color:var(--head)}
-.brand svg{width:24px;height:24px}
-.status{font-size:12px;color:var(--light);display:flex;align-items:center;gap:8px}
-.status i{width:7px;height:7px;border-radius:50%;background:var(--orange)}
+      /* Kekuatan lapisan terang di atas gambar latar (0 = gambar polos, 1 = tertutup penuh) */
+      --akashic-500-veil-start: 0.86;
+      --akashic-500-veil-end: 0.52;
+    }
 
-/* ========== LAYOUT ========== */
-main{display:grid;place-items:center;padding:16px 28px 40px}
-.stage{width:100%;max-width:1040px;display:grid;grid-template-columns:1.1fr 1fr;align-items:center;gap:clamp(24px,5vw,72px)}
-.art{width:100%}
-.art svg{display:block;width:100%;height:auto;overflow:visible}
+    *, *::before, *::after { box-sizing: border-box; }
 
-/* ========== ILLUSTRATION ANIMATION ========== */
-.warning-bubble{animation:floatWarning 4s ease-in-out infinite}
-.warning-lines{animation:pulseLines 3s ease-in-out infinite}
-.head{transform-box:fill-box;transform-origin:50% 100%;animation:tilt 5s ease-in-out infinite}
-.status-light{animation:blink 2.4s ease-in-out infinite}
-@keyframes floatWarning{0%,100%{transform:translateY(-3px)}50%{transform:translateY(3px)}}
-@keyframes pulseLines{0%,100%{opacity:1}50%{opacity:.35}}
-@keyframes tilt{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
 
-/* ========== MESSAGE ========== */
-.code{font-size:12px;font-weight:700;letter-spacing:.12em;color:var(--light);margin-bottom:18px}
-.code b{color:var(--orange);font-weight:800}
-h1{font-weight:800;letter-spacing:-.03em;line-height:1.08;color:var(--head)}
-h1 .big{display:block;font-size:clamp(2.6rem,6vw,4.4rem)}
-h1 .mid{display:block;margin-top:6px;font-size:clamp(1.35rem,2.8vw,2rem);font-weight:700}
-.desc{margin-top:20px;max-width:42ch;font-size:15.5px;line-height:1.7}
-.actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:30px}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      background-color: var(--akashic-500-bg);
+      background-image: radial-gradient(ellipse 70% 60% at 30% 50%, #f6f5f2 0%, rgba(246, 245, 242, 0) 70%);
+      color: var(--akashic-500-charcoal);
+      font-family: var(--akashic-500-sans);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      animation: akashic-500-fade 600ms var(--akashic-500-ease) both;
+    }
 
-/* ========== BUTTONS ========== */
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:12px 22px;border-radius:10px;border:1.5px solid transparent;font:600 14px/1.2 var(--font);cursor:pointer;transition:transform .2s,background .2s,border-color .2s,color .2s}
-.btn:hover{transform:translateY(-1px)}
-.btn--primary{background:var(--orange);color:#fff}
-.btn--primary:hover{background:var(--orange-dark)}
-.btn--ghost{background:transparent;color:var(--head);border-color:var(--light)}
-.btn--ghost:hover{border-color:var(--dark);color:var(--dark)}
+    /* ---------- Gambar latar ---------- */
+    .akashic-500__bg {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      pointer-events: none;
+      background-color: var(--akashic-500-bg);
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      transform-origin: 60% 50%;
+      animation:
+        akashic-500-bg-in 1600ms var(--akashic-500-ease) both,
+        akashic-500-bg-drift 28s ease-in-out 1.6s infinite alternate;
+    }
 
-/* ========== FOOTER ========== */
-footer.bar{font-size:12px;color:var(--light);flex-wrap:wrap}
-footer nav{display:flex;gap:18px}
-footer a{transition:color .2s}footer a:hover{color:var(--dark)}
+    /* Lapisan terang agar teks tetap terbaca di atas gambar apa pun */
+    .akashic-500__bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(
+          90deg,
+          rgba(238, 238, 236, var(--akashic-500-veil-start)) 0%,
+          rgba(238, 238, 236, var(--akashic-500-veil-end)) 100%
+        ),
+        radial-gradient(ellipse 90% 80% at 50% 50%, rgba(238, 238, 236, 0) 40%, rgba(238, 238, 236, 0.55) 100%);
+    }
 
-/* ========== RESPONSIVE ========== */
-@media (max-width:900px){
-  .stage{grid-template-columns:1fr;text-align:center;gap:20px}
-  .art{width:min(85vw,420px);margin:0 auto}
-  .desc{margin-left:auto;margin-right:auto}
-  .actions{justify-content:center}
-  .status{display:none}
-}
-@media (max-width:420px){.bar{padding:18px 20px}main{padding:8px 20px 28px}.actions .btn{width:100%}footer.bar{justify-content:center;text-align:center}}
+    /* ---------- Root layout ---------- */
+    .akashic-500 {
+      position: relative;
+      isolation: isolate;
+      min-height: 100vh;
+      min-height: 100dvh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      width: 100%;
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: clamp(18px, 2.6vw, 36px) clamp(20px, 5vw, 64px);
+    }
 
-/* ========== ACCESSIBILITY ========== */
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
-</style>
+    /* Grid arsitektural tipis + noise halus (full viewport) */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, var(--akashic-500-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--akashic-500-line) 1px, transparent 1px);
+      background-size: 76px 76px;
+      -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 15%, transparent 78%);
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 15%, transparent 78%);
+    }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.35;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.27  0 0 0 0 0.27  0 0 0 0 0.27  0 0 0 0.07 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+    }
+
+    /* ---------- Header ---------- */
+    .akashic-500__header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .akashic-500__brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: inherit;
+      text-decoration: none;
+      border-radius: 6px;
+    }
+
+    .akashic-500__brand-mark { width: 26px; height: 26px; flex: none; }
+
+    .akashic-500__brand-text { display: flex; flex-direction: column; gap: 3px; }
+
+    .akashic-500__wordmark {
+      font-family: var(--akashic-500-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      color: var(--akashic-500-ink);
+      line-height: 1;
+    }
+
+    .akashic-500__tagline {
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--akashic-500-muted);
+      line-height: 1.2;
+    }
+
+    .akashic-500__code {
+      text-align: right;
+      font-size: 0.66rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--akashic-500-muted);
+      line-height: 1.5;
+    }
+
+    .akashic-500__code strong {
+      display: block;
+      font-family: var(--akashic-500-serif);
+      font-size: 1.05rem;
+      letter-spacing: 0.12em;
+      font-weight: 700;
+      color: var(--akashic-500-orange-deep);
+    }
+
+    /* ---------- Main ---------- */
+    .akashic-500__main {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      align-items: center;
+      column-gap: clamp(32px, 6vw, 88px);
+      padding: clamp(24px, 5vh, 56px) 0;
+    }
+
+    /* Ilustrasi (kini berisi angka 500) */
+    .akashic-500__illustration {
+      width: 100%;
+      max-width: 640px;
+      justify-self: start;
+    }
+
+    /* Angka 500: digambar sebagai garis SVG (konsisten di semua font/perangkat) */
+    .akashic-500__number {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+      user-select: none;
+      -webkit-user-select: none;
+      animation: akashic-500-rise 1000ms var(--akashic-500-ease) 200ms both;
+    }
+
+    .akashic-500__num-layer {
+      fill: none;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* Bayangan tebal di belakang angka */
+    .akashic-500__num-shadow {
+      stroke: rgba(68, 68, 68, 0.10);
+      stroke-width: 34;
+    }
+
+    /* Garis tipis ala blueprint, bergeser dari angka utama */
+    .akashic-500__num-blueprint {
+      stroke: var(--akashic-500-orange);
+      stroke-width: 2;
+      stroke-opacity: 0.85;
+    }
+
+    /* Angka utama */
+    .akashic-500__num-main {
+      stroke: url(#akashic-500-ink-grad);
+      stroke-width: 34;
+    }
+
+    .akashic-500__num-main--accent {
+      stroke: var(--akashic-500-orange);
+    }
+
+    /* Efek menggambar angka satu per satu */
+    .akashic-500__draw {
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+      animation: akashic-500-draw 1500ms var(--akashic-500-ease) both;
+    }
+    .akashic-500__draw--1 { animation-delay: 350ms; }
+    .akashic-500__draw--2 { animation-delay: 700ms; }
+    .akashic-500__draw--3 { animation-delay: 1050ms; }
+
+    /* Cahaya di balik angka "0" tengah */
+    .akashic-500__num-glow {
+      opacity: 0.5;
+      animation: akashic-500-pulse 4.2s ease-in-out 1.6s infinite alternate;
+    }
+
+    /* Titik lokasi + gelombang radar di dalam angka "0" tengah */
+    .akashic-500__pin {
+      opacity: 0;
+      animation: akashic-500-fade 700ms var(--akashic-500-ease) 1.8s both;
+    }
+
+    .akashic-500__ping {
+      fill: none;
+      stroke: var(--akashic-500-orange);
+      stroke-width: 2;
+      opacity: 0;
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: akashic-500-ping 3.4s cubic-bezier(0.2, 0.6, 0.3, 1) 2s infinite;
+    }
+    .akashic-500__ping--b { animation-delay: 3.1s; }
+
+    /* Glitch singkat sesekali (kesan error) */
+    .akashic-500__glitch {
+      fill: none;
+      stroke: var(--akashic-500-blue);
+      stroke-width: 34;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      mix-blend-mode: multiply;
+      opacity: 0;
+      animation: akashic-500-glitch 7s steps(1, end) 3s infinite;
+    }
+
+    .akashic-500__scene {
+      display: block;
+      width: 100%;
+      height: auto;
+      overflow: visible;
+    }
+
+    .akashic-500__figure {
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+      animation: akashic-500-rise-svg 900ms var(--akashic-500-ease) 300ms both;
+    }
+
+    .akashic-500__bubble {
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+      animation: akashic-500-rise-svg 900ms var(--akashic-500-ease) 150ms both;
+    }
+
+    .akashic-500__bubble-float {
+      transform-box: fill-box;
+      transform-origin: 30% 100%;
+      animation: akashic-500-float 7s ease-in-out 1.2s infinite alternate;
+    }
+
+    .akashic-500__tick { animation: akashic-500-tick 3.6s ease-in-out 1.2s infinite alternate; }
+    .akashic-500__tick--b { animation-delay: 1.6s; }
+    .akashic-500__tick--c { animation-delay: 2.2s; }
+
+    .akashic-500__glow {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: akashic-500-glow 6s ease-in-out infinite alternate;
+    }
+
+    .akashic-500__cursor { animation: akashic-500-cursor 3.4s ease-in-out infinite; }
+    .akashic-500__led { animation: akashic-500-led 4.5s ease-in-out infinite; }
+
+    .akashic-500__signal { animation: akashic-500-signal 5s ease-in-out infinite; }
+    .akashic-500__signal--b { animation-delay: 1s; }
+
+    /* Konten teks */
+    .akashic-500__content {
+      max-width: 32rem;
+      justify-self: start;
+    }
+
+    .akashic-500__title {
+      margin: 0 0 clamp(18px, 3vh, 28px);
+      font-family: var(--akashic-500-serif);
+      font-weight: 400;
+      font-size: clamp(2.4rem, 4.8vw, 4.3rem);
+      line-height: 1.06;
+      letter-spacing: -0.02em;
+      color: var(--akashic-500-ink);
+      animation: akashic-500-rise 900ms var(--akashic-500-ease) 450ms both;
+    }
+
+    .akashic-500__title-sub {
+      display: block;
+      margin-top: 0.1em;
+    }
+
+    .akashic-500__message {
+      animation: akashic-500-rise 900ms var(--akashic-500-ease) 600ms both;
+    }
+
+    .akashic-500__message p {
+      margin: 0 0 0.7em;
+      font-family: var(--akashic-500-serif);
+      font-size: clamp(1.02rem, 1.4vw, 1.18rem);
+      line-height: 1.65;
+      color: var(--akashic-500-muted);
+    }
+
+    .akashic-500__message p:last-child { margin-bottom: 0; }
+
+    .akashic-500__actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 28px;
+      margin-top: clamp(24px, 4vh, 40px);
+      animation: akashic-500-rise 900ms var(--akashic-500-ease) 750ms both;
+    }
+
+    /* CTA utama */
+    .akashic-500__cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 14px;
+      min-height: 52px;
+      padding: 0 26px;
+      border-radius: 999px;
+      background: var(--akashic-500-charcoal);
+      color: #ffffff;
+      font-size: 0.78rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 6px;
+      transition: opacity 260ms var(--akashic-500-ease), text-decoration-color 260ms var(--akashic-500-ease);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .akashic-500__cta-arrow {
+      width: 18px;
+      height: 18px;
+      flex: none;
+      color: var(--akashic-500-orange);
+      transition: transform 320ms var(--akashic-500-ease);
+    }
+
+    .akashic-500__cta:hover {
+      opacity: 0.92;
+      text-decoration-color: var(--akashic-500-orange);
+    }
+    .akashic-500__cta:hover .akashic-500__cta-arrow { transform: translateX(5px); }
+
+    .akashic-500__cta:focus-visible,
+    .akashic-500__retry:focus-visible,
+    .akashic-500__brand:focus-visible {
+      outline: 3px solid var(--akashic-500-blue);
+      outline-offset: 4px;
+    }
+
+    /* Aksi sekunder */
+    .akashic-500__retry {
+      appearance: none;
+      background: none;
+      border: 0;
+      padding: 10px 2px;
+      font: inherit;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--akashic-500-muted);
+      cursor: pointer;
+      text-decoration: underline;
+      text-decoration-color: transparent;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 6px;
+      transition: color 260ms var(--akashic-500-ease), text-decoration-color 260ms var(--akashic-500-ease);
+    }
+    .akashic-500__retry[hidden] { display: none; }
+    .akashic-500__retry:hover {
+      color: var(--akashic-500-ink);
+      text-decoration-color: currentColor;
+    }
+
+    /* ---------- Footer ---------- */
+    .akashic-500__meta {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 6px 24px;
+      padding-top: 16px;
+      border-top: 1px solid rgba(68, 68, 68, 0.12);
+      font-size: 0.62rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #747472;
+      animation: akashic-500-fade 900ms var(--akashic-500-ease) 800ms both;
+    }
+
+    /* ---------- Keyframes ---------- */
+    @keyframes akashic-500-fade {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes akashic-500-bg-in {
+      from { opacity: 0; transform: scale(1.08); }
+      to   { opacity: 1; transform: scale(1.02); }
+    }
+
+    @keyframes akashic-500-bg-drift {
+      from { transform: scale(1.02) translate3d(0, 0, 0); }
+      to   { transform: scale(1.07) translate3d(-1.2%, -0.8%, 0); }
+    }
+
+    @keyframes akashic-500-pulse {
+      from { opacity: 0.35; }
+      to   { opacity: 0.75; }
+    }
+
+    @keyframes akashic-500-draw {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes akashic-500-ping {
+      0%   { opacity: 0;   transform: scale(0.25); }
+      15%  { opacity: 0.8; }
+      100% { opacity: 0;   transform: scale(1); }
+    }
+
+    @keyframes akashic-500-glitch {
+      0%, 100% { opacity: 0;    transform: translate3d(0, 0, 0); }
+      90%      { opacity: 0.55; transform: translate3d(-7px, 2px, 0); }
+      92%      { opacity: 0.55; transform: translate3d(6px, -2px, 0); }
+      94%      { opacity: 0.35; transform: translate3d(-3px, 0, 0); }
+      96%      { opacity: 0;    transform: translate3d(0, 0, 0); }
+    }
+
+    @keyframes akashic-500-rise {
+      from { opacity: 0; transform: translate3d(0, 16px, 0); }
+      to   { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+
+    @keyframes akashic-500-rise-svg {
+      from { opacity: 0; transform: translate3d(0, 10px, 0); }
+      to   { opacity: 1; transform: translate3d(0, 0, 0); }
+    }
+
+    @keyframes akashic-500-float {
+      from { transform: translate3d(0, 0, 0) rotate(-1deg); }
+      to   { transform: translate3d(0, -4px, 0) rotate(1.5deg); }
+    }
+
+    @keyframes akashic-500-tick {
+      from { opacity: 0.4; }
+      to   { opacity: 1; }
+    }
+
+    @keyframes akashic-500-glow {
+      from { opacity: 0.35; transform: scale(0.97); }
+      to   { opacity: 0.7;  transform: scale(1.03); }
+    }
+
+    @keyframes akashic-500-cursor {
+      0%, 100% { transform: translate3d(0, 0, 0); opacity: 1; }
+      45%      { transform: translate3d(6px, 0, 0); opacity: 1; }
+      60%      { transform: translate3d(6px, 0, 0); opacity: 0.25; }
+      80%      { transform: translate3d(0, 0, 0); opacity: 1; }
+    }
+
+    @keyframes akashic-500-led {
+      0%, 100% { opacity: 1; }
+      50%      { opacity: 0.35; }
+    }
+
+    @keyframes akashic-500-signal {
+      0%, 100% { opacity: 0.15; }
+      50%      { opacity: 0.65; }
+    }
+
+    /* Jeda animasi saat tab tidak aktif */
+    .akashic-500-paused *,
+    .akashic-500-paused *::before,
+    .akashic-500-paused *::after {
+      animation-play-state: paused !important;
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 880px) {
+      .akashic-500__main {
+        grid-template-columns: minmax(0, 1fr);
+        row-gap: clamp(12px, 3vh, 28px);
+        padding: 20px 0 32px;
+      }
+      .akashic-500__illustration {
+        justify-self: center;
+        max-width: min(460px, 100%);
+      }
+      .akashic-500__content {
+        justify-self: center;
+        max-width: 34rem;
+        width: 100%;
+      }
+      .akashic-500 {
+        --akashic-500-veil-start: 0.8;
+        --akashic-500-veil-end: 0.7;
+      }
+      .akashic-500__bg::after {
+        background:
+          linear-gradient(
+            180deg,
+            rgba(238, 238, 236, 0.72) 0%,
+            rgba(238, 238, 236, 0.88) 100%
+          );
+      }
+    }
+
+    @media (max-width: 520px) {
+      .akashic-500__tagline { display: none; }
+      .akashic-500__actions { flex-direction: column; align-items: stretch; gap: 6px; }
+      .akashic-500__cta { justify-content: space-between; min-height: 56px; }
+      .akashic-500__retry { align-self: center; }
+      .akashic-500__meta { flex-direction: column; gap: 4px; }
+    }
+
+    @media (max-height: 640px) and (min-width: 881px) {
+      .akashic-500__main { padding: 12px 0; }
+      .akashic-500__illustration { max-width: 500px; }
+    }
+
+    /* ---------- Reduced motion ---------- */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+      .akashic-500__draw { stroke-dashoffset: 0 !important; }
+      .akashic-500__pin { opacity: 1 !important; }
+    }
+  </style>
 </head>
+
 <body>
+  <!-- Gambar latar -->
+  <div class="akashic-500__bg" aria-hidden="true" style="background-image: url('{{ url_for('static', filename='image/gambar-01.jpg') }}');"></div>
 
-<header class="bar">
-  <a class="brand" href="{{ url_for('index') }}" aria-label="AKASHIC — Beranda">
-    <svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><circle cx="16" cy="16" r="14" stroke="#92939A"/><ellipse cx="16" cy="16" rx="14" ry="5" stroke="#686970" transform="rotate(-24 16 16)"/><circle cx="16" cy="16" r="3.2" fill="#FF9418"/></svg>
-    AKASHIC
-  </a>
-  <span class="status"><i aria-hidden="true"></i>System status: gangguan</span>
-</header>
+  <div class="akashic-500">
 
-<main id="main">
-  <section class="stage" aria-labelledby="title">
+    <!-- Header minimal -->
+    <header class="akashic-500__header">
+      <a class="akashic-500__brand" href="{{ url_for('index') }}" aria-label="Akashic, kembali ke beranda">
+        <svg class="akashic-500__brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
+          <path d="M16 3.5c-5.2 0-9.2 4-9.2 9 0 6.6 9.2 16 9.2 16s9.2-9.4 9.2-16c0-5-4-9-9.2-9Z" fill="#444444"/>
+          <circle cx="16" cy="12.5" r="3.6" fill="#f7931e"/>
+        </svg>
+        <span class="akashic-500__brand-text">
+          <span class="akashic-500__wordmark">AKASHIC</span>
+          <span class="akashic-500__tagline">Location-Based Information System</span>
+        </span>
+      </a>
 
-    <div class="art">
-      <svg viewBox="0 0 480 390" role="img" aria-label="Ilustrasi seorang operator memegang kepala di depan komputer yang menampilkan error 500, dengan tanda peringatan oranye di atasnya">
-        <ellipse cx="250" cy="362" rx="215" ry="9" fill="#D3D3D6"/>
-
-        <!-- desk -->
-        <rect x="262" y="242" width="9" height="118" rx="3" fill="#92939A"/>
-        <rect x="446" y="242" width="9" height="118" rx="3" fill="#92939A"/>
-        <rect x="250" y="232" width="216" height="11" rx="4" fill="#686970"/>
-
-        <!-- monitor -->
-        <rect x="358" y="216" width="14" height="16" fill="#686970"/>
-        <rect x="340" y="226" width="50" height="6" rx="3" fill="#4A4B50"/>
-        <rect x="298" y="128" width="134" height="92" rx="9" fill="#4A4B50"/>
-        <rect x="307" y="137" width="116" height="74" rx="4" fill="#F3F3F4"/>
-        <text x="365" y="180" text-anchor="middle" font-family="Manrope,Inter,sans-serif" font-weight="800" font-size="28" fill="#FF9418">500</text>
-        <rect x="337" y="192" width="56" height="5" rx="2.5" fill="#92939A"/>
-        <rect x="347" y="201" width="36" height="4" rx="2" fill="#C9C9CE"/>
-        <circle class="status-light" cx="418" cy="214" r="2.5" fill="#FF9418"/>
-
-        <!-- keyboard + mouse -->
-        <rect x="284" y="224" width="62" height="8" rx="3" fill="#92939A"/>
-        <ellipse cx="404" cy="229" rx="9" ry="4" fill="#92939A"/>
-
-        <!-- chair -->
-        <rect x="108" y="172" width="16" height="102" rx="8" fill="#55565C"/>
-        <rect x="116" y="262" width="108" height="14" rx="7" fill="#55565C"/>
-        <rect x="166" y="276" width="9" height="62" rx="3" fill="#55565C"/>
-        <path d="M122 350h96" stroke="#55565C" stroke-width="8" stroke-linecap="round"/>
-        <circle cx="128" cy="357" r="5" fill="#4A4B50"/><circle cx="212" cy="357" r="5" fill="#4A4B50"/>
-
-        <!-- character -->
-        <g class="character">
-          <rect x="222" y="266" width="24" height="84" rx="12" fill="#4A4B50"/>
-          <rect x="216" y="342" width="44" height="14" rx="7" fill="#F3F3F4" stroke="#92939A"/>
-          <rect x="136" y="252" width="108" height="26" rx="13" fill="#4A4B50"/>
-          <rect x="132" y="190" width="62" height="86" rx="24" fill="#92939A"/>
-          <path d="M178 218l30 10 10-14" fill="none" stroke="#92939A" stroke-width="13" stroke-linecap="round" stroke-linejoin="round" opacity="0"/>
-          <path d="M176 216l36 12-14-62" fill="none" stroke="#92939A" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M178 224l60 12 40-10" fill="none" stroke="#92939A" stroke-width="13" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="284" cy="225" r="7" fill="#E8C7A9"/>
-          <g class="head">
-            <rect x="158" y="176" width="14" height="22" rx="6" fill="#E8C7A9"/>
-            <circle cx="170" cy="154" r="27" fill="#E8C7A9"/>
-            <path d="M143 154a27 27 0 0 1 54-6c-8-16-40-22-54 6z" fill="#4A4B50"/>
-            <circle cx="186" cy="156" r="2.4" fill="#4A4B50"/>
-            <path d="M178 170h12" stroke="#4A4B50" stroke-width="2.4" stroke-linecap="round"/>
-            <circle cx="198" cy="164" r="8" fill="#E8C7A9"/>
-          </g>
-        </g>
-
-        <!-- warning -->
-        <g class="warning-lines" stroke="#FF9418" stroke-width="4" stroke-linecap="round" fill="none">
-          <path d="M126 50l-12-10M214 50l12-10M170 28V14M110 80H96M230 80h14"/>
-        </g>
-        <g class="warning-bubble">
-          <path d="M150 104l-12 24 32-16z" fill="#FF9418"/>
-          <circle cx="170" cy="78" r="35" fill="#FF9418"/>
-          <rect x="164.5" y="55" width="11" height="28" rx="5.5" fill="#fff"/>
-          <circle cx="170" cy="97" r="6" fill="#fff"/>
-        </g>
-      </svg>
-    </div>
-
-    <div class="copy">
-      <p class="code"><b>500</b> / INTERNAL SERVER ERROR</p>
-      <h1 id="title">
-        <span class="big">Maaf...</span>
-        <span class="mid">Terjadi masalah pada sistem.</span>
-      </h1>
-      <p class="desc">Ada masalah di sisi kami, bukan di kamu. Akashic mengalami gangguan saat memproses permintaanmu. Silakan coba kembali beberapa saat lagi.</p>
-      <div class="actions">
-        <a class="btn btn--primary" href="{{ url_for('index') }}">Kembali ke Beranda</a>
-        <button class="btn btn--ghost" type="button" id="retryButton">Coba Lagi</button>
+      <div class="akashic-500__code" aria-hidden="true">
+        HTTP
+        <strong>500</strong>
       </div>
-    </div>
+    </header>
 
-  </section>
-</main>
+    <!-- Konten utama -->
+    <main class="akashic-500__main" id="main">
 
-<footer class="bar">
-  <span>© <span id="year">2026</span> Akashic · Location-Based Information System</span>
-  <nav aria-label="Legal">
-    <a href="{{ url_for('privacy') }}">Privacy</a>
-    <a href="{{ url_for('terms') }}">Terms</a>
-  </nav>
-</footer>
+      <div class="akashic-500__illustration">
+        <svg class="akashic-500__number" viewBox="0 0 590 240" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="akashic-500-ink-grad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="240">
+              <stop offset="0%" stop-color="#2f2f2f"/>
+              <stop offset="100%" stop-color="#6b6b6b"/>
+            </linearGradient>
+            <filter id="akashic-500-blur" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur stdDeviation="16"/>
+            </filter>
 
-<script>
-"use strict";
-(function () {
-  var y = document.getElementById("year");
-  if (y) y.textContent = new Date().getFullYear();
+            <!-- Bentuk angka (garis tengah), dipakai ulang di tiap lapisan -->
+            <path id="akashic-500-five" pathLength="1"
+                  d="M168 34H64L56 112C78 96 112 92 136 106C168 126 170 172 138 192C108 210 70 204 44 180"/>
+            <ellipse id="akashic-500-zero-a" pathLength="1" cx="285" cy="120" rx="62" ry="86"/>
+            <ellipse id="akashic-500-zero-b" pathLength="1" cx="480" cy="120" rx="62" ry="86"/>
+          </defs>
 
-  var retry = document.getElementById("retryButton");
-  if (retry) retry.addEventListener("click", function () { window.location.reload(); });
-})();
-</script>
+          <!-- Cahaya di balik "0" tengah -->
+          <use class="akashic-500__num-layer akashic-500__num-main--accent akashic-500__num-glow"
+               href="#akashic-500-zero-a" style="stroke-width:34" filter="url(#akashic-500-blur)"/>
+
+          <!-- Angka 5 -->
+          <g class="akashic-500__draw akashic-500__draw--1">
+            <g transform="translate(14 14)">
+              <use class="akashic-500__num-layer akashic-500__num-shadow" href="#akashic-500-five"/>
+              <use class="akashic-500__num-layer akashic-500__num-blueprint" href="#akashic-500-five"/>
+            </g>
+            <use class="akashic-500__num-layer akashic-500__num-main" href="#akashic-500-five"/>
+          </g>
+
+          <!-- Angka 0 (tengah, aksen oranye) -->
+          <g class="akashic-500__draw akashic-500__draw--2">
+            <g transform="translate(14 14)">
+              <use class="akashic-500__num-layer akashic-500__num-shadow" href="#akashic-500-zero-a"/>
+              <use class="akashic-500__num-layer akashic-500__num-blueprint" href="#akashic-500-zero-a"/>
+            </g>
+            <use class="akashic-500__num-layer akashic-500__num-main akashic-500__num-main--accent" href="#akashic-500-zero-a"/>
+          </g>
+
+          <!-- Titik lokasi + radar di dalam "0" tengah -->
+          <circle class="akashic-500__ping" cx="285" cy="120" r="46"/>
+          <circle class="akashic-500__ping akashic-500__ping--b" cx="285" cy="120" r="46"/>
+          <circle class="akashic-500__pin" cx="285" cy="120" r="11" fill="#f7931e"/>
+
+          <!-- Angka 0 (kanan) -->
+          <g class="akashic-500__draw akashic-500__draw--3">
+            <g transform="translate(14 14)">
+              <use class="akashic-500__num-layer akashic-500__num-shadow" href="#akashic-500-zero-b"/>
+              <use class="akashic-500__num-layer akashic-500__num-blueprint" href="#akashic-500-zero-b"/>
+            </g>
+            <use class="akashic-500__num-layer akashic-500__num-main" href="#akashic-500-zero-b"/>
+          </g>
+
+          <!-- Glitch sesekali -->
+          <g class="akashic-500__glitch">
+            <use href="#akashic-500-five"/>
+            <use href="#akashic-500-zero-a"/>
+            <use href="#akashic-500-zero-b"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="akashic-500__content">
+        <h1 class="akashic-500__title">
+          Maaf...
+          <span class="akashic-500__title-sub">Ini bukan salahmu.</span>
+        </h1>
+
+        <div class="akashic-500__message">
+          <p>Sistem kami sedang mengalami masalah internal pada server.</p>
+          <p>Coba kembali beberapa saat lagi.</p>
+        </div>
+
+        <div class="akashic-500__actions">
+          <a class="akashic-500__cta" href="{{ url_for('index') }}">
+            <span>Kembali ke Akashic</span>
+            <svg class="akashic-500__cta-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
+              <path d="M3 10h13M11 4.5 16.5 10 11 15.5"/>
+            </svg>
+          </a>
+          <button class="akashic-500__retry" type="button" id="akashic-500-retry" hidden>Coba lagi</button>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer / meta -->
+    <footer class="akashic-500__meta" aria-hidden="true">
+      <span>Akashic / Internal Server Error / 500</span>
+      <span>System status: sementara tidak tersedia</span>
+    </footer>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      'use strict';
+
+      const root = document.documentElement;
+      const retry = document.getElementById('akashic-500-retry');
+
+      // Tombol "Coba lagi" hanya tampil jika JavaScript aktif
+      if (retry) {
+        retry.hidden = false;
+        retry.addEventListener('click', () => {
+          retry.textContent = 'Memuat ulang...';
+          retry.setAttribute('aria-busy', 'true');
+          retry.disabled = true;
+          window.location.reload();
+        });
+      }
+
+      // Jeda animasi saat tab tidak terlihat
+      const syncVisibility = () => {
+        root.classList.toggle('akashic-500-paused', document.hidden);
+      };
+      document.addEventListener('visibilitychange', syncVisibility);
+      syncVisibility();
+    });
+  </script>
 </body>
 </html>

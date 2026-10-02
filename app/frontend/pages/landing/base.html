@@ -1,0 +1,562 @@
+{#
+  AKASHIC — landing/base.html
+  Foundation template: design tokens, typography, navbar, mobile menu, footer, global JS.
+
+  Child pages:  {% extends "landing/base.html" %}
+  Blocks:       title, meta_description, extra_head, body_class, breadcrumb,
+                page_header, content, extra_scripts
+  Body classes: landing-home | landing-information | landing-about | landing-contact
+                is-nav-overlay  -> content starts under the transparent navbar (full-bleed hero)
+                is-frameless    -> hides the faint background meridian lines
+
+  ROUTES: set the real endpoint names below. Use none for a route that does not exist
+  yet; that link is then simply not rendered (no BuildError).
+#}
+{%- set AK = {
+  'home': 'index', 'about': 'about', 'information': 'information', 'contact': 'contact',
+  'login': none, 'register': none,
+  'privacy': 'privacy', 'terms': 'terms', 'disclaimer': 'disclaimer'
+} -%}
+{%- set current = request.endpoint -%}
+
+{%- macro nav_link(target, label, cls) -%}
+{%- if target -%}<a class="{{ cls }}{{ ' is-active' if current == target }}" href="{{ url_for(target) }}"{% if current == target %} aria-current="page"{% endif %} data-nav-link>{{ label }}</a>{%- endif -%}
+{%- endmacro -%}
+
+{%- macro menu_item(target, num, label, i) -%}
+{%- if target -%}<li class="ak-menu__item" style="--i:{{ i }}"><a class="ak-menu__link{{ ' is-active' if current == target }}" href="{{ url_for(target) }}"{% if current == target %} aria-current="page"{% endif %} data-nav-link><span class="ak-menu__num">{{ num }}</span><span class="ak-menu__text">{{ label }}</span></a></li>{%- endif -%}
+{%- endmacro -%}
+
+{%- macro foot_link(target, label) -%}
+{%- if target -%}<li><a class="ak-footer__link ak-link" href="{{ url_for(target) }}">{{ label }}</a></li>{%- endif -%}
+{%- endmacro -%}
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <title>{% block title %}Akashic{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}Akashic adalah sistem informasi berbasis lokasi. Informasi yang hadir di tempat yang tepat.{% endblock %}">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#EFEDE5" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#12161C" media="(prefers-color-scheme: dark)">
+
+  {# Inline favicon: never broken. To use a file instead: href="{{ url_for('static', filename='image/favicon.svg') }}" #}
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='8' fill='none' stroke='%231D2128' stroke-width='1.5'/%3E%3Ccircle cx='12' cy='12' r='3' fill='%237C5A2E'/%3E%3C/svg%3E">
+
+  <meta property="og:site_name" content="Akashic">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ self.title() | striptags | trim }}">
+  <meta property="og:description" content="{{ self.meta_description() | striptags | trim }}">
+  <meta property="og:url" content="{{ request.url }}">
+  <meta property="og:locale" content="id_ID">
+
+  <style>
+/* ==========================================================================
+   1. TOKENS
+   ========================================================================== */
+:root{
+  --ak-bg:#EFEDE5; --ak-surface:#F8F7F2; --ak-surface-soft:#E6E4DA;
+  --ak-text:#1D2128; --ak-text-muted:#48515C; --ak-text-subtle:#5E6873;
+  --ak-border:rgba(29,33,40,.14); --ak-border-strong:rgba(29,33,40,.34);
+  --ak-accent:#7C5A2E; --ak-accent-soft:rgba(124,90,46,.12); --ak-on-accent:#FBFAF6;
+  --ak-slate:#5F6D7C; --ak-dark:#141922; --ak-white:#FBFAF6; --ak-glass:rgba(239,237,229,.88);
+
+  --ak-serif:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,"Times New Roman",serif;
+  --ak-sans:Inter,"Helvetica Neue",Helvetica,"Segoe UI",Arial,system-ui,sans-serif;
+  --ak-ease:cubic-bezier(.22,1,.36,1);
+
+  --space-1:.25rem; --space-2:.5rem; --space-3:.75rem; --space-4:1rem;
+  --space-5:clamp(1.25rem,1.1rem + .6vw,1.75rem);
+  --space-6:clamp(2rem,1.5rem + 2vw,3rem);
+  --space-7:clamp(3rem,2rem + 4vw,6rem);
+  --space-8:clamp(4.5rem,3rem + 7vw,10rem);
+
+  --gutter:clamp(1.25rem,.5rem + 3.2vw,4rem);
+  --ak-max:90rem; --ak-nav-h:4rem;
+
+  --fs-display:clamp(2.75rem,1.5rem + 5.8vw,7rem);
+  --fs-h1:clamp(2.25rem,1.5rem + 3.4vw,4.5rem);
+  --fs-h2:clamp(1.75rem,1.3rem + 2vw,3rem);
+  --fs-h3:clamp(1.3rem,1.15rem + .7vw,1.75rem);
+  --fs-lead:clamp(1.125rem,1.05rem + .4vw,1.375rem);
+  --fs-body:clamp(1rem,.96rem + .2vw,1.0625rem);
+  --fs-label:.72rem; --fs-meta:.78rem;
+}
+@media (min-width:56.25em){:root{--ak-nav-h:4.75rem}}
+@media (prefers-color-scheme:dark){
+  :root{
+    --ak-bg:#12161C; --ak-surface:#181E26; --ak-surface-soft:#1F2630;
+    --ak-text:#E9E6DD; --ak-text-muted:#B3BAC4; --ak-text-subtle:#8F99A5;
+    --ak-border:rgba(233,230,221,.14); --ak-border-strong:rgba(233,230,221,.34);
+    --ak-accent:#C7A874; --ak-accent-soft:rgba(199,168,116,.14); --ak-on-accent:#141922;
+    --ak-slate:#8696A8; --ak-dark:#0C0F14; --ak-glass:rgba(18,22,28,.88);
+  }
+}
+
+/* ==========================================================================
+   2. BASE
+   ========================================================================== */
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scrollbar-gutter:stable;scroll-padding-top:calc(var(--ak-nav-h) + 1rem);overflow-x:clip}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+html.is-menu-open,html.is-menu-open body{overflow:hidden}
+body{margin:0;min-height:100vh;min-height:100svh;display:flex;flex-direction:column;overflow-x:clip;
+  background:var(--ak-bg);color:var(--ak-text);font:400 var(--fs-body)/1.65 var(--ak-sans);
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+img,svg,video,canvas{max-width:100%;height:auto}
+h1,h2,h3,h4,p,ul,ol,figure,blockquote{margin:0}
+ul,ol{padding:0;list-style:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+::selection{background:var(--ak-accent);color:var(--ak-on-accent)}
+:focus-visible{outline:2px solid var(--ak-accent);outline-offset:3px}
+.ak-visually-hidden{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+.ak-skip{position:absolute;z-index:200;top:0;left:var(--gutter);padding:.75rem 1.25rem;background:var(--ak-text);color:var(--ak-bg);
+  font:500 var(--fs-label)/1 var(--ak-sans);letter-spacing:.16em;text-transform:uppercase;transform:translateY(-130%);transition:transform .2s var(--ak-ease)}
+.ak-skip:focus{transform:translateY(.75rem)}
+
+/* ==========================================================================
+   3. LAYOUT
+   ========================================================================== */
+.ak-container{width:100%;max-width:var(--ak-max);margin-inline:auto;padding-inline:var(--gutter)}
+.ak-container--narrow{max-width:64rem}
+.ak-section{padding-block:var(--space-8)}
+.ak-section--tight{padding-block:var(--space-7)}
+.ak-section--ruled{border-top:1px solid var(--ak-border)}
+.ak-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-6) var(--space-5)}
+@media (min-width:48em){
+  .ak-grid{grid-template-columns:repeat(12,minmax(0,1fr))}
+  .ak-grid>*{grid-column:1/-1}
+  .ak-col-4{grid-column:span 4}.ak-col-5{grid-column:span 5}.ak-col-6{grid-column:span 6}
+  .ak-col-7{grid-column:span 7}.ak-col-8{grid-column:span 8}
+  .ak-grid>.ak-start-2{grid-column-start:2}.ak-grid>.ak-start-5{grid-column-start:5}
+  .ak-grid>.ak-start-6{grid-column-start:6}.ak-grid>.ak-start-7{grid-column-start:7}.ak-grid>.ak-start-9{grid-column-start:9}
+}
+
+.ak-main{position:relative;z-index:1;flex:1 0 auto;padding-top:var(--ak-nav-h);animation:ak-enter .5s var(--ak-ease) backwards}
+.ak-main:focus{outline:0} /* programmatic focus target of the skip link only */
+body.is-nav-overlay .ak-main{padding-top:0}
+@keyframes ak-enter{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+html.is-leaving .ak-main,html.is-leaving .ak-footer{opacity:0;transform:translateY(-6px);transition:opacity .2s ease,transform .2s ease}
+
+/* background meridians: faint columns aligned to the container */
+.ak-frame{position:fixed;inset:0;z-index:0;pointer-events:none}
+.ak-frame__inner{display:grid;grid-template-columns:repeat(2,1fr);height:100%}
+.ak-frame__inner i{border-left:1px solid var(--ak-border);opacity:.55}
+.ak-frame__inner i:last-child{border-right:1px solid var(--ak-border)}
+@media (min-width:48em){.ak-frame__inner{grid-template-columns:repeat(4,1fr)}}
+body.is-frameless .ak-frame{display:none}
+
+/* ==========================================================================
+   4. TYPOGRAPHY
+   ========================================================================== */
+h1,h2,h3,h4,.ak-display{font-family:var(--ak-serif);font-weight:400;letter-spacing:-.015em;text-wrap:balance}
+.ak-display{font-size:var(--fs-display);line-height:1.02;letter-spacing:-.025em}
+h1,.ak-h1{font-size:var(--fs-h1);line-height:1.06}
+h2,.ak-h2{font-size:var(--fs-h2);line-height:1.12}
+h3,.ak-h3{font-size:var(--fs-h3);line-height:1.25}
+p{text-wrap:pretty}
+.ak-lead{font:400 var(--fs-lead)/1.55 var(--ak-serif);color:var(--ak-text-muted);max-width:42rem}
+.ak-label{font:500 var(--fs-label)/1.4 var(--ak-sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ak-text-subtle)}
+.ak-meta{font:400 var(--fs-meta)/1.5 var(--ak-sans);letter-spacing:.04em;color:var(--ak-text-subtle)}
+.ak-prose{max-width:40rem}
+.ak-prose>*+*{margin-top:1.1em}
+.ak-prose a{background:linear-gradient(currentColor,currentColor) left bottom/100% 1px no-repeat;transition:color .2s,background-size .35s var(--ak-ease)}
+.ak-prose a:hover{color:var(--ak-accent)}
+
+.ak-link{background:linear-gradient(currentColor,currentColor) left bottom/0 1px no-repeat;padding-bottom:.1em;transition:color .2s,background-size .35s var(--ak-ease)}
+.ak-link:hover,.ak-link:focus-visible{color:var(--ak-accent);background-size:100% 1px}
+
+/* ==========================================================================
+   5. ICONS, DECORATION
+   ========================================================================== */
+.ak-icon{width:1.1em;height:1.1em;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:square;stroke-linejoin:miter;flex:none;transition:transform .35s var(--ak-ease)}
+.ak-rule{height:1px;border:0;background:var(--ak-border);margin:0}
+.ak-coords{display:flex;flex-wrap:wrap;gap:.25rem 1.5rem;font:400 var(--fs-label)/1.4 var(--ak-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ak-text-subtle)}
+.ak-section-mark{display:flex;align-items:center;gap:1rem;font:500 var(--fs-label)/1 var(--ak-sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ak-text-subtle)}
+.ak-section-mark::after{content:"";flex:1;height:1px;background:var(--ak-border)}
+.ak-gridlines{background-image:linear-gradient(var(--ak-border) 1px,transparent 1px),linear-gradient(90deg,var(--ak-border) 1px,transparent 1px);background-size:6rem 6rem}
+
+.ak-marker{width:1.5rem;height:1.5rem;flex:none;color:var(--ak-text)}
+.ak-marker__ring{fill:none;stroke:currentColor;stroke-width:1}
+.ak-marker__ticks{fill:none;stroke:currentColor;stroke-width:1}
+.ak-marker__dot,.ak-marker__pulse{fill:var(--ak-accent)}
+.ak-marker__pulse{transform-box:fill-box;transform-origin:center;animation:ak-pulse 4.5s var(--ak-ease) infinite}
+@keyframes ak-pulse{0%{transform:scale(1);opacity:.55}70%,100%{transform:scale(3);opacity:0}}
+html.is-hidden *{animation-play-state:paused!important}
+
+/* ==========================================================================
+   6. BUTTONS
+   ========================================================================== */
+.ak-btn{display:inline-flex;align-items:center;justify-content:center;gap:.75rem;min-height:2.75rem;padding:0 1.5rem;border:1px solid transparent;border-radius:2px;
+  font:500 var(--fs-label)/1 var(--ak-sans);letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;
+  transition:background-color .25s,border-color .25s,color .25s}
+.ak-btn:hover .ak-icon,.ak-btn:focus-visible .ak-icon{transform:translateX(4px)}
+.ak-btn--primary{background:var(--ak-text);color:var(--ak-bg)}
+.ak-btn--primary:hover{background:var(--ak-accent);color:var(--ak-on-accent)}
+.ak-btn--primary:active{opacity:.88}
+.ak-btn--secondary{border-color:var(--ak-border-strong);color:var(--ak-text)}
+.ak-btn--secondary:hover{border-color:var(--ak-text);background:var(--ak-surface)}
+.ak-btn--secondary:active{background:var(--ak-surface-soft)}
+.ak-btn--text{padding:0;color:var(--ak-text)}
+.ak-btn--text:hover{color:var(--ak-accent)}
+.ak-btn--icon{width:2.75rem;padding:0;border-color:var(--ak-border-strong)}
+.ak-btn--icon:hover{border-color:var(--ak-text);background:var(--ak-surface)}
+.ak-btn:disabled,.ak-btn[aria-disabled="true"]{opacity:.4;cursor:not-allowed;pointer-events:none}
+
+/* ==========================================================================
+   7. HEADER / NAVBAR
+   ========================================================================== */
+.ak-progress{position:fixed;z-index:110;top:0;left:0;right:0;height:2px;pointer-events:none}
+.ak-progress__bar{height:100%;background:var(--ak-accent);transform:scaleX(0);transform-origin:0 50%;will-change:transform}
+
+.ak-header{position:fixed;z-index:100;top:0;left:0;right:0;height:var(--ak-nav-h);display:flex;align-items:center;
+  border-bottom:1px solid transparent;transition:background-color .35s ease,border-color .35s ease}
+.ak-header.is-scrolled,.ak-header.is-menu-open{background:var(--ak-glass);border-bottom-color:var(--ak-border);-webkit-backdrop-filter:blur(10px) saturate(1.1);backdrop-filter:blur(10px) saturate(1.1)}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.ak-header.is-scrolled,.ak-header.is-menu-open{background:var(--ak-bg)}}
+html:not(.js) .ak-header{background:var(--ak-bg);border-bottom-color:var(--ak-border)}
+.ak-header__inner{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);height:100%}
+
+.ak-brand{display:inline-flex;align-items:center;gap:.75rem;min-height:2.75rem}
+.ak-brand__stack{display:flex;flex-direction:column;gap:.3rem}
+.ak-brand__word{font:600 1.25rem/1 var(--ak-serif);letter-spacing:.24em;text-transform:uppercase}
+.ak-brand__sub{display:none;font:500 .6rem/1 var(--ak-sans);letter-spacing:.2em;text-transform:uppercase;color:var(--ak-text-subtle)}
+
+.ak-nav{display:none}
+.ak-nav__list{display:flex;gap:clamp(1.5rem,3vw,3rem)}
+.ak-nav__link{position:relative;display:inline-flex;align-items:center;min-height:2.75rem;font:500 var(--fs-label)/1 var(--ak-sans);letter-spacing:.16em;text-transform:uppercase;color:var(--ak-text-muted);transition:color .25s}
+.ak-nav__link::after{content:"";position:absolute;left:0;right:0;bottom:.55rem;height:1px;background:var(--ak-accent);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ak-ease)}
+.ak-nav__link:hover,.ak-nav__link.is-active{color:var(--ak-text)}
+.ak-nav__link:hover::after,.ak-nav__link:focus-visible::after,.ak-nav__link.is-active::after{transform:scaleX(1)}
+.ak-header__aside{display:none;justify-self:end}
+
+@media (min-width:56.25em){
+  .ak-header__inner{display:grid;grid-template-columns:1fr auto 1fr}
+  .ak-nav,.ak-header__aside{display:block}
+  .ak-toggle,.ak-menu{display:none!important}
+}
+@media (min-width:64em){.ak-brand__sub{display:block}}
+
+/* mobile toggle */
+.ak-toggle{display:inline-flex;align-items:center;gap:.75rem;min-height:2.75rem;min-width:2.75rem;justify-content:flex-end;font:500 var(--fs-label)/1 var(--ak-sans);letter-spacing:.16em;text-transform:uppercase}
+.ak-toggle__bars{position:relative;width:1.125rem;height:.5rem}
+.ak-toggle__bars i{position:absolute;left:0;right:0;height:1px;background:currentColor;transition:transform .4s var(--ak-ease)}
+.ak-toggle__bars i:first-child{top:0}.ak-toggle__bars i:last-child{bottom:0}
+.ak-toggle[aria-expanded="true"] .ak-toggle__bars i:first-child{transform:translateY(.25rem) rotate(45deg)}
+.ak-toggle[aria-expanded="true"] .ak-toggle__bars i:last-child{transform:translateY(-.25rem) rotate(-45deg)}
+html:not(.js) .ak-toggle{display:none}
+
+/* mobile menu */
+.ak-menu{position:fixed;z-index:90;inset:0;display:flex;flex-direction:column;overflow-y:auto;background:var(--ak-bg);
+  padding:calc(var(--ak-nav-h) + var(--space-5)) var(--gutter) var(--space-6);
+  opacity:0;visibility:hidden;transform:translateY(-1rem);clip-path:inset(0 0 100% 0);
+  transition:opacity .3s ease,transform .5s var(--ak-ease),clip-path .5s var(--ak-ease),visibility 0s linear .5s}
+.ak-menu.is-open{opacity:1;visibility:visible;transform:none;clip-path:inset(0);transition-delay:0s}
+.ak-menu__list{border-bottom:1px solid var(--ak-border)}
+.ak-menu__item{border-top:1px solid var(--ak-border);opacity:0;transform:translateY(.75rem);transition:opacity .4s ease,transform .5s var(--ak-ease)}
+.ak-menu.is-open .ak-menu__item{opacity:1;transform:none;transition-delay:calc(.08s + var(--i) * .05s)}
+.ak-menu__link{display:grid;grid-template-columns:3rem 1fr;align-items:baseline;min-height:4.25rem;padding-block:var(--space-3);transition:color .25s}
+.ak-menu__num{font:500 var(--fs-label)/1 var(--ak-sans);letter-spacing:.16em;color:var(--ak-text-subtle)}
+.ak-menu__text{font:400 clamp(1.9rem,1.4rem + 3vw,3rem)/1.1 var(--ak-serif);letter-spacing:-.015em}
+.ak-menu__link:hover,.ak-menu__link.is-active{color:var(--ak-accent)}
+.ak-menu__foot{margin-top:auto;padding-top:var(--space-6);display:grid;gap:var(--space-2)}
+html:not(.js) .ak-menu{position:static;opacity:1;visibility:visible;transform:none;clip-path:none;padding-top:calc(var(--ak-nav-h) + var(--space-4))}
+html:not(.js) .ak-menu__item{opacity:1;transform:none}
+html:not(.js) .ak-menu__foot{display:none}
+
+/* ==========================================================================
+   8. PAGE HEADER, BREADCRUMB
+   ========================================================================== */
+.ak-breadcrumb{padding-top:var(--space-5)}
+.ak-breadcrumb ol{display:flex;flex-wrap:wrap;align-items:center;gap:.25rem .75rem;font:500 var(--fs-label)/1.4 var(--ak-sans);letter-spacing:.14em;text-transform:uppercase;color:var(--ak-text-subtle)}
+.ak-breadcrumb li+li::before{content:"/";margin-right:.75rem;opacity:.6}
+.ak-breadcrumb a:hover{color:var(--ak-accent)}
+.ak-breadcrumb [aria-current]{color:var(--ak-text)}
+.ak-page-header{padding-block:var(--space-7) var(--space-6);border-bottom:1px solid var(--ak-border)}
+.ak-page-header__label{margin-bottom:var(--space-4)}
+.ak-page-header__title{font:400 var(--fs-h1)/1.04 var(--ak-serif);letter-spacing:-.02em;max-width:18ch}
+.ak-page-header__lead{margin-top:var(--space-5)}
+
+/* ==========================================================================
+   9. FOOTER (always dark)
+   ========================================================================== */
+.ak-footer{--ak-text:#E9E6DD;--ak-text-muted:#B3BAC4;--ak-text-subtle:#8F99A5;--ak-border:rgba(233,230,221,.14);--ak-border-strong:rgba(233,230,221,.34);--ak-accent:#C7A874;
+  position:relative;z-index:1;overflow:hidden;background:var(--ak-dark);color:var(--ak-text);border-top:1px solid var(--ak-border);padding-block:var(--space-7) var(--space-5)}
+.ak-footer__bg{position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:linear-gradient(var(--ak-border) 1px,transparent 1px),linear-gradient(90deg,var(--ak-border) 1px,transparent 1px);background-size:6rem 6rem;
+  -webkit-mask-image:linear-gradient(to bottom,transparent,#000 85%);mask-image:linear-gradient(to bottom,transparent,#000 85%)}
+.ak-footer__contours{position:absolute;right:-12%;bottom:-38%;width:min(62rem,110vw);pointer-events:none;fill:none;stroke:var(--ak-border);stroke-width:1}
+.ak-footer .ak-container{position:relative}
+.ak-footer__top{display:grid;gap:var(--space-6)}
+.ak-footer__tagline{margin-top:var(--space-4);font:400 var(--fs-h3)/1.3 var(--ak-serif);color:var(--ak-text-muted)}
+.ak-footer__cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-6) var(--space-5)}
+.ak-footer__col .ak-label{margin-bottom:var(--space-3)}
+.ak-footer__col li{margin-bottom:.15rem}
+.ak-footer__link{display:inline-block;padding-block:.4rem;font-size:.9375rem;color:var(--ak-text-muted)}
+.ak-footer__line{position:relative;height:.75rem;margin-block:var(--space-7) var(--space-4);border-top:1px solid var(--ak-border-strong);
+  background:repeating-linear-gradient(90deg,var(--ak-border-strong) 0 1px,transparent 1px 1.5rem) top/100% .4rem no-repeat}
+.ak-footer__line::after{content:"";position:absolute;top:-4px;left:62%;width:7px;height:7px;border-radius:50%;background:var(--ak-accent)}
+.ak-footer__base{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--space-2) var(--space-5)}
+@media (min-width:48em){
+  .ak-footer__top{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:var(--space-7)}
+  .ak-footer__cols{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+/* ==========================================================================
+   10. REDUCED MOTION
+   ========================================================================== */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .ak-main{animation:none}
+  .ak-marker__pulse{animation:none;opacity:0}
+  html.is-leaving .ak-main,html.is-leaving .ak-footer{transition:none}
+  .ak-menu{transform:none!important;clip-path:none!important;transition:opacity .15s linear,visibility 0s linear .15s}
+  .ak-menu.is-open{transition-delay:0s}
+  .ak-menu__item{transform:none;transition:none}
+  .ak-header,.ak-nav__link::after,.ak-link,.ak-btn,.ak-icon,.ak-toggle__bars i{transition-duration:.01ms}
+}
+  </style>
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body class="ak-body {% block body_class %}{% endblock %}">
+
+  {# decorative SVG sprite (aria-hidden); use: <svg class="ak-icon" aria-hidden="true"><use href="#ak-i-arrow"/></svg> #}
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <symbol id="ak-i-arrow" viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></symbol>
+    <symbol id="ak-i-close" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></symbol>
+    <symbol id="ak-i-menu" viewBox="0 0 24 24"><path d="M4 8h16M4 16h16"/></symbol>
+    <symbol id="ak-i-location" viewBox="0 0 24 24"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 1 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.2"/></symbol>
+    <symbol id="ak-i-chevron" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></symbol>
+    <symbol id="ak-i-external" viewBox="0 0 24 24"><path d="M8 6h10v10M18 6L6 18"/></symbol>
+    <symbol id="ak-i-marker" viewBox="0 0 24 24">
+      <circle class="ak-marker__pulse" cx="12" cy="12" r="2.5" stroke="none"/>
+      <circle class="ak-marker__ring" cx="12" cy="12" r="8"/>
+      <path class="ak-marker__ticks" d="M12 1v5M12 18v5M1 12h5M18 12h5"/>
+      <circle class="ak-marker__dot" cx="12" cy="12" r="2.5" stroke="none"/>
+    </symbol>
+  </svg>
+
+  <a class="ak-skip" href="#main-content">Skip to content</a>
+  <div class="ak-progress" aria-hidden="true"><div class="ak-progress__bar" id="ak-progress"></div></div>
+  <div class="ak-frame" aria-hidden="true"><div class="ak-frame__inner"><i></i><i></i><i></i><i></i></div></div>
+
+  <header class="ak-header" id="ak-header">
+    <div class="ak-container ak-header__inner">
+      <a class="ak-brand" href="{{ url_for(AK.home) }}" aria-label="Akashic — Location-Based Information System"{% if current == AK.home %} aria-current="page"{% endif %}>
+        <svg class="ak-marker" aria-hidden="true" focusable="false"><use href="#ak-i-marker"></use></svg>
+        <span class="ak-brand__stack">
+          <span class="ak-brand__word">Akashic</span>
+          <span class="ak-brand__sub">Location-Based Information System</span>
+        </span>
+      </a>
+
+      <nav class="ak-nav" aria-label="Primary">
+        <div class="ak-nav__list">
+          {{ nav_link(AK.about, 'About', 'ak-nav__link') }}
+          {{ nav_link(AK.information, 'Information', 'ak-nav__link') }}
+          {{ nav_link(AK.contact, 'Contact', 'ak-nav__link') }}
+        </div>
+      </nav>
+
+      <div class="ak-header__aside">
+        {% if AK.login %}
+        <a class="ak-btn ak-btn--text" href="{{ url_for(AK.login) }}">Login <svg class="ak-icon" aria-hidden="true" focusable="false"><use href="#ak-i-arrow"></use></svg></a>
+        {% endif %}
+      </div>
+
+      <button class="ak-toggle" id="ak-toggle" type="button" aria-expanded="false" aria-controls="ak-menu" aria-label="Open menu">
+        <span class="ak-toggle__text">Menu</span>
+        <span class="ak-toggle__bars" aria-hidden="true"><i></i><i></i></span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="ak-menu" id="ak-menu" aria-label="Mobile">
+    <ul class="ak-menu__list">
+      {{ menu_item(AK.home, '01', 'Home', 1) }}
+      {{ menu_item(AK.information, '02', 'Information', 2) }}
+      {{ menu_item(AK.about, '03', 'About', 3) }}
+      {{ menu_item(AK.contact, '04', 'Contact', 4) }}
+      {{ menu_item(AK.login, '05', 'Login', 5) }}
+    </ul>
+    <div class="ak-menu__foot">
+      <p class="ak-label">Location-Based Information System</p>
+      <p class="ak-meta">Informasi yang hadir di tempat yang tepat.</p>
+    </div>
+  </nav>
+
+  <main class="ak-main" id="main-content" tabindex="-1">
+    {% block breadcrumb %}{% endblock %}
+    {% block page_header %}{% endblock %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="ak-footer">
+    <div class="ak-footer__bg" aria-hidden="true"></div>
+    <svg class="ak-footer__contours" viewBox="0 0 800 800" aria-hidden="true" focusable="false">
+      <ellipse cx="400" cy="400" rx="380" ry="300"/><ellipse cx="400" cy="400" rx="300" ry="230"/>
+      <ellipse cx="400" cy="400" rx="220" ry="160"/><ellipse cx="400" cy="400" rx="140" ry="92"/>
+      <ellipse cx="400" cy="400" rx="60" ry="34"/><path d="M400 20v760M20 400h760"/>
+    </svg>
+
+    <div class="ak-container">
+      <div class="ak-footer__top">
+        <div>
+          <a class="ak-brand" href="{{ url_for(AK.home) }}" aria-label="Akashic — Home">
+            <svg class="ak-marker" aria-hidden="true" focusable="false" style="color:var(--ak-text)"><use href="#ak-i-marker"></use></svg>
+            <span class="ak-brand__word">Akashic</span>
+          </a>
+          <p class="ak-footer__tagline">Informasi yang hadir<br>di tempat yang tepat.</p>
+        </div>
+
+        <div class="ak-footer__cols">
+          <nav class="ak-footer__col" aria-label="Footer — Explore">
+            <h2 class="ak-label">Explore</h2>
+            <ul>
+              {{ foot_link(AK.about, 'About') }}
+              {{ foot_link(AK.information, 'Information') }}
+              {{ foot_link(AK.contact, 'Contact') }}
+            </ul>
+          </nav>
+          {% if AK.login or AK.register %}
+          <nav class="ak-footer__col" aria-label="Footer — Account">
+            <h2 class="ak-label">Account</h2>
+            <ul>
+              {{ foot_link(AK.login, 'Login') }}
+              {{ foot_link(AK.register, 'Register') }}
+            </ul>
+          </nav>
+          {% endif %}
+          {% if AK.privacy or AK.terms or AK.disclaimer %}
+          <nav class="ak-footer__col" aria-label="Footer — Legal">
+            <h2 class="ak-label">Legal</h2>
+            <ul>
+              {{ foot_link(AK.privacy, 'Privacy') }}
+              {{ foot_link(AK.terms, 'Terms') }}
+              {{ foot_link(AK.disclaimer, 'Disclaimer') }}
+            </ul>
+          </nav>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="ak-footer__line" aria-hidden="true"></div>
+      <div class="ak-footer__base">
+        <p class="ak-label">Location-Based Information System</p>
+        <p class="ak-label">System / 2026</p>
+        <p class="ak-meta">&copy; 2026 Akashic</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var root = document.documentElement;
+    var header = document.getElementById('ak-header');
+    var toggle = document.getElementById('ak-toggle');
+    var menu = document.getElementById('ak-menu');
+    var bar = document.getElementById('ak-progress');
+    var desktop = window.matchMedia('(min-width: 56.25em)');
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var ticking = false, maxScroll = 1, lastFocus = null;
+
+    /* ---- navbar state + scroll progress (rAF-throttled) ---- */
+    function measure() { maxScroll = Math.max(1, root.scrollHeight - window.innerHeight); }
+    function paint() {
+      ticking = false;
+      if (document.hidden) return;
+      var y = window.pageYOffset || root.scrollTop;
+      if (header) header.classList.toggle('is-scrolled', y > 8);
+      if (bar) bar.style.transform = 'scaleX(' + Math.min(1, y / maxScroll).toFixed(4) + ')';
+    }
+    function onScroll() { if (!ticking) { ticking = true; window.requestAnimationFrame(paint); } }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', function () { measure(); onScroll(); }, { passive: true });
+    window.addEventListener('load', function () { measure(); onScroll(); });
+    measure(); paint();
+
+    /* ---- pause decorative animation in background tabs ---- */
+    document.addEventListener('visibilitychange', function () {
+      root.classList.toggle('is-hidden', document.hidden);
+      if (!document.hidden) { measure(); onScroll(); }
+    });
+
+    /* ---- mobile menu ---- */
+    var isOpen = false;
+    var inertTargets = [document.getElementById('main-content'), document.querySelector('.ak-footer')];
+    function setInert(on) {
+      inertTargets.forEach(function (el) {
+        if (!el) return;
+        if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert');
+      });
+    }
+    function setMenu(open, restoreFocus) {
+      if (!toggle || !menu || open === isOpen) return;
+      isOpen = open;
+      if (open) lastFocus = document.activeElement;
+      menu.classList.toggle('is-open', open);
+      header.classList.toggle('is-menu-open', open);
+      root.classList.toggle('is-menu-open', open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      var label = toggle.querySelector('.ak-toggle__text');
+      if (label) label.textContent = open ? 'Close' : 'Menu';
+      setInert(open);
+      if (open) {
+        var first = menu.querySelector('a[href]');
+        if (first) first.focus({ preventScroll: true });
+      } else if (restoreFocus) {
+        (lastFocus && lastFocus.focus ? lastFocus : toggle).focus({ preventScroll: true });
+      }
+    }
+    if (toggle && menu) {
+      toggle.addEventListener('click', function () { setMenu(!isOpen, true); });
+      menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false, false); });
+      document.addEventListener('keydown', function (e) {
+        if (!isOpen) return;
+        if (e.key === 'Escape') { e.preventDefault(); setMenu(false, true); return; }
+        if (e.key !== 'Tab') return;
+        var items = [].slice.call(header.querySelectorAll('.ak-brand, .ak-toggle')).concat([].slice.call(menu.querySelectorAll('a[href]')));
+        var firstEl = items[0], lastEl = items[items.length - 1];
+        if (e.shiftKey && document.activeElement === firstEl) { e.preventDefault(); lastEl.focus(); }
+        else if (!e.shiftKey && document.activeElement === lastEl) { e.preventDefault(); firstEl.focus(); }
+      });
+      var onBreakpoint = function (e) { if (e.matches) setMenu(false, false); };
+      if (desktop.addEventListener) desktop.addEventListener('change', onBreakpoint);
+      else if (desktop.addListener) desktop.addListener(onBreakpoint);
+    }
+
+    /* ---- active navigation fallback (server-side is-active takes priority) ---- */
+    var links = [].slice.call(document.querySelectorAll('[data-nav-link]'));
+    if (links.length && !links.some(function (a) { return a.hasAttribute('aria-current'); })) {
+      var here = location.pathname.replace(/\/+$/, '') || '/';
+      links.forEach(function (a) {
+        var p = new URL(a.href, location.href).pathname.replace(/\/+$/, '') || '/';
+        if (p === here) { a.classList.add('is-active'); a.setAttribute('aria-current', 'page'); }
+      });
+    }
+
+    /* ---- short page-leave transition (~200ms) ---- */
+    document.addEventListener('click', function (e) {
+      var a = e.target.closest ? e.target.closest('a[href]') : null;
+      if (!a || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      if (reduce.matches || a.target === '_blank' || a.hasAttribute('download') || a.hasAttribute('data-no-transition')) return;
+      var url;
+      try { url = new URL(a.href, location.href); } catch (err) { return; }
+      if (url.origin !== location.origin || !/^https?:$/.test(url.protocol)) return;
+      if (url.pathname === location.pathname && url.search === location.search) return;
+      e.preventDefault();
+      root.classList.add('is-leaving');
+      window.setTimeout(function () { window.location.assign(url.href); }, 200);
+    });
+    window.addEventListener('pageshow', function (e) { if (e.persisted) root.classList.remove('is-leaving'); });
+  });
+  </script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>
