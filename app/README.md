@@ -201,7 +201,7 @@ app/
 │       │   ├── register.html
 │       │   └── reset-password.html
 │       ├── error/                   # Halaman Error
-│       │   ├── 400.html
+│       │   ├── 404.html
 │       │   └── 500.html
 │       ├── landing/                 # Halaman Publik
 │       │   ├── about.html
