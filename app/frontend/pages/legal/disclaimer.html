@@ -1,2456 +1,412 @@
 <!DOCTYPE html>
-<html lang="id" class="akashic-disclaimer-html">
+<html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="theme-color" content="#F7F5F2">
-    <meta name="color-scheme" content="light">
-    <meta name="robots" content="index, follow">
-
-    <title>Akashic — Disclaimer</title>
-    <meta name="description" content="Disclaimer Akashic menjelaskan batasan informasi, penggunaan data berbasis lokasi, sumber eksternal, dan keterbatasan sistem.">
-
-    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='image/favicon.svg') }}">
-
-    <style>
-        /* ============================================================
-           AKASHIC DISCLAIMER — INDEPENDENT LEGAL DOCUMENT
-           Prefix: akashic-disclaimer-
-           ============================================================ */
-
-        /* ── 01. TOKENS ───────────────────────────────────────── */
-        :root {
-            --akd-bg:            #F7F5F2;
-            --akd-surface:       #FFFFFF;
-            --akd-surface-soft:  #F1EEE9;
-            --akd-surface-muted: #EAE6E0;
-
-            --akd-text:          #1C1C1E;
-            --akd-text-muted:    #5C5C60;
-            --akd-text-subtle:   #8E8E93;
-
-            --akd-border:        rgba(28, 28, 30, 0.08);
-            --akd-border-strong: rgba(28, 28, 30, 0.16);
-
-            --akd-accent:        #9A6B4A;
-            --akd-accent-soft:   rgba(154, 107, 74, 0.10);
-            --akd-warning:       #C28E3E;
-            --akd-warning-soft:  rgba(194, 142, 62, 0.10);
-
-            --akd-dark:          #141416;
-            --akd-white:         #FFFFFF;
-
-            --akd-font-serif:    Georgia, "Times New Roman", "Noto Serif", serif;
-            --akd-font-sans:     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
-            --akd-font-mono:     "SF Mono", "Fira Code", "Consolas", "Liberation Mono", monospace;
-
-            --akd-space-1:  0.25rem;
-            --akd-space-2:  0.5rem;
-            --akd-space-3:  0.75rem;
-            --akd-space-4:  1rem;
-            --akd-space-5:  1.5rem;
-            --akd-space-6:  2rem;
-            --akd-space-7:  3rem;
-            --akd-space-8:  4rem;
-            --akd-space-9:  6rem;
-
-            --akd-container: 1440px;
-            --akd-reading:   820px;
-
-            --akd-nav-height: 72px;
-            --akd-nav-height-mobile: 64px;
-
-            --akd-ease-out:   cubic-bezier(0.22, 1, 0.36, 1);
-            --akd-duration-fast: 150ms;
-            --akd-duration-base: 300ms;
-            --akd-duration-slow: 500ms;
-
-            --akd-z-nav:     100;
-            --akd-z-mobile:  200;
-            --akd-z-progress: 300;
-            --akd-z-skip:    400;
-        }
-
-        /* ── 02. RESET ────────────────────────────────────────── */
-        *,
-        *::before,
-        *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            -webkit-text-size-adjust: 100%;
-            text-size-adjust: 100%;
-            scroll-behavior: smooth;
-            scroll-padding-top: calc(var(--akd-nav-height) + var(--akd-space-6));
-        }
-
-        body {
-            font-family: var(--akd-font-sans);
-            font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
-            line-height: 1.7;
-            color: var(--akd-text);
-            background-color: var(--akd-bg);
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
-            overflow-x: hidden;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        img, svg, video {
-            display: block;
-            max-width: 100%;
-            height: auto;
-        }
-
-        a {
-            color: inherit;
-            text-decoration: none;
-        }
-
-        button {
-            font: inherit;
-            color: inherit;
-            background: none;
-            border: none;
-            cursor: pointer;
-        }
-
-        ul, ol {
-            list-style: none;
-        }
-
-        :focus-visible {
-            outline: 2px solid var(--akd-accent);
-            outline-offset: 3px;
-            border-radius: 2px;
-        }
-
-        /* ── 03. SKIP LINK ────────────────────────────────────── */
-        .akashic-disclaimer-skip {
-            position: absolute;
-            top: -100%;
-            left: var(--akd-space-4);
-            z-index: var(--akd-z-skip);
-            padding: var(--akd-space-3) var(--akd-space-5);
-            background: var(--akd-dark);
-            color: var(--akd-white);
-            font-size: 0.8125rem;
-            font-weight: 500;
-            letter-spacing: 0.04em;
-            text-transform: uppercase;
-            border-radius: 4px;
-            transition: top var(--akd-duration-fast) var(--akd-ease-out);
-        }
-
-        .akashic-disclaimer-skip:focus {
-            top: var(--akd-space-4);
-        }
-
-        /* ── 04. CONTAINER ────────────────────────────────────── */
-        .akashic-disclaimer-container {
-            width: 100%;
-            max-width: var(--akd-container);
-            margin-inline: auto;
-            padding-inline: clamp(1.25rem, 4vw, 4rem);
-        }
-
-        /* ── 05. SCROLL PROGRESS ──────────────────────────────── */
-        .akashic-disclaimer-progress {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            z-index: var(--akd-z-progress);
-            background: transparent;
-            pointer-events: none;
-        }
-
-        .akashic-disclaimer-progress__bar {
-            height: 100%;
-            width: 0%;
-            background: var(--akd-accent);
-            transition: width 80ms linear;
-        }
-
-        /* ── 06. NAVBAR ───────────────────────────────────────── */
-        .akashic-disclaimer-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: var(--akd-z-nav);
-            height: var(--akd-nav-height);
-            background: rgba(247, 245, 242, 0.92);
-            -webkit-backdrop-filter: blur(12px);
-            backdrop-filter: blur(12px);
-            border-bottom: 1px solid transparent;
-            transition:
-                border-color var(--akd-duration-base) var(--akd-ease-out),
-                background-color var(--akd-duration-base) var(--akd-ease-out);
-        }
-
-        .akashic-disclaimer-nav.is-scrolled {
-            border-bottom-color: var(--akd-border);
-        }
-
-        .akashic-disclaimer-nav__inner {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            height: 100%;
-            gap: var(--akd-space-5);
-        }
-
-        .akashic-disclaimer-nav__brand {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--akd-space-3);
-            flex-shrink: 0;
-        }
-
-        .akashic-disclaimer-nav__brand-mark {
-            position: relative;
-            width: 8px;
-            height: 8px;
-            flex-shrink: 0;
-        }
-
-        .akashic-disclaimer-nav__brand-mark::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            border: 1.5px solid var(--akd-accent);
-            border-radius: 50%;
-        }
-
-        .akashic-disclaimer-nav__brand-mark::after {
-            content: "";
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 2px;
-            height: 2px;
-            background: var(--akd-accent);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-        }
-
-        .akashic-disclaimer-nav__brand-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.1;
-        }
-
-        .akashic-disclaimer-nav__brand-name {
-            font-family: var(--akd-font-serif);
-            font-size: 1.25rem;
-            font-weight: 400;
-            letter-spacing: 0.08em;
-            color: var(--akd-text);
-        }
-
-        .akashic-disclaimer-nav__brand-sub {
-            font-size: 0.5625rem;
-            font-weight: 500;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--akd-text-subtle);
-        }
-
-        .akashic-disclaimer-nav__right {
-            display: flex;
-            align-items: center;
-            gap: var(--akd-space-5);
-            margin-left: auto;
-        }
-
-        .akashic-disclaimer-nav__links {
-            display: flex;
-            align-items: center;
-            gap: var(--akd-space-7);
-        }
-
-        .akashic-disclaimer-nav__link {
-            position: relative;
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            color: var(--akd-text-muted);
-            transition: color var(--akd-duration-fast) var(--akd-ease-out);
-            padding: var(--akd-space-2) 0;
-        }
-
-        .akashic-disclaimer-nav__link::after {
-            content: "";
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 1px;
-            background: var(--akd-accent);
-            transform: scaleX(0);
-            transform-origin: right;
-            transition: transform var(--akd-duration-base) var(--akd-ease-out);
-        }
-
-        .akashic-disclaimer-nav__link:hover {
-            color: var(--akd-text);
-        }
-
-        .akashic-disclaimer-nav__link:hover::after {
-            transform: scaleX(1);
-            transform-origin: left;
-        }
-
-        /* ── DIGITAL CLOCK ────────────────────────────────────── */
-        .akashic-disclaimer-clock {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--akd-space-3);
-            padding-left: var(--akd-space-5);
-            border-left: 1px solid var(--akd-border);
-            font-family: var(--akd-font-mono);
-            font-size: 0.75rem;
-            font-weight: 500;
-            letter-spacing: 0.08em;
-            color: var(--akd-text);
-            line-height: 1;
-            user-select: none;
-            white-space: nowrap;
-        }
-
-        .akashic-disclaimer-clock__dot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: var(--akd-accent);
-            flex-shrink: 0;
-            animation: akd-clock-blink 2s ease-in-out infinite;
-        }
-
-        @keyframes akd-clock-blink {
-            0%, 100% { opacity: 1; }
-            50%      { opacity: 0.35; }
-        }
-
-        .akashic-disclaimer-clock__time {
-            font-variant-numeric: tabular-nums;
-            font-feature-settings: "tnum";
-            color: var(--akd-text);
-        }
-
-        .akashic-disclaimer-clock__label {
-            font-size: 0.5625rem;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--akd-text-subtle);
-        }
-
-        /* Mobile nav toggle */
-        .akashic-disclaimer-nav__toggle {
-            display: none;
-            align-items: center;
-            justify-content: center;
-            width: 44px;
-            height: 44px;
-            margin-right: calc(var(--akd-space-2) * -1);
-            color: var(--akd-text);
-        }
-
-        .akashic-disclaimer-nav__toggle svg {
-            width: 22px;
-            height: 22px;
-        }
-
-        .akashic-disclaimer-nav__toggle .akashic-disclaimer-icon-close {
-            display: none;
-        }
-
-        .akashic-disclaimer-nav__toggle[aria-expanded="true"] .akashic-disclaimer-icon-menu {
-            display: none;
-        }
-
-        .akashic-disclaimer-nav__toggle[aria-expanded="true"] .akashic-disclaimer-icon-close {
-            display: block;
-        }
-
-        /* ── 07. MOBILE MENU ──────────────────────────────────── */
-        .akashic-disclaimer-mobile {
-            position: fixed;
-            inset: 0;
-            z-index: var(--akd-z-mobile);
-            background: var(--akd-bg);
-            padding: calc(var(--akd-nav-height-mobile) + var(--akd-space-6)) clamp(1.25rem, 6vw, 2.5rem) var(--akd-space-8);
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-8px);
-            transition:
-                opacity var(--akd-duration-base) var(--akd-ease-out),
-                transform var(--akd-duration-base) var(--akd-ease-out),
-                visibility 0s linear var(--akd-duration-base);
-            overflow-y: auto;
-        }
-
-        .akashic-disclaimer-mobile.is-open {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-            transition:
-                opacity var(--akd-duration-base) var(--akd-ease-out),
-                transform var(--akd-duration-base) var(--akd-ease-out),
-                visibility 0s linear 0s;
-        }
-
-        .akashic-disclaimer-mobile__list {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .akashic-disclaimer-mobile__item {
-            border-bottom: 1px solid var(--akd-border);
-        }
-
-        .akashic-disclaimer-mobile__item:first-child {
-            border-top: 1px solid var(--akd-border);
-        }
-
-        .akashic-disclaimer-mobile__link {
-            display: flex;
-            align-items: baseline;
-            gap: var(--akd-space-5);
-            padding: var(--akd-space-5) 0;
-            transition: color var(--akd-duration-fast) var(--akd-ease-out);
-        }
-
-        .akashic-disclaimer-mobile__link:hover {
-            color: var(--akd-accent);
-        }
-
-        .akashic-disclaimer-mobile__num {
-            font-family: var(--akd-font-mono);
-            font-size: 0.6875rem;
-            letter-spacing: 0.06em;
-            color: var(--akd-text-subtle);
-            flex-shrink: 0;
-            width: 2rem;
-        }
-
-        .akashic-disclaimer-mobile__label {
-            font-family: var(--akd-font-serif);
-            font-size: clamp(1.5rem, 1.2rem + 1.5vw, 2rem);
-            font-weight: 400;
-            letter-spacing: -0.01em;
-            line-height: 1.2;
-        }
-
-        .akashic-disclaimer-mobile__clock {
-            display: flex;
-            align-items: center;
-            gap: var(--akd-space-3);
-            padding-top: var(--akd-space-6);
-            margin-top: var(--akd-space-5);
-            border-top: 1px solid var(--akd-border);
-            font-family: var(--akd-font-mono);
-            font-size: 0.875rem;
-            letter-spacing: 0.08em;
-            color: var(--akd-text);
-        }
-
-        .akashic-disclaimer-mobile__clock .akashic-disclaimer-clock__label {
-            font-size: 0.625rem;
-        }
-
-        /* ── 08. MAIN ─────────────────────────────────────────── */
-        .akashic-disclaimer-main {
-            flex: 1;
-            padding-top: var(--akd-nav-height);
-        }
-
-        /* ── 09. HERO ─────────────────────────────────────────── */
-        .akashic-disclaimer-hero {
-            position: relative;
-            padding-block: clamp(3rem, 6vh, 5rem) clamp(2.5rem, 5vh, 4rem);
-            overflow: hidden;
-            isolation: isolate;
-            border-bottom: 1px solid var(--akd-border);
-        }
-
-        .akashic-disclaimer-hero__bg {
-            position: absolute;
-            inset: 0;
-            z-index: -2;
-            background:
-                radial-gradient(circle at 22% 28%, rgba(194, 142, 62, 0.08), transparent 55%),
-                radial-gradient(circle at 82% 72%, rgba(28, 28, 30, 0.04), transparent 50%),
-                linear-gradient(180deg, #F7F5F2 0%, #F2EEE8 100%);
-        }
-
-        .akashic-disclaimer-hero__grid {
-            position: absolute;
-            inset: 0;
-            z-index: -1;
-            pointer-events: none;
-            background-image:
-                linear-gradient(to right, var(--akd-border) 1px, transparent 1px),
-                linear-gradient(to bottom, var(--akd-border) 1px, transparent 1px);
-            background-size: 120px 120px;
-            mask-image: radial-gradient(ellipse at 25% 40%, #000 10%, transparent 72%);
-            -webkit-mask-image: radial-gradient(ellipse at 25% 40%, #000 10%, transparent 72%);
-            opacity: 0.6;
-        }
-
-        .akashic-disclaimer-hero__inner {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: clamp(2rem, 5vw, 6rem);
-            align-items: center;
-        }
-
-        .akashic-disclaimer-hero__label {
-            display: flex;
-            align-items: center;
-            gap: var(--akd-space-4);
-            margin-bottom: var(--akd-space-6);
-            flex-wrap: wrap;
-        }
-
-        .akashic-disclaimer-hero__label-line {
-            width: 32px;
-            height: 1px;
-            background: var(--akd-accent);
-            flex-shrink: 0;
-        }
-
-        .akashic-disclaimer-eyebrow {
-            font-family: var(--akd-font-sans);
-            font-size: 0.6875rem;
-            font-weight: 600;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--akd-text-subtle);
-        }
-
-        .akashic-disclaimer-hero__title {
-            font-family: var(--akd-font-serif);
-            font-weight: 400;
-            font-size: clamp(2rem, 1.3rem + 3.6vw, 4.25rem);
-            line-height: 1.06;
-            letter-spacing: -0.025em;
-            color: var(--akd-text);
-            max-width: 16ch;
-            margin-bottom: var(--akd-space-6);
-        }
-
-        .akashic-disclaimer-hero__title em {
-            font-style: italic;
-            color: var(--akd-accent);
-        }
-
-        .akashic-disclaimer-hero__desc {
-            font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
-            line-height: 1.65;
-            color: var(--akd-text-muted);
-            max-width: 52ch;
-            margin-bottom: var(--akd-space-6);
-        }
-
-        .akashic-disclaimer-hero__meta {
-            display: flex;
-            gap: var(--akd-space-7);
-            padding-top: var(--akd-space-5);
-            border-top: 1px solid var(--akd-border);
-            flex-wrap: wrap;
-        }
-
-        .akashic-disclaimer-hero__meta-item {
-            display: flex;
-            flex-direction: column;
-            gap: var(--akd-space-1);
-        }
-
-        .akashic-disclaimer-hero__meta-label {
-            font-family: var(--akd-font-mono);
-            font-size: 0.5625rem;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--akd-text-subtle);
-        }
-
-        .akashic-disclaimer-hero__meta-value {
-            font-family: var(--akd-font-sans);
-            font-size: 0.875rem;
-            font-weight: 500;
-            color: var(--akd-text);
-        }
-
-        .akashic-disclaimer-hero__visual {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 1 / 1;
-            max-width: 420px;
-            margin-left: auto;
-        }
-
-        .akashic-disclaimer-hero__visual svg {
-            width: 100%;
-            height: 100%;
-            overflow: visible;
-        }
-
-        .akashic-disclaimer-pulse {
-            animation: akd-pulse 3.2s ease-in-out infinite;
-            transform-origin: center;
-            transform-box: fill-box;
-        }
-
-        @keyframes akd-pulse {
-            0%, 100% { opacity: 0.7; transform: scale(1); }
-            50%      { opacity: 0.2; transform: scale(1.7); }
-        }
-
-        /* ── 10. NOTICE ───────────────────────────────────────── */
-        .akashic-disclaimer-notice {
-            padding-block: clamp(2rem, 4vw, 3rem);
-            border-bottom: 1px solid var(--akd-border);
-        }
-
-        .akashic-disclaimer-notice__card {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: var(--akd-space-6);
-            align-items: start;
-            padding: clamp(1.5rem, 3vw, 2.25rem);
-            border: 1px solid var(--akd-warning);
-            background: var(--akd-warning-soft);
-            border-left-width: 3px;
-        }
-
-        .akashic-disclaimer-notice__icon {
-            width: 32px;
-            height: 32px;
-            color: var(--akd-warning);
-            flex-shrink: 0;
-        }
-
-        .akashic-disclaimer-notice__content {
-            display: flex;
-            flex-direction: column;
-            gap: var(--akd-space-3);
-        }
-
-        .akashic-disclaimer-notice__label {
-            font-family: var(--akd-font-mono);
-            font-size: 0.625rem;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: var(--akd-warning);
-            font-weight: 600;
-        }
-
-        .akashic-disclaimer-notice__title {
-            font-family: var(--akd-font-serif);
-            font-size: clamp(1.25rem, 1.1rem + 0.8vw, 1.625rem);
-            font-weight: 400;
-            line-height: 1.25;
-            letter-spacing: -0.01em;
-            color: var(--akd-text);
-        }
-
-        .akashic-disclaimer-notice__text {
-            font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
-            line-height: 1.7;
-            color: var(--akd-text-muted);
-        }
-
-        /* ── 11. LAYOUT (TOC + CONTENT) ───────────────────────── */
-        .akashic-disclaimer-layout {
-            display: grid;
-            grid-template-columns: 260px 1fr;
-            gap: clamp(2rem, 5vw, 5rem);
-            padding-block: clamp(3rem, 6vw, 5rem) clamp(4rem, 8vw, 7rem);
-            align-items: start;
-        }
-
-        /* ── 12. TOC ──────────────────────────────────────────── */
-        .akashic-disclaimer-toc {
-            position: sticky;
-            top: calc(var(--akd-nav-height) + var(--akd-space-6));
-            align-self: start;
-            max-height: calc(100vh - var(--akd-nav-height) - var(--akd-space-8));
-            overflow-y: auto;
-            padding-right: var(--akd-space-3);
-
-            /* Sembunyikan scrollbar, tetap bisa scroll */
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .akashic-disclaimer-toc::-webkit-scrollbar {
-            display: none;
-            width: 0;
-            height: 0;
-        }
-
-        .akashic-disclaimer-toc__label {
-            font-family: var(--akd-font-mono);
-            font-size: 0.625rem;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: var(--akd-text-subtle);
-            padding-bottom: var(--akd-space-4);
-            border-bottom: 1px solid var(--akd-border);
-            margin-bottom: var(--akd-space-4);
-        }
-
-        .akashic-disclaimer-toc__list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--akd-space-1);
-        }
-
-        .akashic-disclaimer-toc__link {
-            display: grid;
-            grid-template-columns: auto 1fr;
-            gap: var(--akd-space-3);
-            align-items: baseline;
-            padding: var(--akd-space-2) var(--akd-space-3);
-            font-size: 0.8125rem;
-            line-height: 1.4;
-            color: var(--akd-text-muted);
-            border-left: 2px solid transparent;
-            cursor: pointer;
-            text-align: left;
-            width: 100%;
-            transition:
-                color var(--akd-duration-fast) var(--akd-ease-out),
-                border-color var(--akd-duration-fast) var(--akd-ease-out),
-                background-color var(--akd-duration-fast) var(--akd-ease-out);
-        }
-
-        .akashic-disclaimer-toc__link:hover {
-            color: var(--akd-text);
-            background: rgba(154, 107, 74, 0.04);
-        }
-
-        .akashic-disclaimer-toc__link.is-active {
-            color: var(--akd-text);
-            border-left-color: var(--akd-accent);
-            background: rgba(154, 107, 74, 0.06);
-        }
-
-        .akashic-disclaimer-toc__num {
-            font-family: var(--akd-font-mono);
-            font-size: 0.625rem;
-            letter-spacing: 0.06em;
-            color: var(--akd-text-subtle);
-            flex-shrink: 0;
-        }
-
-        .akashic-disclaimer-toc__link.is-active .akashic-disclaimer-toc__num {
-            color: var(--akd-accent);
-        }
-
-        /* ── 13. CONTENT ──────────────────────────────────────── */
-        .akashic-disclaimer-content {
-            max-width: var(--akd-reading);
-            min-height: 400px;
-        }
-
-        /* Empty state — tampil sebelum user memilih item TOC */
-        .akashic-disclaimer-content__empty {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            gap: var(--akd-space-4);
-            padding: clamp(2.5rem, 5vw, 4rem) 0;
-            color: var(--akd-text-subtle);
-        }
-
-        .akashic-disclaimer-content__empty-label {
-            font-family: var(--akd-font-mono);
-            font-size: 0.625rem;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: var(--akd-text-subtle);
-        }
-
-        .akashic-disclaimer-content__empty-title {
-            font-family: var(--akd-font-serif);
-            font-weight: 400;
-            font-size: clamp(1.25rem, 1.1rem + 0.8vw, 1.625rem);
-            line-height: 1.25;
-            letter-spacing: -0.01em;
-            color: var(--akd-text-muted);
-            max-width: 24ch;
-        }
-
-        .akashic-disclaimer-content__empty-desc {
-            font-size: 0.9375rem;
-            line-height: 1.65;
-            color: var(--akd-text-subtle);
-            max-width: 52ch;
-        }
-
-        /* Section — hanya ditampilkan bila aktif */
-        .akashic-disclaimer-section {
-            padding-block: clamp(2rem, 4vw, 3rem);
-            border-bottom: 1px solid var(--akd-border);
-            display: none;
-        }
-
-        .akashic-disclaimer-section.is-active {
-            display: block;
-        }
-
-        .akashic-disclaimer-section:first-child {
-            padding-top: 0;
-        }
-
-        .akashic-disclaimer-section__head {
-            display: flex;
-            align-items: baseline;
-            gap: var(--akd-space-4);
-            margin-bottom: var(--akd-space-5);
-        }
-
-        .akashic-disclaimer-section__num {
-            font-family: var(--akd-font-mono);
-            font-size: 0.6875rem;
-            letter-spacing: 0.08em;
-            color: var(--akd-accent);
-            flex-shrink: 0;
-        }
-
-        .akashic-disclaimer-section__label {
-            font-family: var(--akd-font-sans);
-            font-size: 0.6875rem;
-            font-weight: 600;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--akd-text-subtle);
-        }
-
-        .akashic-disclaimer-section__title {
-            font-family: var(--akd-font-serif);
-            font-weight: 400;
-            font-size: clamp(1.5rem, 1.2rem + 1.4vw, 2.125rem);
-            line-height: 1.15;
-            letter-spacing: -0.015em;
-            color: var(--akd-text);
-            margin-bottom: var(--akd-space-5);
-        }
-
-        .akashic-disclaimer-section__title em {
-            font-style: italic;
-            color: var(--akd-accent);
-        }
-
-        .akashic-disclaimer-content p {
-            font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
-            line-height: 1.75;
-            color: var(--akd-text-muted);
-            margin-bottom: var(--akd-space-4);
-        }
-
-        .akashic-disclaimer-content p:last-child {
-            margin-bottom: 0;
-        }
-
-        .akashic-disclaimer-content p strong {
-            color: var(--akd-text);
-            font-weight: 600;
-        }
-
-        .akashic-disclaimer-content h3 {
-            font-family: var(--akd-font-sans);
-            font-size: 1rem;
-            font-weight: 600;
-            letter-spacing: -0.005em;
-            color: var(--akd-text);
-            margin-top: var(--akd-space-6);
-            margin-bottom: var(--akd-space-3);
-        }
-
-        .akashic-disclaimer-content ul {
-            display: flex;
-            flex-direction: column;
-            gap: var(--akd-space-3);
-            margin-bottom: var(--akd-space-5);
-            padding-left: 0;
-        }
-
-        .akashic-disclaimer-content ul li {
-            position: relative;
-            padding-left: var(--akd-space-5);
-            font-size: clamp(0.9375rem, 0.9rem + 0.2vw, 1.0625rem);
-            line-height: 1.7;
-            color: var(--akd-text-muted);
-        }
-
-        .akashic-disclaimer-content ul li::before {
-            content: "";
-            position: absolute;
-            left: 0;
-            top: 0.7em;
-            width: 8px;
-            height: 1px;
-            background: var(--akd-accent);
-        }
-
-        .akashic-disclaimer-content a {
-            color: var(--akd-text);
-            border-bottom: 1px solid var(--akd-border-strong);
-            transition: color var(--akd-duration-fast) var(--akd-ease-out),
-                        border-color var(--akd-duration-fast) var(--akd-ease-out);
-        }
-
-        .akashic-disclaimer-content a:hover {
-            color: var(--akd-accent);
-            border-bottom-color: var(--akd-accent);
-        }
-
-        /* ── 14. CALLOUT ──────────────────────────────────────── */
-        .akashic-disclaimer-callout {
-            padding: var(--akd-space-5) var(--akd-space-6);
-            border-left: 3px solid var(--akd-accent);
-            background: var(--akd-accent-soft);
-            margin-block: var(--akd-space-5);
-            font-size: 0.9375rem;
-            line-height: 1.65;
-            color: var(--akd-text);
-        }
-
-        .akashic-disclaimer-callout strong {
-            display: block;
-            font-family: var(--akd-font-mono);
-            font-size: 0.625rem;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--akd-accent);
-            margin-bottom: var(--akd-space-2);
-            font-weight: 600;
-        }
-
-        /* ── 15. INFO CARDS ───────────────────────────────────── */
-        .akashic-disclaimer-cards {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 0;
-            border-top: 1px solid var(--akd-border-strong);
-            border-bottom: 1px solid var(--akd-border-strong);
-            margin-block: var(--akd-space-6);
-        }
-
-        .akashic-disclaimer-card {
-            padding: var(--akd-space-5);
-            border-right: 1px solid var(--akd-border);
-            display: flex;
-            flex-direction: column;
-            gap: var(--akd-space-3);
-        }
-
-        .akashic-disclaimer-card:last-child {
-            border-right: none;
-        }
-
-        .akashic-disclaimer-card__label {
-            font-family: var(--akd-font-mono);
-            font-size: 0.5625rem;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--akd-accent);
-        }
-
-        .akashic-disclaimer-card__title {
-            font-family: var(--akd-font-sans);
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--akd-text);
-            line-height: 1.3;
-        }
-
-        .akashic-disclaimer-card__desc {
-            font-size: 0.875rem;
-            line-height: 1.6;
-            color: var(--akd-text-muted);
-        }
-
-        /* ── 16. REGION HIERARCHY DIAGRAM ─────────────────────── */
-        .akashic-disclaimer-flow {
-            padding: var(--akd-space-6);
-            border: 1px solid var(--akd-border);
-            background: var(--akd-surface);
-            margin-block: var(--akd-space-6);
-        }
-
-        .akashic-disclaimer-flow svg {
-            width: 100%;
-            height: auto;
-            max-width: 480px;
-            margin-inline: auto;
-            display: block;
-        }
-
-        .akashic-disclaimer-flow__caption {
-            margin-top: var(--akd-space-5);
-            padding-top: var(--akd-space-4);
-            border-top: 1px solid var(--akd-border);
-            font-family: var(--akd-font-mono);
-            font-size: 0.6875rem;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            color: var(--akd-text-subtle);
-            text-align: center;
-            line-height: 1.7;
-        }
-
-        /* ── 17. CLOSING ──────────────────────────────────────── */
-        .akashic-disclaimer-closing {
-            padding-block: clamp(4rem, 8vw, 6rem);
-            border-top: 1px solid var(--akd-border);
-            background: var(--akd-surface-soft);
-        }
-
-        .akashic-disclaimer-closing__inner {
-            max-width: var(--akd-reading);
-            margin-inline: auto;
-            text-align: center;
-        }
-
-        .akashic-disclaimer-closing__label {
-            font-family: var(--akd-font-mono);
-            font-size: 0.625rem;
-            letter-spacing: 0.16em;
-            text-transform: uppercase;
-            color: var(--akd-text-subtle);
-            margin-bottom: var(--akd-space-5);
-            display: inline-block;
-        }
-
-        .akashic-disclaimer-closing__title {
-            font-family: var(--akd-font-serif);
-            font-weight: 400;
-            font-size: clamp(1.5rem, 1.2rem + 1.8vw, 2.5rem);
-            line-height: 1.2;
-            letter-spacing: -0.02em;
-            color: var(--akd-text);
-            margin-bottom: var(--akd-space-5);
-        }
-
-        .akashic-disclaimer-closing__title em {
-            font-style: italic;
-            color: var(--akd-accent);
-        }
-
-        .akashic-disclaimer-closing__text {
-            font-size: clamp(1rem, 0.95rem + 0.3vw, 1.125rem);
-            line-height: 1.7;
-            color: var(--akd-text-muted);
-            max-width: 62ch;
-            margin-inline: auto;
-            margin-bottom: var(--akd-space-6);
-        }
-
-        .akashic-disclaimer-closing__actions {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: var(--akd-space-4);
-        }
-
-        .akashic-disclaimer-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: var(--akd-space-2);
-            padding: var(--akd-space-3) var(--akd-space-6);
-            font-family: var(--akd-font-sans);
-            font-size: 0.8125rem;
-            font-weight: 500;
-            letter-spacing: 0.06em;
-            text-transform: uppercase;
-            line-height: 1;
-            border-radius: 2px;
-            min-height: 44px;
-            transition:
-                background-color var(--akd-duration-fast) var(--akd-ease-out),
-                color var(--akd-duration-fast) var(--akd-ease-out),
-                border-color var(--akd-duration-fast) var(--akd-ease-out);
-            white-space: nowrap;
-        }
-
-        .akashic-disclaimer-btn svg {
-            width: 14px;
-            height: 14px;
-            transition: transform var(--akd-duration-base) var(--akd-ease-out);
-        }
-
-        .akashic-disclaimer-btn:hover svg {
-            transform: translateX(3px);
-        }
-
-        .akashic-disclaimer-btn--primary {
-            background: var(--akd-dark);
-            color: var(--akd-white);
-            border: 1px solid var(--akd-dark);
-        }
-
-        .akashic-disclaimer-btn--primary:hover {
-            background: var(--akd-accent);
-            border-color: var(--akd-accent);
-        }
-
-        .akashic-disclaimer-btn--secondary {
-            background: transparent;
-            color: var(--akd-text);
-            border: 1px solid var(--akd-border-strong);
-        }
-
-        .akashic-disclaimer-btn--secondary:hover {
-            border-color: var(--akd-text);
-        }
-
-        /* ── 18. FOOTER ───────────────────────────────────────── */
-        .akashic-disclaimer-footer {
-            border-top: 1px solid var(--akd-border);
-            background: var(--akd-bg);
-            padding-top: clamp(3rem, 6vw, 5rem);
-        }
-
-        .akashic-disclaimer-footer__grid {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr 1fr;
-            gap: clamp(2rem, 4vw, 4rem);
-            padding-bottom: clamp(3rem, 5vw, 4rem);
-        }
-
-        .akashic-disclaimer-footer__brand-name {
-            font-family: var(--akd-font-serif);
-            font-size: clamp(1.5rem, 1.3rem + 1vw, 2rem);
-            font-weight: 400;
-            letter-spacing: 0.08em;
-            line-height: 1;
-            color: var(--akd-text);
-            margin-bottom: var(--akd-space-4);
-        }
-
-        .akashic-disclaimer-footer__tagline {
-            font-size: 0.9375rem;
-            line-height: 1.6;
-            color: var(--akd-text-muted);
-            max-width: 32ch;
-        }
-
-        .akashic-disclaimer-footer__col-title {
-            font-family: var(--akd-font-sans);
-            font-size: 0.6875rem;
-            font-weight: 600;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--akd-text-subtle);
-            margin-bottom: var(--akd-space-5);
-        }
-
-        .akashic-disclaimer-footer__list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--akd-space-3);
-        }
-
-        .akashic-disclaimer-footer__list a {
-            font-size: 0.875rem;
-            color: var(--akd-text-muted);
-            transition: color var(--akd-duration-fast) var(--akd-ease-out);
-        }
-
-        .akashic-disclaimer-footer__list a:hover {
-            color: var(--akd-accent);
-        }
-
-        .akashic-disclaimer-footer__bottom {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: var(--akd-space-4);
-            padding-block: var(--akd-space-5);
-            border-top: 1px solid var(--akd-border);
-            flex-wrap: wrap;
-        }
-
-        .akashic-disclaimer-footer__copy {
-            font-family: var(--akd-font-mono);
-            font-size: 0.625rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--akd-text-subtle);
-        }
-
-        .akashic-disclaimer-footer__system {
-            display: flex;
-            align-items: center;
-            gap: var(--akd-space-3);
-            font-family: var(--akd-font-mono);
-            font-size: 0.625rem;
-            letter-spacing: 0.08em;
-            text-transform: uppercase;
-            color: var(--akd-text-subtle);
-        }
-
-        .akashic-disclaimer-footer__system-dot {
-            width: 5px;
-            height: 5px;
-            border-radius: 50%;
-            background: var(--akd-accent);
-            flex-shrink: 0;
-        }
-
-        /* ── 19. RESPONSIVE ───────────────────────────────────── */
-        @media (max-width: 1024px) {
-            .akashic-disclaimer-hero__inner {
-                grid-template-columns: 1fr;
-                gap: var(--akd-space-7);
-            }
-
-            .akashic-disclaimer-hero__visual {
-                max-width: 380px;
-                margin-inline: auto;
-            }
-
-            .akashic-disclaimer-layout {
-                grid-template-columns: 1fr;
-                gap: var(--akd-space-7);
-            }
-
-            .akashic-disclaimer-toc {
-                position: static;
-                max-height: none;
-                padding-right: 0;
-                padding: var(--akd-space-5);
-                background: var(--akd-surface-soft);
-                border: 1px solid var(--akd-border);
-                border-radius: 4px;
-            }
-
-            .akashic-disclaimer-toc__list {
-                display: grid;
-                grid-template-columns: repeat(2, 1fr);
-                gap: var(--akd-space-1) var(--akd-space-4);
-            }
-
-            .akashic-disclaimer-footer__grid {
-                grid-template-columns: 1fr 1fr;
-                gap: var(--akd-space-6);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .akashic-disclaimer-nav__links {
-                display: none;
-            }
-
-            .akashic-disclaimer-nav__clock {
-                display: none;
-            }
-
-            .akashic-disclaimer-nav__toggle {
-                display: flex;
-            }
-
-            .akashic-disclaimer-nav {
-                height: var(--akd-nav-height-mobile);
-            }
-
-            .akashic-disclaimer-main {
-                padding-top: var(--akd-nav-height-mobile);
-            }
-
-            .akashic-disclaimer-hero__grid {
-                background-size: 72px 72px;
-            }
-
-            .akashic-disclaimer-cards {
-                grid-template-columns: 1fr;
-            }
-
-            .akashic-disclaimer-card {
-                border-right: none;
-                border-bottom: 1px solid var(--akd-border);
-            }
-
-            .akashic-disclaimer-card:last-child {
-                border-bottom: none;
-            }
-
-            .akashic-disclaimer-toc__list {
-                grid-template-columns: 1fr;
-            }
-
-            .akashic-disclaimer-notice__card {
-                grid-template-columns: 1fr;
-                gap: var(--akd-space-4);
-            }
-
-            .akashic-disclaimer-footer__grid {
-                grid-template-columns: 1fr;
-                gap: var(--akd-space-6);
-            }
-
-            .akashic-disclaimer-footer__bottom {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .akashic-disclaimer-nav__brand-sub {
-                display: none;
-            }
-
-            .akashic-disclaimer-hero__meta {
-                gap: var(--akd-space-5);
-            }
-
-            .akashic-disclaimer-section {
-                padding-block: var(--akd-space-6);
-            }
-
-            .akashic-disclaimer-closing__actions {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-            .akashic-disclaimer-btn {
-                justify-content: center;
-            }
-        }
-
-        /* ── 20. REDUCED MOTION ───────────────────────────────── */
-        @media (prefers-reduced-motion: reduce) {
-            html {
-                scroll-behavior: auto;
-            }
-
-            *,
-            *::before,
-            *::after {
-                animation-duration: 0.01ms !important;
-                animation-iteration-count: 1 !important;
-                transition-duration: 0.01ms !important;
-                scroll-behavior: auto !important;
-            }
-
-            .akashic-disclaimer-pulse,
-            .akashic-disclaimer-clock__dot {
-                animation: none !important;
-            }
-
-            .akashic-disclaimer-progress__bar {
-                transition: none;
-            }
-        }
-
-        /* ── 21. PRINT ────────────────────────────────────────── */
-        @media print {
-            .akashic-disclaimer-nav,
-            .akashic-disclaimer-mobile,
-            .akashic-disclaimer-progress,
-            .akashic-disclaimer-skip,
-            .akashic-disclaimer-toc,
-            .akashic-disclaimer-clock {
-                display: none !important;
-            }
-
-            .akashic-disclaimer-main {
-                padding-top: 0;
-            }
-
-            body {
-                background: #fff;
-                color: #000;
-                font-size: 11pt;
-            }
-
-            .akashic-disclaimer-layout {
-                grid-template-columns: 1fr;
-                padding-block: 0;
-            }
-
-            /* Saat print, tampilkan semua section agar dokumen utuh */
-            .akashic-disclaimer-section {
-                display: block !important;
-                page-break-inside: avoid;
-            }
-
-            .akashic-disclaimer-content__empty {
-                display: none !important;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F5F2">
+<meta name="color-scheme" content="light">
+<title>Akashic — Disclaimer</title>
+<meta name="description" content="Disclaimer Akashic menjelaskan batasan informasi, penggunaan data berbasis lokasi, sumber eksternal, dan keterbatasan sistem.">
+<link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='image/favicon.svg') }}">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+:root{--bg:#F7F5F2;--soft:#F1EEE9;--tx:#1C1C1E;--mu:#5C5C60;--sub:#8E8E93;--bd:rgba(28,28,30,.1);--ac:#9A6B4A;--wn:#C28E3E;
+--serif:Georgia,"Times New Roman",serif;--sans:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--nav:64px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav) + 24px);-webkit-text-size-adjust:100%}
+body{font:clamp(.9375rem,.9rem + .2vw,1.0625rem)/1.75 var(--sans);color:var(--tx);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:left}
+ul{list-style:none}
+:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
+.wrap{width:100%;max-width:1240px;margin-inline:auto;padding-inline:clamp(1.25rem,4vw,3rem)}
+.skip{position:absolute;top:-100%;left:1rem;z-index:50;padding:.6rem 1rem;background:var(--tx);color:#fff;border-radius:4px}
+.skip:focus{top:1rem}
+
+/* Nav */
+#bar{position:fixed;top:0;left:0;height:2px;width:0;background:var(--ac);z-index:40}
+.nav{position:fixed;inset:0 0 auto;height:var(--nav);z-index:30;background:rgba(247,245,242,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
+.nav.s{border-color:var(--bd)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:100%;gap:1.5rem}
+.brand{font:400 1.25rem var(--serif);letter-spacing:.08em}
+.nav-r{display:flex;align-items:center;gap:1.5rem;font-size:.875rem}
+.nav-r a{color:var(--mu);transition:color .15s}
+.nav-r a:hover{color:var(--tx)}
+.clock{padding-left:1.5rem;border-left:1px solid var(--bd);font-variant-numeric:tabular-nums;color:var(--tx)}
+
+/* Hero */
+main{flex:1;padding-top:var(--nav)}
+.hero{padding-block:clamp(3rem,7vw,5.5rem) clamp(2.5rem,5vw,4rem);border-bottom:1px solid var(--bd);background:radial-gradient(circle at 20% 20%,rgba(194,142,62,.09),transparent 55%),linear-gradient(180deg,#F7F5F2,#F2EEE8)}
+.hero h1{font:400 clamp(2.5rem,1.5rem + 5vw,5rem)/1.05 var(--serif);letter-spacing:-.025em;margin-bottom:1.25rem}
+.hero p{max-width:52ch;color:var(--mu);font-size:1.125rem;line-height:1.65}
+.hero small{display:block;margin-top:1.5rem;color:var(--sub);font-size:.875rem}
+
+/* Notice */
+.notice{margin-block:2rem;display:flex;gap:1.25rem;padding:1.5rem;border:1px solid var(--wn);border-left-width:3px;background:rgba(194,142,62,.1)}
+.notice svg{width:28px;height:28px;flex:none;color:var(--wn)}
+.notice h2{font:400 1.375rem/1.25 var(--serif);margin-bottom:.4rem}
+.notice p{color:var(--mu)}
+
+/* Layout */
+.layout{display:grid;grid-template-columns:250px 1fr;gap:clamp(2rem,5vw,4.5rem);padding-block:2rem 6rem;align-items:start}
+.toc{position:sticky;top:calc(var(--nav) + 24px);max-height:calc(100vh - var(--nav) - 48px);overflow-y:auto;scrollbar-width:none}
+.toc::-webkit-scrollbar{display:none}
+.toc p{font-size:.8125rem;color:var(--sub);padding-bottom:.75rem;margin-bottom:.5rem;border-bottom:1px solid var(--bd)}
+.toc button{display:block;width:100%;padding:.45rem .75rem;font-size:.875rem;line-height:1.4;color:var(--mu);border-left:2px solid transparent;transition:color .15s,background .15s}
+.toc button:hover{color:var(--tx);background:rgba(154,107,74,.05)}
+.toc button[aria-current]{color:var(--tx);border-color:var(--ac);background:rgba(154,107,74,.07)}
+
+/* Content */
+.content{max-width:760px;min-height:400px}
+.empty{padding-block:3rem}
+.empty h2{font:400 1.5rem/1.25 var(--serif);color:var(--mu);margin-bottom:.75rem;max-width:24ch}
+.empty p{color:var(--sub);max-width:50ch}
+.js [data-s]{display:none}
+.js [data-s].on{display:block}
+[data-s]{padding-bottom:2rem}
+[data-s] h2{font:400 clamp(1.75rem,1.3rem + 1.6vw,2.375rem)/1.15 var(--serif);letter-spacing:-.015em;margin-bottom:1.25rem}
+[data-s] h2 em{font-style:italic}
+.content p{color:var(--mu);margin-bottom:1rem}
+.content strong{color:var(--tx);font-weight:600}
+.content h3{font-size:1rem;font-weight:600;margin:1.75rem 0 .6rem}
+.content ul{display:grid;gap:.5rem;margin-bottom:1.25rem}
+.content li{position:relative;padding-left:1.4rem;color:var(--mu)}
+.content li::before{content:"";position:absolute;left:0;top:.85em;width:8px;height:1px;background:var(--ac)}
+.content a{color:var(--tx);border-bottom:1px solid var(--bd);transition:color .15s,border-color .15s}
+.content a:hover{color:var(--ac);border-color:var(--ac)}
+.note{margin-block:1.5rem;padding:1.1rem 1.5rem;border-left:3px solid var(--ac);background:rgba(154,107,74,.09);color:var(--tx);font-size:.9375rem;line-height:1.65}
+.note b{display:block;color:var(--ac);margin-bottom:.2rem}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);margin-block:1.5rem;border-block:1px solid var(--bd)}
+.cards div{padding:1.25rem;border-right:1px solid var(--bd)}
+.cards div:last-child{border:0}
+.cards h3{margin:0 0 .4rem}
+.cards p{font-size:.875rem;line-height:1.6;margin:0}
+.updated{font-size:.875rem;color:var(--sub);padding-top:1rem;border-top:1px solid var(--bd)}
+
+/* Closing + footer */
+.closing{padding-block:clamp(3.5rem,8vw,6rem);background:var(--soft);border-top:1px solid var(--bd);text-align:center}
+.closing h2{font:400 clamp(1.5rem,1.1rem + 2vw,2.5rem)/1.2 var(--serif);letter-spacing:-.02em;max-width:22ch;margin:0 auto 1.25rem}
+.closing p{max-width:60ch;margin:0 auto 2rem;color:var(--mu)}
+.btns{display:flex;justify-content:center;flex-wrap:wrap;gap:1rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.75rem 1.75rem;border:1px solid var(--tx);border-radius:2px;font-size:.9375rem;font-weight:500;transition:background .15s,border-color .15s,color .15s}
+.btn.p{background:var(--tx);color:#fff}
+.btn.p:hover{background:var(--ac);border-color:var(--ac)}
+.btn.g{border-color:rgba(28,28,30,.2)}
+.btn.g:hover{border-color:var(--tx)}
+footer{border-top:1px solid var(--bd);padding-block:3rem 1.5rem}
+.f-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2rem;padding-bottom:2rem}
+.f-grid .brand{display:block;font-size:1.75rem;margin-bottom:.75rem}
+.f-grid p,.f-grid h3{font-size:.875rem;color:var(--mu)}
+.f-grid h3{font-weight:600;color:var(--sub);margin-bottom:.9rem}
+.f-grid li+li{margin-top:.6rem}
+.f-grid a{font-size:.875rem;color:var(--mu)}
+.f-grid a:hover{color:var(--ac)}
+.f-bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding-top:1.25rem;border-top:1px solid var(--bd);font-size:.8125rem;color:var(--sub)}
+
+@media(max-width:900px){
+.layout{grid-template-columns:1fr;gap:1.5rem}
+.toc{position:static;max-height:none;padding:1.25rem;background:var(--soft);border:1px solid var(--bd);border-radius:4px}
+.toc ul{display:grid;grid-template-columns:1fr 1fr;column-gap:1rem}
+}
+@media(max-width:640px){
+.clock,.nav-r a{display:none}
+.toc ul{grid-template-columns:1fr}
+.cards{grid-template-columns:1fr}
+.cards div{border:0;border-bottom:1px solid var(--bd)}
+.cards div:last-child{border:0}
+.notice{flex-direction:column;gap:.75rem}
+.f-grid{grid-template-columns:1fr}
+.btns{flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@media print{
+.nav,#bar,.toc,.skip,.empty{display:none!important}
+main{padding-top:0}
+.layout{display:block}
+[data-s]{display:block!important;break-inside:avoid}
+body{background:#fff}
+}
+</style>
 </head>
+<body>
+<a href="#main" class="skip">Lewati ke konten</a>
+<div id="bar" aria-hidden="true"></div>
 
-<body class="akashic-disclaimer-body">
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="{{ url_for('index') }}" class="brand" aria-label="Akashic — Beranda">AKASHIC</a>
+    <div class="nav-r">
+      <a href="{{ url_for('index') }}">Beranda</a>
+      <time class="clock" id="clock" aria-label="Waktu lokal">--:--:--</time>
+    </div>
+  </div>
+</header>
 
-    <a href="#disclaimer-main" class="akashic-disclaimer-skip">Skip to content</a>
+<main id="main">
+  <section class="hero">
+    <div class="wrap">
+      <h1>Disclaimer</h1>
+      <p>Catatan penting mengenai sifat informasi, keterbatasan sistem, dan penggunaan Akashic.</p>
+      <small>Terakhir diperbarui: 2026</small>
+    </div>
+  </section>
 
-    <div class="akashic-disclaimer-progress" aria-hidden="true">
-        <div class="akashic-disclaimer-progress__bar" id="akd-scroll-bar"></div>
+  <div class="wrap">
+    <div class="notice" role="note">
+      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3 29 27H3Z"/><line x1="16" y1="11" x2="16" y2="18"/><circle cx="16" cy="22" r="1.2" fill="currentColor" stroke="none"/></svg>
+      <div>
+        <h2>Penting untuk dipahami</h2>
+        <p>Informasi di Akashic membantu pengguna menemukan hal yang relevan berdasarkan konteks wilayah. Informasi ini tidak selalu dimaksudkan sebagai pengganti pengumuman, dokumen, atau sumber resmi.</p>
+      </div>
     </div>
 
-    <header class="akashic-disclaimer-nav" id="akd-nav" role="banner">
-        <div class="akashic-disclaimer-container akashic-disclaimer-nav__inner">
+    <div class="layout">
+      <nav class="toc" aria-label="Daftar isi">
+        <p>Daftar isi</p>
+        <ul id="toc"></ul>
+      </nav>
 
-            <a href="{{ url_for('index') }}" class="akashic-disclaimer-nav__brand" aria-label="Akashic — Home">
-                <span class="akashic-disclaimer-nav__brand-mark" aria-hidden="true"></span>
-                <span class="akashic-disclaimer-nav__brand-text">
-                    <span class="akashic-disclaimer-nav__brand-name">AKASHIC</span>
-                    <span class="akashic-disclaimer-nav__brand-sub">Location-Based Information System</span>
-                </span>
-            </a>
-
-            <div class="akashic-disclaimer-nav__right">
-                <nav class="akashic-disclaimer-nav__links" aria-label="Primary navigation">
-                    <a href="{{ url_for('index') }}" class="akashic-disclaimer-nav__link">Home</a>
-                </nav>
-
-                <div class="akashic-disclaimer-clock" role="timer" aria-live="off" aria-label="Waktu lokal saat ini">
-                    <span class="akashic-disclaimer-clock__dot" aria-hidden="true"></span>
-                    <time class="akashic-disclaimer-clock__time" id="akd-clock" datetime="">--:--:--</time>
-                    <span class="akashic-disclaimer-clock__label" aria-hidden="true">Local</span>
-                </div>
-
-                <button class="akashic-disclaimer-nav__toggle"
-                        id="akd-menu-toggle"
-                        type="button"
-                        aria-expanded="false"
-                        aria-controls="akd-mobile-menu"
-                        aria-label="Open menu">
-                    <svg class="akashic-disclaimer-icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-                        <line x1="3" y1="7" x2="21" y2="7"/>
-                        <line x1="3" y1="12" x2="21" y2="12"/>
-                        <line x1="3" y1="17" x2="21" y2="17"/>
-                    </svg>
-                    <svg class="akashic-disclaimer-icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true">
-                        <line x1="5" y1="5" x2="19" y2="19"/>
-                        <line x1="19" y1="5" x2="5" y2="19"/>
-                    </svg>
-                </button>
-            </div>
+      <article class="content">
+        <div class="empty" id="empty">
+          <h2>Pilih salah satu bagian untuk membaca.</h2>
+          <p>Klik item pada daftar isi, dan bagian yang dipilih akan tampil di sini.</p>
         </div>
-    </header>
 
-    <div class="akashic-disclaimer-mobile" id="akd-mobile-menu" role="dialog" aria-modal="true" aria-label="Mobile navigation">
-        <nav aria-label="Mobile primary navigation">
-            <ul class="akashic-disclaimer-mobile__list">
-                <li class="akashic-disclaimer-mobile__item">
-                    <a href="{{ url_for('index') }}" class="akashic-disclaimer-mobile__link">
-                        <span class="akashic-disclaimer-mobile__num">01</span>
-                        <span class="akashic-disclaimer-mobile__label">Home</span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <section data-s id="pendahuluan">
+          <h2>Pendahuluan</h2>
+          <p>Akashic adalah <strong>Location-Based Information System</strong> berbasis web yang menyajikan informasi berdasarkan konteks geografis pengguna. Prinsipnya: <em>“Informasi yang hadir di tempat yang tepat.”</em></p>
+          <p>Disclaimer ini menjelaskan batasan, sifat informasi, dan tanggung jawab penggunaan sistem Akashic dengan bahasa yang mudah dipahami. Dengan menggunakan Akashic, Anda memahami bahwa informasi yang tampil memiliki keterbatasan dan tidak selalu dapat menggantikan sumber resmi.</p>
+          <div class="note"><b>Ringkasan</b>Akashic menghadirkan informasi dalam konteks wilayah, namun pengguna tetap perlu menggunakan pertimbangan sendiri, terutama untuk keputusan penting.</div>
+        </section>
 
-        <div class="akashic-disclaimer-mobile__clock" role="timer" aria-live="off" aria-label="Waktu lokal saat ini">
-            <span class="akashic-disclaimer-clock__dot" aria-hidden="true"></span>
-            <time class="akashic-disclaimer-clock__time" id="akd-clock-mobile" datetime="">--:--:--</time>
-            <span class="akashic-disclaimer-clock__label" aria-hidden="true">Local Time</span>
-        </div>
+        <section data-s id="informasi">
+          <h2>Sifat Informasi</h2>
+          <p>Akashic menyajikan beberapa jenis informasi, masing-masing dengan keterbatasannya.</p>
+          <div class="cards">
+            <div><h3>Informasi sistem</h3><p>Dikelola dalam sistem dan disajikan sesuai konteks wilayah pengguna.</p></div>
+            <div><h3>Kegiatan</h3><p>Informasi kegiatan dengan waktu dan konteks wilayah tertentu.</p></div>
+            <div><h3>Berita</h3><p>Dapat berasal dari sumber eksternal di luar Akashic.</p></div>
+          </div>
+          <p>Informasi dapat berubah, diperbarui, diperbaiki, dihapus, atau menjadi tidak relevan seiring waktu. Akashic tidak menjamin informasi selalu tersedia dalam bentuk yang sama.</p>
+        </section>
+
+        <section data-s id="akurasi" data-t="Akurasi &amp; Kelengkapan">
+          <h2>Akurasi dan Kelengkapan</h2>
+          <p>Akashic berupaya menyajikan informasi yang relevan dan terstruktur, tetapi tidak menjamin informasi akan selalu:</p>
+          <ul>
+            <li>benar pada setiap waktu;</li>
+            <li>lengkap dalam cakupannya;</li>
+            <li>terbaru saat diakses;</li>
+            <li>bebas sepenuhnya dari kesalahan;</li>
+            <li>tersedia di setiap wilayah.</li>
+          </ul>
+          <p>Informasi berasal dari berbagai sumber dan dapat berubah. Gunakan pertimbangan yang tepat saat membaca atau memakainya.</p>
+          <div class="note"><b>Catatan</b>Akashic tidak memberikan jaminan absolut atas akurasi, kelengkapan, atau ketersediaan informasi.</div>
+        </section>
+
+        <section data-s id="lokasi" data-t="Informasi Berbasis Lokasi">
+          <h2>Informasi Berbasis Lokasi</h2>
+          <p>Akashic dapat memakai lokasi browser sebagai konteks untuk menentukan informasi yang relevan dengan wilayah Anda. Data yang dapat digunakan meliputi latitude, longitude, dan tingkat akurasi dari browser.</p>
+          <p>Alur konseptualnya: <strong>lokasi → wilayah → relevansi → informasi</strong>. Lokasi diproses untuk memahami konteks wilayah, bukan sebagai identitas pribadi.</p>
+          <h3>Keterbatasan lokasi</h3>
+          <ul>
+            <li>Lokasi bergantung pada izin yang Anda berikan melalui browser.</li>
+            <li>Akurasi berbeda antar perangkat dan lingkungan.</li>
+            <li>Perangkat dapat memberikan estimasi yang tidak sempurna.</li>
+            <li>Anda dapat menolak memberikan izin lokasi.</li>
+          </ul>
+          <div class="note"><b>Catatan</b>Halaman ini tidak meminta izin lokasi Anda. Halaman ini hanya menjelaskan bagaimana lokasi digunakan sebagai konteks.</div>
+        </section>
+
+        <section data-s id="wilayah" data-t="Region &amp; Relevansi">
+          <h2>Wilayah tidak selalu berarti titik yang tepat</h2>
+          <p>Lokasi diproses dalam konteks wilayah, bukan titik presisi. Sistem mengenali wilayah berdasarkan hierarki administratif: Indonesia, provinsi, kabupaten/kota, kecamatan, dan wilayah lokal.</p>
+          <p>Karena itu, informasi yang tampil untuk suatu wilayah mungkin tidak selalu mencerminkan titik lokasi Anda secara tepat.</p>
+          <div class="note"><b>Catatan</b>Informasi wilayah bersifat kontekstual dan tidak selalu merepresentasikan titik presisi lokasi pengguna.</div>
+        </section>
+
+        <section data-s id="event" data-t="Event &amp; Waktu">
+          <h2>Event dan Informasi Waktu</h2>
+          <p>Informasi event dapat berubah karena:</p>
+          <ul>
+            <li>perubahan jadwal atau lokasi;</li>
+            <li>pembatalan kegiatan;</li>
+            <li>pergantian penyelenggara;</li>
+            <li>kondisi tertentu di lapangan.</li>
+          </ul>
+          <p>Verifikasi informasi event melalui sumber resmi penyelenggara jika Anda memakainya untuk keputusan praktis.</p>
+        </section>
+
+        <section data-s id="berita" data-t="Berita Eksternal">
+          <h2>Berita dan Sumber Eksternal</h2>
+          <p>Akashic dapat mengintegrasikan berita dari sumber eksternal. Berita tersebut:</p>
+          <ul>
+            <li>tidak selalu dibuat oleh Akashic;</li>
+            <li>dapat berasal dari RSS, API, atau sumber lain;</li>
+            <li>dapat berubah atau dihapus dari sumber asalnya;</li>
+            <li>tunduk pada kebijakan sumber masing-masing.</li>
+          </ul>
+          <p>Akashic dapat menyimpan metadata atau referensi sumber, misalnya untuk menautkan berita dengan wilayah tertentu.</p>
+        </section>
+
+        <section data-s id="teknologi" data-t="Ketergantungan Teknologi">
+          <h2>Ketergantungan Teknologi</h2>
+          <p>Akashic berjalan di atas berbagai komponen yang dapat memengaruhi fitur:</p>
+          <ul>
+            <li>browser Anda, termasuk Geolocation API dan Web Push;</li>
+            <li>koneksi internet;</li>
+            <li>server dan database;</li>
+            <li>layanan pihak ketiga dan sumber berita eksternal.</li>
+          </ul>
+          <p>Jika salah satu komponen terganggu, fitur tertentu dapat tidak berfungsi sebagaimana mestinya.</p>
+        </section>
+
+        <section data-s id="ketersediaan" data-t="Ketersediaan Sistem">
+          <h2>Ketersediaan Sistem</h2>
+          <p>Layanan dapat terpengaruh oleh pemeliharaan, gangguan server atau jaringan, perubahan konfigurasi, kesalahan teknis tak terduga, dan keterbatasan layanan pihak ketiga. Akashic tidak menjanjikan layanan yang terus-menerus tanpa gangguan.</p>
+        </section>
+
+        <section data-s id="penggunaan" data-t="Penggunaan Informasi">
+          <h2>Penggunaan Informasi</h2>
+          <p>Informasi Akashic membantu Anda memahami hal yang relevan dengan suatu wilayah, tetapi Anda tetap perlu menggunakan pertimbangan sendiri. Untuk keputusan penting, periksa sumber resmi yang berwenang, terutama terkait keselamatan, hukum, kesehatan, administrasi, perjalanan, dan kegiatan resmi.</p>
+          <div class="note"><b>Penting</b>Akashic bukan pengganti sumber resmi. Untuk keputusan penting, verifikasi melalui sumber resmi yang berwenang.</div>
+        </section>
+
+        <section data-s id="tanggung-jawab" data-t="Tanggung Jawab Pengguna">
+          <h2>Tanggung Jawab Pengguna</h2>
+          <p>Anda bertanggung jawab menggunakan informasi di Akashic secara bijak, yaitu dengan:</p>
+          <ul>
+            <li>membaca informasi secara kritis;</li>
+            <li>memeriksa waktu publikasi atau pembaruan bila tersedia;</li>
+            <li>memverifikasi informasi penting melalui sumber resmi;</li>
+            <li>memahami keterbatasan yang berkaitan dengan lokasi.</li>
+          </ul>
+          <p>Akashic menyediakan informasi sebagai alat bantu. Keputusan akhir tetap berada pada Anda.</p>
+        </section>
+
+        <section data-s id="pihak-ketiga" data-t="Pihak Ketiga">
+          <h2>Tautan dan Layanan Pihak Ketiga</h2>
+          <p>Akashic dapat merujuk atau terhubung ke sumber eksternal, dan tidak selalu mengendalikan isi, ketersediaan, keamanan, kebijakan, maupun perubahan informasi di sana. Saat mengakses layanan pihak ketiga, Anda tunduk pada kebijakan dan ketentuan penyedia layanan tersebut.</p>
+        </section>
+
+        <section data-s id="perubahan" data-t="Perubahan Informasi">
+          <h2>Perubahan Informasi dan Disclaimer</h2>
+          <p>Informasi di Akashic dapat berubah sewaktu-waktu. Disclaimer ini juga dapat diperbarui bila terjadi perubahan sistem atau kebutuhan operasional. Versi terbaru selalu ditampilkan di halaman ini.</p>
+          <p class="updated">Terakhir diperbarui: 2026</p>
+        </section>
+
+        <section data-s id="kontak" data-t="Hubungi Kami">
+          <h2>Hubungi Kami</h2>
+          <p>Pertanyaan tentang informasi atau cara kerja Akashic dapat disampaikan melalui halaman <a href="{{ url_for('contact') }}">Kontak</a>.</p>
+          <p>Cara data dan konteks lokasi diproses dijelaskan di <a href="{{ url_for('privacy') }}">Kebijakan Privasi</a>. Ketentuan penggunaan ada di <a href="{{ url_for('terms') }}">Syarat dan Ketentuan</a>.</p>
+        </section>
+      </article>
     </div>
-
-    <main id="disclaimer-main" class="akashic-disclaimer-main" role="main">
-
-        <section class="akashic-disclaimer-hero" aria-labelledby="akd-hero-title">
-            <div class="akashic-disclaimer-hero__bg" aria-hidden="true"></div>
-            <div class="akashic-disclaimer-hero__grid" aria-hidden="true"></div>
-
-            <div class="akashic-disclaimer-container">
-                <div class="akashic-disclaimer-hero__inner">
-
-                    <div>
-                        <div class="akashic-disclaimer-hero__label">
-                            <span class="akashic-disclaimer-hero__label-line" aria-hidden="true"></span>
-                            <span class="akashic-disclaimer-eyebrow">Akashic / Legal</span>
-                        </div>
-
-                        <h1 id="akd-hero-title" class="akashic-disclaimer-hero__title">
-                            Dis<em>claimer.</em>
-                        </h1>
-
-                        <p class="akashic-disclaimer-hero__desc">
-                            Catatan penting mengenai sifat informasi, keterbatasan sistem,
-                            dan penggunaan Akashic.
-                        </p>
-
-                        <div class="akashic-disclaimer-hero__meta">
-                            <div class="akashic-disclaimer-hero__meta-item">
-                                <span class="akashic-disclaimer-hero__meta-label">Document</span>
-                                <span class="akashic-disclaimer-hero__meta-value">Disclaimer</span>
-                            </div>
-                            <div class="akashic-disclaimer-hero__meta-item">
-                                <span class="akashic-disclaimer-hero__meta-label">Last Updated</span>
-                                <span class="akashic-disclaimer-hero__meta-value">2026</span>
-                            </div>
-                            <div class="akashic-disclaimer-hero__meta-item">
-                                <span class="akashic-disclaimer-hero__meta-label">System</span>
-                                <span class="akashic-disclaimer-hero__meta-value">Akashic</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="akashic-disclaimer-hero__visual" aria-hidden="true">
-                        <svg viewBox="0 0 420 420" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <rect x="15" y="15" width="390" height="390" stroke="var(--akd-border-strong)" stroke-width="1"/>
-                            <rect x="35" y="35" width="350" height="350" stroke="var(--akd-border)" stroke-width="0.75"/>
-
-                            <g stroke="var(--akd-border)" stroke-width="0.5" opacity="0.55">
-                                <line x1="15"  y1="115" x2="405" y2="115"/>
-                                <line x1="15"  y1="210" x2="405" y2="210"/>
-                                <line x1="15"  y1="305" x2="405" y2="305"/>
-                                <line x1="115" y1="15"  x2="115" y2="405"/>
-                                <line x1="210" y1="15"  x2="210" y2="405"/>
-                                <line x1="305" y1="15"  x2="305" y2="405"/>
-                            </g>
-
-                            <path d="M 80 130 Q 140 70 210 100 T 340 130 Q 380 190 350 270 T 260 350 Q 170 370 100 320 T 60 210 Q 50 160 80 130 Z"
-                                  stroke="var(--akd-accent)" stroke-width="0.9" fill="none" opacity="0.5" stroke-dasharray="4 3"/>
-
-                            <!-- Warning triangle with info mark -->
-                            <g transform="translate(210 210)">
-                                <path d="M 0 -70 L 60 40 L -60 40 Z"
-                                      stroke="var(--akd-warning)" stroke-width="1.8" fill="none" stroke-linejoin="round"/>
-                                <path d="M 0 -70 L 60 40 L -60 40 Z"
-                                      fill="var(--akd-warning-soft)" stroke="none"/>
-                                <circle cx="0" cy="10" r="4" fill="var(--akd-warning)"/>
-                                <rect x="-1.5" y="-30" width="3" height="30" rx="1.5" fill="var(--akd-warning)"/>
-                            </g>
-
-                            <circle cx="210" cy="210" r="100" class="akashic-disclaimer-pulse" fill="var(--akd-warning)" opacity="0.06"/>
-
-                            <g fill="var(--akd-text-subtle)">
-                                <circle cx="115" cy="115" r="2.5"/>
-                                <circle cx="305" cy="115" r="2.5"/>
-                                <circle cx="115" cy="305" r="2.5"/>
-                                <circle cx="305" cy="305" r="2.5"/>
-                            </g>
-
-                            <text x="30"  y="30"  font-family="SF Mono, Fira Code, Consolas, monospace" font-size="9" fill="var(--akd-text-subtle)" letter-spacing="0.12em">DISCLAIMER / NOTICE</text>
-                            <text x="30"  y="405" font-family="SF Mono, Fira Code, Consolas, monospace" font-size="9" fill="var(--akd-text-subtle)" letter-spacing="0.12em">GRID / 04</text>
-                            <text x="310" y="405" font-family="SF Mono, Fira Code, Consolas, monospace" font-size="9" fill="var(--akd-text-subtle)" letter-spacing="0.12em">AKASHIC</text>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="akashic-disclaimer-notice" aria-labelledby="akd-notice-title">
-            <div class="akashic-disclaimer-container">
-                <div class="akashic-disclaimer-notice__card">
-                    <svg class="akashic-disclaimer-notice__icon" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M 16 3 L 29 27 L 3 27 Z"/>
-                        <circle cx="16" cy="21" r="1.4" fill="currentColor" stroke="none"/>
-                        <line x1="16" y1="10" x2="16" y2="18"/>
-                    </svg>
-                    <div class="akashic-disclaimer-notice__content">
-                        <span class="akashic-disclaimer-notice__label">Notice / Important</span>
-                        <h2 id="akd-notice-title" class="akashic-disclaimer-notice__title">
-                            Penting untuk dipahami
-                        </h2>
-                        <p class="akashic-disclaimer-notice__text">
-                            Informasi yang ditampilkan Akashic disediakan untuk membantu pengguna
-                            menemukan informasi yang relevan berdasarkan konteks wilayah.
-                            Informasi tersebut tidak selalu dimaksudkan sebagai pengganti
-                            pengumuman, dokumen, atau sumber resmi.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <div class="akashic-disclaimer-container">
-            <div class="akashic-disclaimer-layout">
-
-                <aside class="akashic-disclaimer-toc" aria-label="Table of contents">
-                    <p class="akashic-disclaimer-toc__label">On This Page</p>
-                    <ul class="akashic-disclaimer-toc__list">
-                        <li><button type="button" class="akashic-disclaimer-toc__link" data-toc data-target="section-introduction"><span class="akashic-disclaimer-toc__num">01</span><span>Pendahuluan</span></button></li>
-                        <li><button type="button" class="akashic-disclaimer-toc__link" data-toc data-target="section-information"><span class="akashic-disclaimer-toc__num">02</span><span>Sifat Informasi</span></button></li>
-                        <li><button type="button" class="akashic-disclaimer-toc__link" data-toc data-target="section-accuracy"><span class="akashic-disclaimer-toc__num">03</span><span>Akurasi &amp; Kelengkapan</span></button></li>
-                        <li><button type="button" class="akashic-disclaimer-toc__link" data-toc data-target="section-location"><span class="akashic-disclaimer-toc__num">04</span><span>Informasi Berbasis Lokasi</span></button></li>
-                        <li><button type="button" class="akashic-disclaimer-toc__link" data-toc data-target="section-region"><span class="akashic-disclaimer-toc__num">05</span><span>Region &amp; Relevansi</span></button></li>
-                        <li><button type="button" class="akashic-disclaimer-toc__link" data-toc data-target="section-events"><span class="akashic-disclaimer-toc__num">06</span><span>Event &amp; Waktu</span></button></li>
-                        <li><button type="button" class="akashic-disclaimer-toc__link" data-toc data-target="section-news"><span class="akashic-disclaimer-toc__num">07</span><span>Berita Eksternal</span></button></li>
-                        <li><button type="button" class="akashic-disclaimer-toc__link" data-toc data-target="section-technology"><span class="akashic-disclaimer-toc__num">08</span><span>Ketergantungan Teknologi</span></button></li>
-                        <li><button type="button" class="akashic-disclaimer-toc__link" data-toc data-target="section-availability"><span class="akashic-disclaimer-toc__num">09</span><span>Ketersediaan Sistem</span></button></li>
-                        <li><button type="button" class="akashic-disclaimer-toc__link" data-toc data-target="section-usage"><span class="akashic-disclaimer-toc__num">10</span><span>Penggunaan Informasi</span></button></li>
-                        <li><button type="button" class="akashic-disclaimer-toc__link" data-toc data-target="section-responsibility"><span class="akashic-disclaimer-toc__num">11</span><span>Tanggung Jawab Pengguna</span></button></li>
-                        <li><button type="button" class="akashic-disclaimer-toc__link" data-toc data-target="section-third-party"><span class="akashic-disclaimer-toc__num">12</span><span>Pihak Ketiga</span></button></li>
-                        <li><button type="button" class="akashic-disclaimer-toc__link" data-toc data-target="section-changes"><span class="akashic-disclaimer-toc__num">13</span><span>Perubahan Informasi</span></button></li>
-                        <li><button type="button" class="akashic-disclaimer-toc__link" data-toc data-target="section-contact"><span class="akashic-disclaimer-toc__num">14</span><span>Hubungi Kami</span></button></li>
-                    </ul>
-                </aside>
-
-                <article class="akashic-disclaimer-content">
-
-                    {# Empty state — tampil sebelum user memilih item TOC #}
-                    <div class="akashic-disclaimer-content__empty" id="akd-content-empty">
-                        <span class="akashic-disclaimer-content__empty-label">On This Page / Select</span>
-                        <h2 class="akashic-disclaimer-content__empty-title">
-                            Pilih salah satu bagian di samping untuk membaca.
-                        </h2>
-                        <p class="akashic-disclaimer-content__empty-desc">
-                            Konten akan ditampilkan sesuai bagian yang Anda pilih.
-                            Klik salah satu item pada daftar &ldquo;On This Page&rdquo;
-                            untuk mulai membaca.
-                        </p>
-                    </div>
-
-                    <!-- ═══ 01. PENDAHULUAN ═══ -->
-                    <section class="akashic-disclaimer-section" id="section-introduction" data-section aria-labelledby="title-introduction">
-                        <header class="akashic-disclaimer-section__head">
-                            <span class="akashic-disclaimer-section__num">01 /</span>
-                            <span class="akashic-disclaimer-section__label">Introduction</span>
-                        </header>
-                        <h2 id="title-introduction" class="akashic-disclaimer-section__title">
-                            Pendahuluan
-                        </h2>
-                        <p>
-                            Akashic adalah sebuah <strong>Location-Based Information System</strong>
-                            berbasis web yang dirancang untuk menyajikan informasi berdasarkan
-                            konteks geografis pengguna. Prinsip dasarnya adalah
-                            <em>“Informasi yang hadir di tempat yang tepat.”</em>
-                        </p>
-                        <p>
-                            Disclaimer ini menjelaskan batasan, sifat informasi, serta
-                            tanggung jawab penggunaan yang berkaitan dengan sistem Akashic.
-                            Dokumen ini disusun agar dapat dipahami oleh pengguna umum
-                            tanpa harus memiliki latar belakang teknis atau hukum.
-                        </p>
-                        <p>
-                            Dengan menggunakan Akashic, pengguna memahami bahwa informasi
-                            yang ditampilkan memiliki keterbatasan tertentu dan tidak
-                            selalu dapat menggantikan sumber resmi.
-                        </p>
-
-                        <div class="akashic-disclaimer-callout">
-                            <strong>Ringkasan</strong>
-                            Akashic membantu menghadirkan informasi dalam konteks wilayah,
-                            namun pengguna tetap perlu menggunakan pertimbangan sendiri,
-                            terutama untuk keputusan penting.
-                        </div>
-                    </section>
-
-                    <!-- ═══ 02. SIFAT INFORMASI ═══ -->
-                    <section class="akashic-disclaimer-section" id="section-information" data-section aria-labelledby="title-information">
-                        <header class="akashic-disclaimer-section__head">
-                            <span class="akashic-disclaimer-section__num">02 /</span>
-                            <span class="akashic-disclaimer-section__label">Information</span>
-                        </header>
-                        <h2 id="title-information" class="akashic-disclaimer-section__title">
-                            Sifat Informasi
-                        </h2>
-                        <p>
-                            Akashic dapat menyajikan berbagai jenis informasi. Setiap jenis
-                            informasi memiliki sifat dan keterbatasannya masing-masing.
-                        </p>
-
-                        <div class="akashic-disclaimer-cards">
-                            <div class="akashic-disclaimer-card">
-                                <span class="akashic-disclaimer-card__label">Information</span>
-                                <h3 class="akashic-disclaimer-card__title">Informasi Sistem</h3>
-                                <p class="akashic-disclaimer-card__desc">
-                                    Informasi yang dikelola dalam sistem dan disajikan
-                                    berdasarkan konteks wilayah pengguna.
-                                </p>
-                            </div>
-
-                            <div class="akashic-disclaimer-card">
-                                <span class="akashic-disclaimer-card__label">Event</span>
-                                <h3 class="akashic-disclaimer-card__title">Kegiatan</h3>
-                                <p class="akashic-disclaimer-card__desc">
-                                    Informasi mengenai kegiatan yang memiliki waktu
-                                    dan konteks wilayah tertentu.
-                                </p>
-                            </div>
-
-                            <div class="akashic-disclaimer-card">
-                                <span class="akashic-disclaimer-card__label">News</span>
-                                <h3 class="akashic-disclaimer-card__title">Berita</h3>
-                                <p class="akashic-disclaimer-card__desc">
-                                    Informasi berita yang dapat berasal dari
-                                    sumber eksternal di luar sistem Akashic.
-                                </p>
-                            </div>
-                        </div>
-
-                        <p>
-                            Informasi yang ditampilkan dapat berubah, diperbarui,
-                            diperbaiki, dihapus, atau menjadi tidak relevan seiring waktu.
-                            Akashic tidak menjamin bahwa setiap informasi akan selalu
-                            tersedia dalam bentuk yang sama.
-                        </p>
-                    </section>
-
-                    <!-- ═══ 03. AKURASI DAN KELENGKAPAN ═══ -->
-                    <section class="akashic-disclaimer-section" id="section-accuracy" data-section aria-labelledby="title-accuracy">
-                        <header class="akashic-disclaimer-section__head">
-                            <span class="akashic-disclaimer-section__num">03 /</span>
-                            <span class="akashic-disclaimer-section__label">Accuracy</span>
-                        </header>
-                        <h2 id="title-accuracy" class="akashic-disclaimer-section__title">
-                            Akurasi dan Kelengkapan
-                        </h2>
-                        <p>
-                            Akashic berupaya menyajikan informasi yang relevan dan
-                            terstruktur. Namun, sistem tidak menjamin bahwa setiap
-                            informasi akan selalu memenuhi kriteria berikut:
-                        </p>
-                        <ul>
-                            <li>Selalu benar pada setiap waktu.</li>
-                            <li>Selalu lengkap dalam cakupan informasi.</li>
-                            <li>Selalu terbaru pada saat diakses.</li>
-                            <li>Bebas sepenuhnya dari kesalahan.</li>
-                            <li>Tersedia di setiap wilayah.</li>
-                        </ul>
-                        <p>
-                            Informasi dapat berasal dari berbagai sumber dan dapat
-                            mengalami perubahan. Pengguna dianjurkan untuk menggunakan
-                            pertimbangan yang tepat ketika membaca atau menggunakan
-                            informasi yang ditampilkan.
-                        </p>
-
-                        <div class="akashic-disclaimer-callout">
-                            <strong>Catatan</strong>
-                            Akashic tidak memberikan jaminan absolut terhadap
-                            akurasi, kelengkapan, atau ketersediaan informasi.
-                        </div>
-                    </section>
-
-                    <!-- ═══ 04. INFORMASI BERBASIS LOKASI ═══ -->
-                    <section class="akashic-disclaimer-section" id="section-location" data-section aria-labelledby="title-location">
-                        <header class="akashic-disclaimer-section__head">
-                            <span class="akashic-disclaimer-section__num">04 /</span>
-                            <span class="akashic-disclaimer-section__label">Location</span>
-                        </header>
-                        <h2 id="title-location" class="akashic-disclaimer-section__title">
-                            Informasi Berbasis Lokasi
-                        </h2>
-                        <p>
-                            Akashic dapat menggunakan lokasi browser sebagai konteks
-                            geografis untuk menentukan informasi yang relevan dengan
-                            wilayah pengguna. Secara konseptual, data yang dapat
-                            digunakan mencakup:
-                        </p>
-                        <ul>
-                            <li>Latitude (koordinat lintang).</li>
-                            <li>Longitude (koordinat bujur).</li>
-                            <li>Accuracy (tingkat akurasi dari browser).</li>
-                        </ul>
-
-                        <h3>Alur Konseptual</h3>
-                        <p>
-                            Informasi lokasi diproses untuk mendukung pemahaman
-                            konteks wilayah, bukan sebagai identitas pribadi pengguna.
-                        </p>
-
-                        <div class="akashic-disclaimer-flow">
-                            <svg viewBox="0 0 400 360" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                <rect x="120" y="10" width="160" height="42" stroke="var(--akd-border-strong)" stroke-width="1"/>
-                                <text x="200" y="36" text-anchor="middle" font-family="SF Mono, Fira Code, Consolas, monospace" font-size="10" fill="var(--akd-text)" letter-spacing="0.1em">LOCATION</text>
-
-                                <line x1="200" y1="52" x2="200" y2="78" stroke="var(--akd-accent)" stroke-width="1"/>
-                                <polygon points="200,84 195,76 205,76" fill="var(--akd-accent)"/>
-
-                                <rect x="120" y="88" width="160" height="42" stroke="var(--akd-border-strong)" stroke-width="1"/>
-                                <text x="200" y="114" text-anchor="middle" font-family="SF Mono, Fira Code, Consolas, monospace" font-size="10" fill="var(--akd-text)" letter-spacing="0.1em">REGION</text>
-
-                                <line x1="200" y1="130" x2="200" y2="156" stroke="var(--akd-accent)" stroke-width="1"/>
-                                <polygon points="200,162 195,154 205,154" fill="var(--akd-accent)"/>
-
-                                <rect x="120" y="166" width="160" height="42" stroke="var(--akd-border-strong)" stroke-width="1"/>
-                                <text x="200" y="192" text-anchor="middle" font-family="SF Mono, Fira Code, Consolas, monospace" font-size="10" fill="var(--akd-text)" letter-spacing="0.1em">RELEVANCE</text>
-
-                                <line x1="200" y1="208" x2="200" y2="234" stroke="var(--akd-accent)" stroke-width="1"/>
-                                <polygon points="200,240 195,232 205,232" fill="var(--akd-accent)"/>
-
-                                <rect x="120" y="244" width="160" height="42" stroke="var(--akd-accent)" stroke-width="1"/>
-                                <text x="200" y="270" text-anchor="middle" font-family="SF Mono, Fira Code, Consolas, monospace" font-size="10" fill="var(--akd-text)" letter-spacing="0.1em">INFORMATION</text>
-
-                                <text x="20" y="350" font-family="SF Mono, Fira Code, Consolas, monospace" font-size="8" fill="var(--akd-text-subtle)" letter-spacing="0.12em">CONCEPTUAL / NOT LIVE DATA</text>
-                            </svg>
-                            <p class="akashic-disclaimer-flow__caption">
-                                Alur konseptual &mdash; bukan data lokasi pengguna secara langsung
-                            </p>
-                        </div>
-
-                        <h3>Keterbatasan Lokasi</h3>
-                        <ul>
-                            <li>Lokasi bergantung pada izin yang diberikan melalui browser.</li>
-                            <li>Tingkat akurasi dapat berbeda antar perangkat dan lingkungan.</li>
-                            <li>Perangkat dapat memberikan estimasi lokasi yang tidak sempurna.</li>
-                            <li>Pengguna dapat menolak memberikan izin lokasi.</li>
-                        </ul>
-
-                        <div class="akashic-disclaimer-callout">
-                            <strong>Catatan</strong>
-                            Halaman ini tidak meminta izin lokasi Anda. Halaman ini
-                            hanya menjelaskan bagaimana lokasi digunakan sebagai
-                            konteks pada sistem Akashic.
-                        </div>
-                    </section>
-
-                    <!-- ═══ 05. REGION DAN RELEVANSI ═══ -->
-                    <section class="akashic-disclaimer-section" id="section-region" data-section aria-labelledby="title-region">
-                        <header class="akashic-disclaimer-section__head">
-                            <span class="akashic-disclaimer-section__num">05 /</span>
-                            <span class="akashic-disclaimer-section__label">Region</span>
-                        </header>
-                        <h2 id="title-region" class="akashic-disclaimer-section__title">
-                            Region Tidak Selalu Berarti <em>Titik yang Tepat</em>
-                        </h2>
-                        <p>
-                            Lokasi geografis diproses dalam konteks wilayah, bukan
-                            sebagai titik presisi. Sistem dapat mengenali wilayah
-                            berdasarkan hierarki administratif secara konseptual:
-                        </p>
-
-                        <h3>Hierarki Konseptual Wilayah</h3>
-                        <ul>
-                            <li>Indonesia</li>
-                            <li>Provinsi</li>
-                            <li>Kabupaten / Kota</li>
-                            <li>Kecamatan</li>
-                            <li>Wilayah Lokal</li>
-                        </ul>
-
-                        <p>
-                            Relevansi informasi dapat bergantung pada struktur wilayah
-                            tersebut. Artinya, informasi yang ditampilkan untuk suatu
-                            wilayah mungkin tidak selalu mencerminkan titik lokasi
-                            pengguna secara tepat.
-                        </p>
-
-                        <div class="akashic-disclaimer-callout">
-                            <strong>Catatan</strong>
-                            Informasi wilayah bersifat kontekstual dan tidak selalu
-                            merepresentasikan titik presisi lokasi pengguna.
-                        </div>
-                    </section>
-
-                    <!-- ═══ 06. EVENT DAN WAKTU ═══ -->
-                    <section class="akashic-disclaimer-section" id="section-events" data-section aria-labelledby="title-events">
-                        <header class="akashic-disclaimer-section__head">
-                            <span class="akashic-disclaimer-section__num">06 /</span>
-                            <span class="akashic-disclaimer-section__label">Events</span>
-                        </header>
-                        <h2 id="title-events" class="akashic-disclaimer-section__title">
-                            Event dan Informasi Waktu
-                        </h2>
-                        <p>
-                            Informasi mengenai event atau kegiatan dapat berubah
-                            karena berbagai hal, termasuk:
-                        </p>
-                        <ul>
-                            <li>Perubahan jadwal.</li>
-                            <li>Perubahan lokasi.</li>
-                            <li>Pembatalan kegiatan.</li>
-                            <li>Perubahan penyelenggara.</li>
-                            <li>Kondisi tertentu di lapangan.</li>
-                        </ul>
-                        <p>
-                            Pengguna dianjurkan untuk memverifikasi informasi event
-                            melalui sumber resmi penyelenggara apabila informasi
-                            tersebut digunakan untuk keputusan praktis.
-                        </p>
-                    </section>
-
-                    <!-- ═══ 07. BERITA DAN SUMBER EKSTERNAL ═══ -->
-                    <section class="akashic-disclaimer-section" id="section-news" data-section aria-labelledby="title-news">
-                        <header class="akashic-disclaimer-section__head">
-                            <span class="akashic-disclaimer-section__num">07 /</span>
-                            <span class="akashic-disclaimer-section__label">News</span>
-                        </header>
-                        <h2 id="title-news" class="akashic-disclaimer-section__title">
-                            Berita dan Sumber Eksternal
-                        </h2>
-                        <p>
-                            Sistem dapat mengintegrasikan informasi berita dari
-                            sumber eksternal. Berita tersebut memiliki karakteristik
-                            sebagai berikut:
-                        </p>
-                        <ul>
-                            <li>Bukan selalu dibuat oleh Akashic.</li>
-                            <li>Dapat berasal dari RSS, API, atau sumber eksternal lainnya.</li>
-                            <li>Dapat berubah atau dihapus dari sumber asal.</li>
-                            <li>Tetap tunduk pada kebijakan sumber masing-masing.</li>
-                        </ul>
-                        <p>
-                            Akashic dapat menyimpan metadata atau referensi sumber
-                            untuk kebutuhan sistem, misalnya untuk menampilkan
-                            keterkaitan dengan wilayah tertentu.
-                        </p>
-                    </section>
-
-                    <!-- ═══ 08. KETERGANTUNGAN TEKNOLOGI ═══ -->
-                    <section class="akashic-disclaimer-section" id="section-technology" data-section aria-labelledby="title-technology">
-                        <header class="akashic-disclaimer-section__head">
-                            <span class="akashic-disclaimer-section__num">08 /</span>
-                            <span class="akashic-disclaimer-section__label">Technology</span>
-                        </header>
-                        <h2 id="title-technology" class="akashic-disclaimer-section__title">
-                            Ketergantungan Teknologi
-                        </h2>
-                        <p>
-                            Akashic dirancang untuk berjalan di atas berbagai
-                            komponen teknologi. Sistem dapat bergantung pada:
-                        </p>
-                        <ul>
-                            <li>Browser yang digunakan pengguna.</li>
-                            <li>Fitur Geolocation API pada browser.</li>
-                            <li>Fitur Web Push untuk notifikasi.</li>
-                            <li>Koneksi internet yang tersedia.</li>
-                            <li>Server dan database yang menjalankan sistem.</li>
-                            <li>Layanan pihak ketiga yang mendukung fungsi tertentu.</li>
-                            <li>Sumber berita eksternal.</li>
-                        </ul>
-                        <p>
-                            Jika salah satu komponen mengalami gangguan, fitur
-                            tertentu dapat tidak berfungsi sebagaimana mestinya.
-                        </p>
-
-                        <div class="akashic-disclaimer-callout">
-                            <strong>Catatan</strong>
-                            Ketersediaan fitur bergantung pada dukungan browser
-                            dan infrastruktur yang digunakan.
-                        </div>
-                    </section>
-
-                    <!-- ═══ 09. KETERSEDIAAN SISTEM ═══ -->
-                    <section class="akashic-disclaimer-section" id="section-availability" data-section aria-labelledby="title-availability">
-                        <header class="akashic-disclaimer-section__head">
-                            <span class="akashic-disclaimer-section__num">09 /</span>
-                            <span class="akashic-disclaimer-section__label">Availability</span>
-                        </header>
-                        <h2 id="title-availability" class="akashic-disclaimer-section__title">
-                            Ketersediaan Sistem
-                        </h2>
-                        <p>
-                            Akashic dapat mengalami situasi yang memengaruhi
-                            ketersediaan layanan, termasuk:
-                        </p>
-                        <ul>
-                            <li>Pemeliharaan sistem (maintenance).</li>
-                            <li>Gangguan pada server.</li>
-                            <li>Gangguan jaringan.</li>
-                            <li>Perubahan konfigurasi.</li>
-                            <li>Kesalahan teknis yang tidak terduga.</li>
-                            <li>Keterbatasan layanan pihak ketiga.</li>
-                        </ul>
-                        <p>
-                            Akashic tidak menjanjikan ketersediaan layanan secara
-                            terus-menerus tanpa gangguan.
-                        </p>
-                    </section>
-
-                    <!-- ═══ 10. PENGGUNAAN INFORMASI ═══ -->
-                    <section class="akashic-disclaimer-section" id="section-usage" data-section aria-labelledby="title-usage">
-                        <header class="akashic-disclaimer-section__head">
-                            <span class="akashic-disclaimer-section__num">10 /</span>
-                            <span class="akashic-disclaimer-section__label">Usage</span>
-                        </header>
-                        <h2 id="title-usage" class="akashic-disclaimer-section__title">
-                            Penggunaan Informasi
-                        </h2>
-                        <p>
-                            Informasi Akashic dapat membantu pengguna memahami
-                            kondisi atau informasi yang relevan dengan suatu wilayah.
-                            Namun pengguna tetap perlu menggunakan pertimbangan sendiri.
-                        </p>
-                        <p>
-                            Untuk keputusan penting, pengguna disarankan memeriksa
-                            sumber resmi yang berwenang. Kategori keputusan penting
-                            yang dimaksud dapat mencakup:
-                        </p>
-                        <ul>
-                            <li>Keselamatan.</li>
-                            <li>Hukum.</li>
-                            <li>Kesehatan.</li>
-                            <li>Administrasi.</li>
-                            <li>Perjalanan.</li>
-                            <li>Kegiatan resmi.</li>
-                        </ul>
-
-                        <div class="akashic-disclaimer-callout">
-                            <strong>Penting</strong>
-                            Akashic bukan pengganti sumber resmi. Untuk keputusan
-                            penting, verifikasi melalui sumber resmi yang berwenang.
-                        </div>
-                    </section>
-
-                    <!-- ═══ 11. TANGGUNG JAWAB PENGGUNA ═══ -->
-                    <section class="akashic-disclaimer-section" id="section-responsibility" data-section aria-labelledby="title-responsibility">
-                        <header class="akashic-disclaimer-section__head">
-                            <span class="akashic-disclaimer-section__num">11 /</span>
-                            <span class="akashic-disclaimer-section__label">Responsibility</span>
-                        </header>
-                        <h2 id="title-responsibility" class="akashic-disclaimer-section__title">
-                            Tanggung Jawab Pengguna
-                        </h2>
-                        <p>
-                            Pengguna bertanggung jawab untuk menggunakan informasi
-                            yang tersedia di Akashic secara bijak. Tanggung jawab
-                            tersebut mencakup:
-                        </p>
-                        <ul>
-                            <li>Membaca informasi secara kritis.</li>
-                            <li>Memeriksa waktu publikasi atau pembaruan bila tersedia.</li>
-                            <li>Memverifikasi informasi penting melalui sumber resmi.</li>
-                            <li>Memahami keterbatasan yang berkaitan dengan lokasi.</li>
-                        </ul>
-                        <p>
-                            Akashic menyediakan informasi sebagai alat bantu.
-                            Keputusan akhir tetap berada pada pengguna.
-                        </p>
-                    </section>
-
-                    <!-- ═══ 12. PIHAK KETIGA ═══ -->
-                    <section class="akashic-disclaimer-section" id="section-third-party" data-section aria-labelledby="title-third-party">
-                        <header class="akashic-disclaimer-section__head">
-                            <span class="akashic-disclaimer-section__num">12 /</span>
-                            <span class="akashic-disclaimer-section__label">Third Parties</span>
-                        </header>
-                        <h2 id="title-third-party" class="akashic-disclaimer-section__title">
-                            Tautan dan Layanan Pihak Ketiga
-                        </h2>
-                        <p>
-                            Akashic dapat merujuk atau terhubung dengan sumber
-                            eksternal. Akashic tidak selalu mengendalikan:
-                        </p>
-                        <ul>
-                            <li>Isi dari layanan pihak ketiga.</li>
-                            <li>Ketersediaan layanan tersebut.</li>
-                            <li>Keamanan layanan pihak ketiga.</li>
-                            <li>Kebijakan yang berlaku pada layanan tersebut.</li>
-                            <li>Perubahan informasi yang terjadi di sana.</li>
-                        </ul>
-                        <p>
-                            Pengguna yang mengakses layanan pihak ketiga tetap
-                            tunduk pada kebijakan dan ketentuan dari penyedia
-                            layanan masing-masing.
-                        </p>
-                    </section>
-
-                    <!-- ═══ 13. PERUBAHAN INFORMASI ═══ -->
-                    <section class="akashic-disclaimer-section" id="section-changes" data-section aria-labelledby="title-changes">
-                        <header class="akashic-disclaimer-section__head">
-                            <span class="akashic-disclaimer-section__num">13 /</span>
-                            <span class="akashic-disclaimer-section__label">Changes</span>
-                        </header>
-                        <h2 id="title-changes" class="akashic-disclaimer-section__title">
-                            Perubahan Informasi dan Disclaimer
-                        </h2>
-                        <p>
-                            Informasi yang ditampilkan di Akashic dapat berubah
-                            sewaktu-waktu. Disclaimer ini juga dapat diperbarui
-                            apabila terjadi perubahan pada sistem atau kebutuhan
-                            operasional.
-                        </p>
-                        <p>
-                            Versi terbaru dari disclaimer ini akan selalu
-                            ditampilkan pada halaman ini.
-                        </p>
-                        <p class="akashic-disclaimer-flow__caption" style="text-align:left; border-top:1px solid var(--akd-border); padding-top: var(--akd-space-4); margin-top: var(--akd-space-5);">
-                            Terakhir diperbarui: 2026
-                        </p>
-                    </section>
-
-                    <!-- ═══ 14. HUBUNGI KAMI ═══ -->
-                    <section class="akashic-disclaimer-section" id="section-contact" data-section aria-labelledby="title-contact">
-                        <header class="akashic-disclaimer-section__head">
-                            <span class="akashic-disclaimer-section__num">14 /</span>
-                            <span class="akashic-disclaimer-section__label">Contact</span>
-                        </header>
-                        <h2 id="title-contact" class="akashic-disclaimer-section__title">
-                            Hubungi Kami
-                        </h2>
-                        <p>
-                            Jika Anda memiliki pertanyaan mengenai informasi atau
-                            cara kerja Akashic, Anda dapat menghubungi pengelola
-                            sistem melalui halaman
-                            <a href="{{ url_for('contact') }}">Contact</a>.
-                        </p>
-                        <p>
-                            Untuk informasi mengenai bagaimana data dan konteks
-                            lokasi diproses, Anda dapat membaca
-                            <a href="{{ url_for('privacy') }}">Kebijakan Privasi</a>.
-                            Untuk ketentuan penggunaan sistem, lihat
-                            <a href="{{ url_for('terms') }}">Syarat dan Ketentuan</a>.
-                        </p>
-                    </section>
-
-                </article>
-            </div>
-        </div>
-
-        <section class="akashic-disclaimer-closing" aria-labelledby="akd-closing-title">
-            <div class="akashic-disclaimer-container">
-                <div class="akashic-disclaimer-closing__inner">
-                    <span class="akashic-disclaimer-closing__label">Closing / Statement</span>
-                    <h2 id="akd-closing-title" class="akashic-disclaimer-closing__title">
-                        Konteks geografis tidak menghilangkan <em>kebutuhan verifikasi.</em>
-                    </h2>
-                    <p class="akashic-disclaimer-closing__text">
-                        Akashic dirancang untuk membantu informasi hadir dalam konteks
-                        tempat yang tepat. Namun konteks geografis tidak menghilangkan
-                        kebutuhan untuk memeriksa sumber, memahami keterbatasan
-                        informasi, dan menggunakan pertimbangan yang tepat.
-                    </p>
-                    <div class="akashic-disclaimer-closing__actions">
-                        <a href="{{ url_for('privacy') }}" class="akashic-disclaimer-btn akashic-disclaimer-btn--primary">
-                            Pelajari Kebijakan Privasi
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <path d="M3 8h10M9 4l4 4-4 4"/>
-                            </svg>
-                        </a>
-                        <a href="{{ url_for('contact') }}" class="akashic-disclaimer-btn akashic-disclaimer-btn--secondary">
-                            Hubungi Akashic
-                            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <path d="M3 8h10M9 4l4 4-4 4"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="akashic-disclaimer-footer" role="contentinfo">
-        <div class="akashic-disclaimer-container">
-            <div class="akashic-disclaimer-footer__grid">
-
-                <div>
-                    <p class="akashic-disclaimer-footer__brand-name">AKASHIC</p>
-                    <p class="akashic-disclaimer-footer__tagline">
-                        Informasi yang hadir<br>
-                        di tempat yang tepat.
-                    </p>
-                </div>
-
-                <div>
-                    <p class="akashic-disclaimer-footer__col-title">Navigation</p>
-                    <ul class="akashic-disclaimer-footer__list">
-                        <li><a href="{{ url_for('index') }}">Home</a></li>
-                        <li><a href="{{ url_for('information') }}">Information</a></li>
-                        <li><a href="{{ url_for('about') }}">About</a></li>
-                        <li><a href="{{ url_for('contact') }}">Contact</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <p class="akashic-disclaimer-footer__col-title">Legal</p>
-                    <ul class="akashic-disclaimer-footer__list">
-                        <li><a href="{{ url_for('privacy') }}">Privacy</a></li>
-                        <li><a href="{{ url_for('terms') }}">Terms</a></li>
-                        <li><a href="{{ url_for('disclaimer') }}">Disclaimer</a></li>
-                    </ul>
-                </div>
-
-                <div>
-                    <p class="akashic-disclaimer-footer__col-title">System</p>
-                    <ul class="akashic-disclaimer-footer__list">
-                        <li><a href="{{ url_for('information') }}">Information</a></li>
-                        <li><a href="{{ url_for('about') }}">About</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="akashic-disclaimer-footer__bottom">
-                <p class="akashic-disclaimer-footer__copy">© 2026 Akashic</p>
-                <p class="akashic-disclaimer-footer__system">
-                    <span class="akashic-disclaimer-footer__system-dot" aria-hidden="true"></span>
-                    Location-Based Information System
-                </p>
-            </div>
-        </div>
-    </footer>
-
-    <script>
-        (function () {
-            'use strict';
-
-            var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-            /* ── 01. Navbar scroll state ── */
-            var nav = document.getElementById('akd-nav');
-            var scrollBar = document.getElementById('akd-scroll-bar');
-            var ticking = false;
-
-            function onScroll() {
-                if (!ticking) {
-                    window.requestAnimationFrame(function () {
-                        var scrollY = window.scrollY || window.pageYOffset;
-                        var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-
-                        if (nav) {
-                            if (scrollY > 10) {
-                                nav.classList.add('is-scrolled');
-                            } else {
-                                nav.classList.remove('is-scrolled');
-                            }
-                        }
-
-                        if (scrollBar && docHeight > 0) {
-                            var progress = Math.min(scrollY / docHeight, 1);
-                            scrollBar.style.width = (progress * 100) + '%';
-                        }
-
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            }
-
-            window.addEventListener('scroll', onScroll, { passive: true });
-            onScroll();
-
-            /* ── 02. Mobile menu ── */
-            var toggle = document.getElementById('akd-menu-toggle');
-            var menu = document.getElementById('akd-mobile-menu');
-            var body = document.body;
-            var lastFocused = null;
-
-            function openMenu() {
-                if (!menu || !toggle) return;
-                lastFocused = document.activeElement;
-                menu.classList.add('is-open');
-                toggle.setAttribute('aria-expanded', 'true');
-                toggle.setAttribute('aria-label', 'Close menu');
-                body.style.overflow = 'hidden';
-
-                var firstLink = menu.querySelector('.akashic-disclaimer-mobile__link');
-                if (firstLink) {
-                    window.setTimeout(function () { firstLink.focus(); }, 50);
-                }
-            }
-
-            function closeMenu() {
-                if (!menu || !toggle) return;
-                menu.classList.remove('is-open');
-                toggle.setAttribute('aria-expanded', 'false');
-                toggle.setAttribute('aria-label', 'Open menu');
-                body.style.overflow = '';
-
-                if (lastFocused && typeof lastFocused.focus === 'function') {
-                    lastFocused.focus();
-                }
-            }
-
-            if (toggle && menu) {
-                toggle.addEventListener('click', function () {
-                    if (menu.classList.contains('is-open')) {
-                        closeMenu();
-                    } else {
-                        openMenu();
-                    }
-                });
-
-                menu.querySelectorAll('a').forEach(function (link) {
-                    link.addEventListener('click', function () { closeMenu(); });
-                });
-
-                document.addEventListener('keydown', function (e) {
-                    if (e.key === 'Escape' && menu.classList.contains('is-open')) {
-                        closeMenu();
-                    }
-                });
-
-                var resizeTimer;
-                window.addEventListener('resize', function () {
-                    window.clearTimeout(resizeTimer);
-                    resizeTimer = window.setTimeout(function () {
-                        if (window.innerWidth > 768 && menu.classList.contains('is-open')) {
-                            closeMenu();
-                        }
-                    }, 150);
-                }, { passive: true });
-
-                menu.addEventListener('keydown', function (e) {
-                    if (e.key !== 'Tab') return;
-
-                    var focusable = menu.querySelectorAll('a[href], button:not([disabled])');
-                    if (focusable.length === 0) return;
-
-                    var first = focusable[0];
-                    var last = focusable[focusable.length - 1];
-
-                    if (e.shiftKey && document.activeElement === first) {
-                        e.preventDefault();
-                        last.focus();
-                    } else if (!e.shiftKey && document.activeElement === last) {
-                        e.preventDefault();
-                        first.focus();
-                    }
-                });
-            }
-
-            /* ── 03. TOC — section content hanya tampil bila dipilih ──
-                   - Sebelum user memilih: tidak ada section yang tampil,
-                     hanya empty state.
-                   - Setelah user klik item TOC: hanya section itu yang tampil. */
-            var tocLinks = document.querySelectorAll('[data-toc]');
-            var sections = document.querySelectorAll('[data-section]');
-            var emptyState = document.getElementById('akd-content-empty');
-
-            function hideAllSections() {
-                sections.forEach(function (s) {
-                    s.classList.remove('is-active');
-                });
-            }
-
-            function showSection(id) {
-                hideAllSections();
-                var target = document.getElementById(id);
-                if (target) {
-                    target.classList.add('is-active');
-                }
-                if (emptyState) {
-                    emptyState.style.display = 'none';
-                }
-            }
-
-            function showEmptyState() {
-                hideAllSections();
-                if (emptyState) {
-                    emptyState.style.display = '';
-                }
-            }
-
-            /* Initial state: kosong, belum ada section yang dipilih */
-            showEmptyState();
-
-            tocLinks.forEach(function (link) {
-                link.addEventListener('click', function () {
-                    var targetId = link.getAttribute('data-target');
-                    if (!targetId) return;
-
-                    /* Update active state */
-                    tocLinks.forEach(function (l) {
-                        l.classList.remove('is-active');
-                    });
-                    link.classList.add('is-active');
-
-                    /* Tampilkan section yang dipilih */
-                    showSection(targetId);
-
-                    /* Scroll ke area konten agar section langsung terlihat */
-                    var contentEl = document.querySelector('.akashic-disclaimer-content');
-                    if (contentEl) {
-                        var navOffset = (window.innerWidth > 768)
-                            ? (72 + 24)
-                            : (64 + 24);
-                        var rect = contentEl.getBoundingClientRect();
-                        var targetY = window.scrollY + rect.top - navOffset - 16;
-
-                        if (window.scrollY > targetY || window.scrollY < targetY - 200) {
-                            if (prefersReducedMotion) {
-                                window.scrollTo(0, targetY);
-                            } else {
-                                window.scrollTo({ top: targetY, behavior: 'smooth' });
-                            }
-                        }
-                    }
-                });
-            });
-
-            /* ── 04. DIGITAL CLOCK ── */
-            var clockDesktop = document.getElementById('akd-clock');
-            var clockMobile = document.getElementById('akd-clock-mobile');
-
-            var timeFormatter = null;
-
-            function initClockFormatter() {
-                try {
-                    timeFormatter = new Intl.DateTimeFormat('id-ID', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        hour12: false
-                    });
-                } catch (err) {
-                    timeFormatter = null;
-                }
-            }
-
-            function pad(n) {
-                return n < 10 ? '0' + n : '' + n;
-            }
-
-            function formatTimeFallback(date) {
-                return pad(date.getHours()) + ':' + pad(date.getMinutes()) + ':' + pad(date.getSeconds());
-            }
-
-            function updateClock() {
-                var now = new Date();
-                var text = timeFormatter ? timeFormatter.format(now) : formatTimeFallback(now);
-                var iso = now.toISOString();
-
-                if (clockDesktop) {
-                    clockDesktop.textContent = text;
-                    clockDesktop.setAttribute('datetime', iso);
-                }
-                if (clockMobile) {
-                    clockMobile.textContent = text;
-                    clockMobile.setAttribute('datetime', iso);
-                }
-            }
-
-            var clockTimer = null;
-
-            function startClock() {
-                if (clockTimer) return;
-                updateClock();
-                clockTimer = window.setInterval(updateClock, 1000);
-            }
-
-            function stopClock() {
-                if (clockTimer) {
-                    window.clearInterval(clockTimer);
-                    clockTimer = null;
-                }
-            }
-
-            initClockFormatter();
-            startClock();
-
-            document.addEventListener('visibilitychange', function () {
-                if (document.hidden) {
-                    stopClock();
-                } else {
-                    startClock();
-                }
-            });
-
-            /* Pause hero animation saat tab hidden */
-            document.addEventListener('visibilitychange', function () {
-                var heroVisual = document.querySelector('.akashic-disclaimer-hero__visual');
-                if (!heroVisual) return;
-
-                if (document.hidden) {
-                    heroVisual.style.animationPlayState = 'paused';
-                } else {
-                    heroVisual.style.animationPlayState = '';
-                }
-            });
-
-        })();
-    </script>
-
+  </div>
+
+  <section class="closing">
+    <div class="wrap">
+      <h2>Konteks geografis tidak menghilangkan kebutuhan verifikasi.</h2>
+      <p>Akashic membantu informasi hadir di tempat yang tepat. Tetap periksa sumbernya, pahami keterbatasannya, dan gunakan pertimbangan Anda.</p>
+      <div class="btns">
+        <a href="{{ url_for('privacy') }}" class="btn p">Baca Kebijakan Privasi</a>
+        <a href="{{ url_for('contact') }}" class="btn g">Hubungi Akashic</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <a href="{{ url_for('index') }}" class="brand">AKASHIC</a>
+        <p>Informasi yang hadir di tempat yang tepat.</p>
+      </div>
+      <div>
+        <h3>Navigasi</h3>
+        <ul>
+          <li><a href="{{ url_for('index') }}">Beranda</a></li>
+          <li><a href="{{ url_for('information') }}">Informasi</a></li>
+          <li><a href="{{ url_for('about') }}">Tentang</a></li>
+          <li><a href="{{ url_for('contact') }}">Kontak</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="{{ url_for('privacy') }}">Privasi</a></li>
+          <li><a href="{{ url_for('terms') }}">Ketentuan</a></li>
+          <li><a href="{{ url_for('disclaimer') }}">Disclaimer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="f-bot"><span>© 2026 Akashic</span><span>Location-Based Information System</span></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+var d=document,secs=[].slice.call(d.querySelectorAll('[data-s]')),
+    tocEl=d.getElementById('toc'),empty=d.getElementById('empty'),
+    nav=d.getElementById('nav'),bar=d.getElementById('bar'),btns=[];
+
+/* TOC dibangun otomatis dari <section data-s>; judul pendek via data-t */
+secs.forEach(function(s,i){
+  var li=d.createElement('li'),b=d.createElement('button');
+  b.type='button';
+  b.innerHTML=s.getAttribute('data-t')||s.querySelector('h2').innerHTML;
+  b.addEventListener('click',function(){show(s.id,true)});
+  li.appendChild(b);tocEl.appendChild(li);btns.push(b);
+});
+
+function show(id,scroll){
+  var found=false;
+  secs.forEach(function(s,i){
+    var on=s.id===id;
+    s.classList.toggle('on',on);
+    if(on){found=true;btns[i].setAttribute('aria-current','true')}
+    else btns[i].removeAttribute('aria-current');
+  });
+  empty.hidden=found;
+  if(found){
+    history.replaceState(null,'','#'+id);
+    var c=d.querySelector('.content'),top=c.getBoundingClientRect().top;
+    if(scroll&&(top<0||top>window.innerHeight*.5)){
+      c.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});
+    }
+  }
+}
+show(location.hash.slice(1));
+window.addEventListener('hashchange',function(){show(location.hash.slice(1),true)});
+
+/* Scroll: border navbar + progress bar */
+var tick=false;
+function onScroll(){
+  if(tick)return;tick=true;
+  requestAnimationFrame(function(){
+    var y=window.scrollY,h=d.documentElement.scrollHeight-window.innerHeight;
+    nav.classList.toggle('s',y>10);
+    bar.style.width=(h>0?Math.min(y/h,1)*100:0)+'%';
+    tick=false;
+  });
+}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* Jam lokal */
+var clock=d.getElementById('clock'),t=null,fmt;
+try{fmt=new Intl.DateTimeFormat('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})}catch(e){}
+function tickClock(){
+  var n=new Date();
+  clock.textContent=fmt?fmt.format(n):n.toTimeString().slice(0,8);
+  clock.dateTime=n.toISOString();
+}
+function run(){if(!t){tickClock();t=setInterval(tickClock,1000)}}
+function stop(){clearInterval(t);t=null}
+d.addEventListener('visibilitychange',function(){d.hidden?stop():run()});
+run();
+})();
+</script>
 </body>
 </html>

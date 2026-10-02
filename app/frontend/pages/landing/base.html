@@ -847,8 +847,8 @@
           <li><a class="akashic-nav-link{% if request.endpoint == 'contact' %} is-active{% endif %}" href="{{ url_for('contact') }}"{% if request.endpoint == 'contact' %} aria-current="page"{% endif %}>Contact</a></li>
         </ul>
 
-        <a class="akashic-button akashic-button-primary akashic-nav-cta" href="{{ url_for('index') }}#location">Explore</a>
-
+        <a class="akashic-button akashic-button-primary akashic-nav-cta" href="{{ url_for('auth.login') }}">Login</a>
+        
         <button class="akashic-nav-toggle" type="button" id="akashic-nav-toggle" aria-expanded="false" aria-controls="akashic-mobile-menu" aria-label="Buka menu">
           <span></span><span></span><span></span>
         </button>
@@ -859,7 +859,7 @@
         <a class="akashic-mobile-link{% if request.endpoint == 'information' %} is-active{% endif %}" href="{{ url_for('information') }}"{% if request.endpoint == 'information' %} aria-current="page"{% endif %}>Information</a>
         <a class="akashic-mobile-link{% if request.endpoint == 'about' %} is-active{% endif %}" href="{{ url_for('about') }}"{% if request.endpoint == 'about' %} aria-current="page"{% endif %}>About</a>
         <a class="akashic-mobile-link{% if request.endpoint == 'contact' %} is-active{% endif %}" href="{{ url_for('contact') }}"{% if request.endpoint == 'contact' %} aria-current="page"{% endif %}>Contact</a>
-        <a class="akashic-button akashic-button-primary" href="{{ url_for('index') }}#location">Explore</a>
+        <a class="akashic-button akashic-button-primary" href="{{ url_for('auth.login') }}">Login</a>
       </div>
     </header>
 

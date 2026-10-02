@@ -17,6 +17,7 @@ app/
             region_model.py
         routes/
             __init__.py
+            admin_routes.py
             auth_routes.py
             event_routes.py
             information_routes.py

@@ -5,203 +5,117 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex">
 <meta name="description" content="Akashic — Halaman yang kamu cari tidak ditemukan.">
-<meta name="theme-color" content="#DDD3BC">
+<meta name="theme-color" content="#111417">
 <title>404 — Akashic</title>
 <style>
-/* ==============================
-   VARIABLES + RESET (scoped: akashic-404)
-   Tanpa CDN: semua font memakai system stack.
-   ============================== */
 .akashic-404{
-  --a4-ivory:#F1EBDD;--a4-paper:#E8E0CD;--a4-ink:#1D1B19;--a4-gray:#6E675D;--a4-stone:#A39A8A;--a4-bronze:#8C6A43;
-  --a4-line:rgba(29,27,25,.45);
-  --a4-serif:Georgia,"Times New Roman",Times,serif;
-  --a4-sans:Inter,"Helvetica Neue",Helvetica,Arial,system-ui,sans-serif;
-  --a4-ease:cubic-bezier(.22,1,.36,1);--a4-float:cubic-bezier(.45,0,.55,1);
+  --a4-bg:#111417;--a4-ivory:#F2EFE8;--a4-muted:#8C9295;--a4-accent:#B86B43;--a4-blue:#5D8494;
+  --a4-line:rgba(255,255,255,.10);--a4-line2:rgba(255,255,255,.22);--a4-glass:rgba(23,27,31,.55);
+  --a4-sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --a4-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --a4-ease:cubic-bezier(.22,1,.36,1);
   --a4-mx:0;--a4-my:0;
 }
 
-/* ==============================
-   SCROLLBAR — TERSEMBUNYI TAPI SCROLL TETAP BERFUNGSI
-   ============================== */
-html{
-  background:#DDD3BC;
-  overflow-y:scroll;
-  overflow-x:hidden;
-  scrollbar-width:none;              /* Firefox */
-  -ms-overflow-style:none;           /* IE/Edge legacy */
-  scrollbar-gutter:stable;           /* cegah layout shift */
-}
-html::-webkit-scrollbar{width:0;height:0;display:none} /* Chrome/Safari/Edge */
+/* Scrollbar tersembunyi, scroll tetap berfungsi */
+html{background:#111417;overflow-y:scroll;overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
+body{margin:0;background:#CBC7BF;padding:clamp(8px,2vw,28px);overflow-x:hidden;scrollbar-width:none}
 
-body{
-  margin:0;
-  background:#DDD3BC;
-  padding:clamp(14px,2.2vw,32px);
-  overflow-x:hidden;
-  scrollbar-width:none;
-  -ms-overflow-style:none;
-}
-body::-webkit-scrollbar{width:0;height:0;display:none}
-
-/* Container utama juga disembunyikan scrollbarnya (jika suatu saat overflow) */
-.akashic-404{
-  scrollbar-width:none;
-  -ms-overflow-style:none;
-}
-.akashic-404::-webkit-scrollbar{width:0;height:0;display:none}
-
-/* ==============================
-   SCOPED RESET
-   ============================== */
 .akashic-404,.akashic-404 *,.akashic-404 *::before,.akashic-404 *::after{box-sizing:border-box}
 .akashic-404 :is(h1,p){margin:0}
 .akashic-404 a{color:inherit;text-decoration:none}
-.akashic-404 :focus-visible{outline:2px solid var(--a4-ink);outline-offset:6px;border-radius:2px}
+.akashic-404 :focus-visible{outline:2px solid var(--a4-accent);outline-offset:4px;border-radius:4px}
 .akashic-404 .a4-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-/* ==============================
-   STAGE — framed box (tidak full-bleed)
-   ============================== */
+/* Stage */
 .akashic-404{
-  position:relative;
-  width:100%;
-  max-width:1240px;
-  margin:0 auto;
-  min-height:calc(100vh - clamp(28px,4.4vw,64px));
-  min-height:calc(100svh - clamp(28px,4.4vw,64px));
-  display:grid;
-  grid-template-rows:auto 1fr auto;
-  overflow:hidden;
-  isolation:isolate;
-  padding:0 clamp(20px,3.2vw,44px);
-  background:var(--a4-ivory);
-  color:var(--a4-ink);
-  font-family:var(--a4-sans);
-  border:1px solid var(--a4-line);
-  border-radius:clamp(4px,1vw,14px);
-  box-shadow:0 24px 60px -28px rgba(50,38,22,.45),0 6px 18px -10px rgba(50,38,22,.35);
+  position:relative;width:100%;max-width:1440px;margin:0 auto;
+  min-height:calc(100vh - clamp(16px,4vw,56px));min-height:calc(100svh - clamp(16px,4vw,56px));
+  display:grid;grid-template-rows:auto 1fr auto;overflow:hidden;isolation:isolate;
+  padding:0 clamp(20px,4vw,56px);
+  background:var(--a4-bg);color:var(--a4-ivory);font-family:var(--a4-sans);
+  border-radius:clamp(10px,2vw,24px);
+  box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 30px 70px -30px rgba(17,20,23,.6);
   -webkit-font-smoothing:antialiased;
 }
 
-/* ==============================
-   FALLBACK (kertas gading + vinyet)
-   ============================== */
+/* Background layers */
 .akashic-404__fallback{position:absolute;inset:-3%;z-index:0;pointer-events:none;
-  background:radial-gradient(70% 55% at 50% 45%,#F6F1E4,transparent 75%),radial-gradient(120% 90% at 50% 50%,transparent 50%,rgba(110,92,68,.28) 100%),linear-gradient(180deg,#EFE8D8,#E4DBC6);
+  background:radial-gradient(60% 50% at 70% 35%,rgba(184,107,67,.16),transparent 70%),radial-gradient(50% 45% at 20% 80%,rgba(93,132,148,.18),transparent 70%),#111417;
   transform:translate3d(calc(var(--a4-mx)*-3px),calc(var(--a4-my)*-3px),0)}
-
-/* ==============================
-   VIDEO (moving photograph)
-   ============================== */
 .akashic-404__video{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;opacity:0;pointer-events:none;
-  filter:grayscale(.8) sepia(.35) contrast(1.05) brightness(1.04);
+  filter:grayscale(.9) contrast(1.1) brightness(.55);mix-blend-mode:luminosity;
   transform:translate3d(calc(var(--a4-mx)*-6px),calc(var(--a4-my)*-6px),0) scale(1.04);transition:opacity 1.8s var(--a4-ease)}
-.akashic-404--video .akashic-404__video{opacity:1}
+.akashic-404--video .akashic-404__video{opacity:.55}
 .akashic-404--novideo .akashic-404__video{display:none}
-
-/* ==============================
-   OVERLAY + PAPER TEXTURE
-   ============================== */
 .akashic-404__overlay{position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:radial-gradient(120% 95% at 50% 45%,transparent 50%,rgba(70,56,38,.30) 100%),linear-gradient(180deg,rgba(241,235,221,.74),rgba(241,235,221,.52) 42%,rgba(241,235,221,.66))}
-.akashic-404__paper{position:absolute;inset:0;z-index:3;pointer-events:none;opacity:.32;mix-blend-mode:multiply;
-  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 .42 0 0 0 0 .36 0 0 0 0 .28 0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+  background:radial-gradient(90% 70% at 50% 45%,transparent 30%,rgba(17,20,23,.85) 100%),linear-gradient(180deg,rgba(17,20,23,.5),rgba(17,20,23,.2) 40%,rgba(17,20,23,.7))}
+.akashic-404__grid{position:absolute;inset:0;z-index:3;pointer-events:none;
+  background-image:linear-gradient(to right,rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:64px 64px;
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse at center,#000 20%,transparent 75%);
+  transform:translate3d(calc(var(--a4-mx)*3px),calc(var(--a4-my)*3px),0)}
 
-/* ==============================
-   EDITORIAL LINES + CORNER MARKERS
-   (dinaikkan ke z-index 6 agar benar-benar terlihat)
-   ============================== */
-.akashic-404__lines{position:absolute;inset:0;z-index:6;pointer-events:none;transform:translate3d(calc(var(--a4-mx)*3px),calc(var(--a4-my)*3px),0)}
-.akashic-404__vline{position:absolute;top:0;bottom:0;width:1px;background:var(--a4-line);transform-origin:top;animation:akashic-404-vgrow 1.6s var(--a4-ease) .2s both}
-.akashic-404__vline--l{left:clamp(20px,3.2vw,44px)}
-.akashic-404__vline--r{right:clamp(20px,3.2vw,44px)}
-.akashic-404__corner{position:absolute;width:14px;height:14px;border:solid var(--a4-ink);opacity:.7;animation:akashic-404-fade 1.4s var(--a4-ease) .35s both}
-.akashic-404__corner--tl{top:104px;left:calc(clamp(20px,3.2vw,44px) + 16px);border-width:1px 0 0 1px}
-.akashic-404__corner--tr{top:104px;right:calc(clamp(20px,3.2vw,44px) + 16px);border-width:1px 1px 0 0}
-.akashic-404__corner--bl{bottom:104px;left:calc(clamp(20px,3.2vw,44px) + 16px);border-width:0 0 1px 1px}
-.akashic-404__corner--br{bottom:104px;right:calc(clamp(20px,3.2vw,44px) + 16px);border-width:0 1px 1px 0}
-.akashic-404__rule{height:1px;background:var(--a4-line);transform-origin:left;animation:akashic-404-hgrow 1.5s var(--a4-ease) .2s both}
+/* Header */
+.akashic-404__header{position:relative;z-index:7;padding-top:clamp(20px,3vw,32px);animation:akashic-404-rise 1s var(--a4-ease) .2s both;--a4-y:-10px}
+.akashic-404__header-row{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-bottom:18px;border-bottom:1px solid var(--a4-line)}
+.akashic-404__brand{display:flex;align-items:center;gap:12px;font-size:13px;font-weight:700;letter-spacing:.32em}
+.akashic-404__brand svg{width:26px;height:26px}
+.akashic-404__sub{margin-top:4px;font-size:9.5px;font-weight:500;letter-spacing:.2em;color:var(--a4-muted)}
+.akashic-404__meta{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border:1px solid var(--a4-line2);border-radius:999px;background:var(--a4-glass);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font:11px/1 var(--a4-mono);letter-spacing:.12em;color:var(--a4-muted)}
+.akashic-404__meta b{color:var(--a4-ivory);font-weight:600}
+.akashic-404__meta i{width:7px;height:7px;border-radius:50%;background:var(--a4-accent);animation:akashic-404-pulse 2.4s ease-in-out infinite}
 
-/* ==============================
-   HEADER
-   ============================== */
-.akashic-404__header{position:relative;z-index:7;padding-top:28px}
-.akashic-404__header-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;padding:0 clamp(8px,1.6vw,22px) 18px;animation:akashic-404-rise 1s var(--a4-ease) .4s both;--a4-y:10px}
-.akashic-404__brand{font-family:var(--a4-serif);font-size:clamp(1.15rem,2vw,1.5rem);letter-spacing:.28em}
-.akashic-404__sub{margin-top:5px;font-size:9.5px;letter-spacing:.2em;color:var(--a4-gray)}
-.akashic-404__meta{font-size:10px;letter-spacing:.2em;line-height:1.8;color:var(--a4-gray);text-align:right}
-.akashic-404__meta b{display:block;color:var(--a4-ink);font-weight:600}
-
-/* ==============================
-   CONTENT
-   ============================== */
-.akashic-404__content{position:relative;z-index:7;display:grid;place-items:center;align-content:center;text-align:center;padding:24px 0}
-.akashic-404__statement{font-family:var(--a4-serif);font-style:italic;font-size:clamp(1.15rem,2.6vw,2rem);letter-spacing:.01em;color:var(--a4-ink);animation:akashic-404-rise 1.1s var(--a4-ease) .55s both;--a4-y:14px}
-.akashic-404__statement span{display:block;margin-bottom:10px;font-family:var(--a4-sans);font-style:normal;font-size:10.5px;letter-spacing:.34em;text-transform:uppercase;color:var(--a4-gray)}
+/* Content */
+.akashic-404__content{position:relative;z-index:7;display:grid;place-items:center;align-content:center;text-align:center;padding:32px 0}
+.akashic-404__statement{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border:1px solid var(--a4-line2);border-radius:999px;background:var(--a4-glass);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--a4-muted);
+  animation:akashic-404-rise 1.1s var(--a4-ease) .4s both;--a4-y:14px}
+.akashic-404__statement::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--a4-accent)}
+.akashic-404__lead{margin-top:18px;font-size:clamp(1.1rem,2.2vw,1.6rem);font-weight:500;letter-spacing:-.02em;color:var(--a4-ivory);animation:akashic-404-rise 1.1s var(--a4-ease) .5s both;--a4-y:14px}
 .akashic-404__depth{transform:translate3d(calc(var(--a4-mx)*8px),calc(var(--a4-my)*8px),0)}
-.akashic-404__code{font-family:var(--a4-serif);font-weight:400;font-size:clamp(7.5rem,30vw,26rem);line-height:.82;letter-spacing:-.02em;margin:.03em 0;padding-right:.02em;user-select:none;
-  color:rgba(29,27,25,.09);-webkit-text-stroke:1.5px rgba(29,27,25,.86);paint-order:stroke fill;
-  animation:akashic-404-rise 1.6s var(--a4-ease) .7s both,akashic-404-breathe 11s var(--a4-float) 2.2s infinite;--a4-y:30px}
+.akashic-404__code{font-weight:700;font-size:clamp(7rem,28vw,24rem);line-height:.85;letter-spacing:-.06em;margin:.04em 0;user-select:none;
+  background:linear-gradient(180deg,var(--a4-ivory) 10%,rgba(242,239,232,.08) 95%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 40px rgba(184,107,67,.18));
+  animation:akashic-404-rise 1.6s var(--a4-ease) .65s both,akashic-404-breathe 11s ease-in-out 2.2s infinite;--a4-y:30px}
 
-/* ==============================
-   CTA
-   ============================== */
-.akashic-404__cta{position:relative;display:inline-flex;align-items:center;gap:12px;min-height:48px;padding:10px 4px;margin-top:28px;font-size:12px;font-weight:600;letter-spacing:.26em;text-transform:uppercase;
-  animation:akashic-404-rise 1.1s var(--a4-ease) 1.15s both;--a4-y:12px;transition:opacity .35s var(--a4-ease)}
+/* CTA — teks diubah menjadi cokelat tua agar selaras dengan aksen tombol */
+.akashic-404__cta{display:inline-flex;align-items:center;gap:14px;min-height:52px;padding:0 26px 0 22px;margin-top:24px;border-radius:999px;background:var(--a4-ivory);color:#6B3A1F;
+  font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;box-shadow:inset 0 -2px 0 var(--a4-accent);
+  animation:akashic-404-rise 1.1s var(--a4-ease) 1s both;--a4-y:12px;transition:background-color .3s,color .3s,transform .4s var(--a4-ease)}
 .akashic-404__cta svg{width:18px;height:18px;transition:transform .45s var(--a4-ease)}
-.akashic-404__cta::after{content:"";position:absolute;left:4px;right:4px;bottom:7px;height:1px;background:var(--a4-bronze);transform:scaleX(.2);transform-origin:left;transition:transform .55s var(--a4-ease)}
-.akashic-404__cta:hover{opacity:.78}
+.akashic-404__cta:hover{background:#fff;color:#4E2A14;transform:translateY(-2px)}
 .akashic-404__cta:hover svg{transform:translateX(-5px)}
-.akashic-404__cta:hover::after{transform:scaleX(1)}
 
-/* ==============================
-   FOOTER METADATA
-   ============================== */
-.akashic-404__footer{position:relative;z-index:7;padding-bottom:26px;transform:translate3d(calc(var(--a4-mx)*4px),calc(var(--a4-my)*4px),0)}
-.akashic-404__footer-row{display:flex;justify-content:space-between;gap:24px;padding:18px clamp(8px,1.6vw,22px) 0;font-size:10px;letter-spacing:.2em;line-height:1.9;color:var(--a4-gray);animation:akashic-404-fade 1.4s var(--a4-ease) 1.3s both}
+/* Footer */
+.akashic-404__footer{position:relative;z-index:7;padding-bottom:clamp(20px,3vw,32px);transform:translate3d(calc(var(--a4-mx)*4px),calc(var(--a4-my)*4px),0)}
+.akashic-404__footer-row{display:flex;justify-content:space-between;gap:24px;padding-top:18px;border-top:1px solid var(--a4-line);font:10px/1.9 var(--a4-mono);letter-spacing:.14em;color:var(--a4-muted);animation:akashic-404-fade 1.4s var(--a4-ease) 1.2s both}
 .akashic-404__footer-row p:last-child{text-align:right}
-.akashic-404__footer-row b{color:var(--a4-ink);font-weight:600}
+.akashic-404__footer-row b{color:var(--a4-ivory);font-weight:600}
 
-/* ==============================
-   KEYFRAMES
-   ============================== */
 @keyframes akashic-404-fade{from{opacity:0}to{opacity:1}}
-@keyframes akashic-404-rise{from{opacity:0;transform:translate3d(0,var(--a4-y,16px),0)}to{opacity:1;transform:translate3d(0,0,0)}}
-@keyframes akashic-404-hgrow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-@keyframes akashic-404-vgrow{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes akashic-404-rise{from{opacity:0;transform:translate3d(0,var(--a4-y,16px),0)}to{opacity:1;transform:none}}
 @keyframes akashic-404-breathe{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.008);opacity:.92}}
+@keyframes akashic-404-pulse{0%,100%{box-shadow:0 0 0 0 rgba(184,107,67,.5)}50%{box-shadow:0 0 0 6px rgba(184,107,67,0)}}
 
-/* ==============================
-   RESPONSIVE
-   ============================== */
 @media (max-width:768px){
   body{padding:0}
-  .akashic-404{max-width:none;min-height:100vh;min-height:100svh;border-radius:0;border-left:0;border-right:0;border-top:0;box-shadow:none}
-  .akashic-404__header{padding-top:20px}
-  .akashic-404__vline{display:block;left:clamp(16px,3vw,28px)}
-  .akashic-404__vline--r{right:clamp(16px,3vw,28px);left:auto}
-  .akashic-404__corner--tl{top:88px;left:calc(clamp(16px,3vw,28px) + 14px)}
-  .akashic-404__corner--tr{top:88px;right:calc(clamp(16px,3vw,28px) + 14px)}
-  .akashic-404__corner--bl{bottom:88px;left:calc(clamp(16px,3vw,28px) + 14px)}
-  .akashic-404__corner--br{bottom:88px;right:calc(clamp(16px,3vw,28px) + 14px)}
-  .akashic-404__code{-webkit-text-stroke-width:1px}
-  .akashic-404__cta{min-height:52px}
+  .akashic-404{max-width:none;min-height:100vh;min-height:100svh;border-radius:0;box-shadow:none}
+  .akashic-404__grid{background-size:44px 44px}
+  .akashic-404__cta{width:100%;max-width:320px;justify-content:center}
 }
 @media (max-width:520px){
-  .akashic-404__sub{display:none}
-  .akashic-404__meta span{display:none}
-  .akashic-404__corner{width:10px;height:10px}
-  .akashic-404__footer-row{font-size:9px;letter-spacing:.14em}
+  .akashic-404__sub,.akashic-404__meta span{display:none}
+  .akashic-404__footer-row{font-size:9px;letter-spacing:.1em}
 }
-@media (max-width:360px){.akashic-404__code{font-size:6.8rem}}
+@media (max-width:360px){.akashic-404__code{font-size:6.5rem}}
 
-/* ==============================
-   REDUCED MOTION (override: FORCE_MOTION di JavaScript)
-   ============================== */
+/* Reduced motion (override: FORCE_MOTION di JavaScript) */
 @media (prefers-reduced-motion:reduce){
   .akashic-404:not(.akashic-404--force) *,.akashic-404:not(.akashic-404--force) *::before,.akashic-404:not(.akashic-404--force) *::after{animation:none!important;transition:none!important}
-  .akashic-404:not(.akashic-404--force) :is(.akashic-404__fallback,.akashic-404__lines,.akashic-404__depth,.akashic-404__footer){transform:none!important}
+  .akashic-404:not(.akashic-404--force) :is(.akashic-404__fallback,.akashic-404__grid,.akashic-404__depth,.akashic-404__footer){transform:none!important}
   .akashic-404:not(.akashic-404--force) .akashic-404__video{transform:scale(1.04)!important}
 }
 </style>
@@ -210,33 +124,29 @@ body::-webkit-scrollbar{width:0;height:0;display:none}
 <div class="akashic-404" id="akashic404">
 
   <div class="akashic-404__fallback" aria-hidden="true"></div>
-
   <video class="akashic-404__video" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
     <source src="{{ url_for('static', filename='video/animasi-01.mp4') }}" type="video/mp4">
   </video>
   <div class="akashic-404__overlay" aria-hidden="true"></div>
-  <div class="akashic-404__paper" aria-hidden="true"></div>
-
-  <div class="akashic-404__lines" aria-hidden="true">
-    <i class="akashic-404__vline akashic-404__vline--l"></i><i class="akashic-404__vline akashic-404__vline--r"></i>
-    <i class="akashic-404__corner akashic-404__corner--tl"></i><i class="akashic-404__corner akashic-404__corner--tr"></i>
-    <i class="akashic-404__corner akashic-404__corner--bl"></i><i class="akashic-404__corner akashic-404__corner--br"></i>
-  </div>
+  <div class="akashic-404__grid" aria-hidden="true"></div>
 
   <header class="akashic-404__header">
     <div class="akashic-404__header-row">
       <div>
-        <p class="akashic-404__brand">AKASHIC</p>
+        <p class="akashic-404__brand">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><polygon points="4,11 13,4 28,8 27,24 12,28 5,21" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><line x1="16" y1="16" x2="27" y2="8" stroke="currentColor" stroke-dasharray="2 2"/><circle cx="16" cy="16" r="3.2" fill="#B86B43"/><circle cx="27" cy="8" r="1.6" fill="currentColor"/></svg>
+          AKASHIC
+        </p>
         <p class="akashic-404__sub">LOCATION-BASED INFORMATION SYSTEM</p>
       </div>
-      <p class="akashic-404__meta"><b>NO. 404</b><span>ERROR ARCHIVE</span></p>
+      <p class="akashic-404__meta"><i aria-hidden="true"></i><b>NO. 404</b><span>ERROR ARCHIVE</span></p>
     </div>
-    <div class="akashic-404__rule" aria-hidden="true"></div>
   </header>
 
   <main class="akashic-404__content">
     <section aria-labelledby="akashic404Title">
-      <p class="akashic-404__statement"><span>Dokumen tidak tersedia</span>Sepertinya kamu tersesat.</p>
+      <p class="akashic-404__statement">Dokumen tidak tersedia</p>
+      <p class="akashic-404__lead">Sepertinya kamu tersesat.</p>
       <div class="akashic-404__depth">
         <h1 class="akashic-404__code" id="akashic404Title">404<span class="a4-sr"> — Halaman tidak ditemukan</span></h1>
       </div>
@@ -248,7 +158,6 @@ body::-webkit-scrollbar{width:0;height:0;display:none}
   </main>
 
   <footer class="akashic-404__footer" aria-hidden="true">
-    <div class="akashic-404__rule"></div>
     <div class="akashic-404__footer-row">
       <p>DOCUMENT / <b>404</b><br>LOCATION / <b>UNKNOWN</b></p>
       <p>STATUS / <b>NOT FOUND</b><br>EST. 2026</p>
@@ -268,53 +177,37 @@ document.addEventListener("DOMContentLoaded", () => {
   const video = root.querySelector(".akashic-404__video");
   const mq = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
   const state = { motion: FORCE_MOTION || !(mq && mq.matches), tx: 0, ty: 0, cx: 0, cy: 0, raf: 0 };
+  const play = () => { const p = video.play(); if (p && p.catch) p.catch(() => {}); };
 
-  /* ---------- REDUCED MOTION ---------- */
-  function initReducedMotion() {
-    if (FORCE_MOTION) root.classList.add("akashic-404--force");
-  }
+  if (FORCE_MOTION) root.classList.add("akashic-404--force");
 
-  /* ---------- VIDEO (+ fallback) ---------- */
-  function initVideo() {
-    if (!video) return;
+  /* Video + fallback */
+  if (video) {
     const showVideo = () => root.classList.add("akashic-404--video");
     const useFallback = () => {
       root.classList.remove("akashic-404--video");
       root.classList.add("akashic-404--novideo");
-      try { video.pause(); } catch (_) { /* noop */ }
+      try { video.pause(); } catch (_) {}
     };
-    video.addEventListener("loadeddata", () => {
-      showVideo();
-      if (!state.motion) video.pause();   /* tampilkan frame diam */
-    });
+    video.addEventListener("loadeddata", () => { showVideo(); if (!state.motion) video.pause(); });
     video.addEventListener("error", useFallback);
     const source = video.querySelector("source");
     if (source) source.addEventListener("error", useFallback);
     if (video.readyState >= 2) showVideo();
-    if (state.motion) {
-      const p = video.play();
-      if (p && typeof p.catch === "function") p.catch(() => {});
-    } else {
-      video.removeAttribute("autoplay");
-    }
+    if (state.motion) play(); else video.removeAttribute("autoplay");
   }
 
-  /* ---------- POINTER PARALLAX (lerp, loop hanya saat bergerak) ---------- */
+  /* Parallax pointer (lerp, loop hanya saat bergerak) */
   function step() {
     state.cx += (state.tx - state.cx) * 0.07;
     state.cy += (state.ty - state.cy) * 0.07;
     root.style.setProperty("--a4-mx", state.cx.toFixed(3));
     root.style.setProperty("--a4-my", state.cy.toFixed(3));
-    if (Math.abs(state.tx - state.cx) + Math.abs(state.ty - state.cy) > 0.002 && document.visibilityState === "visible") {
-      state.raf = requestAnimationFrame(step);
-    } else {
-      state.raf = 0;
-    }
+    const moving = Math.abs(state.tx - state.cx) + Math.abs(state.ty - state.cy) > 0.002;
+    state.raf = moving && document.visibilityState === "visible" ? requestAnimationFrame(step) : 0;
   }
-
-  function initParallax() {
-    const fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (!state.motion || !fine) return;
+  const fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (state.motion && fine) {
     window.addEventListener("pointermove", (e) => {
       if (window.innerWidth < 768 || (e.pointerType && e.pointerType !== "mouse")) return;
       state.tx = (e.clientX / window.innerWidth - 0.5) * 2;
@@ -323,23 +216,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }, { passive: true });
   }
 
-  /* ---------- VISIBILITY ---------- */
-  function initVisibilityHandling() {
-    document.addEventListener("visibilitychange", () => {
-      if (document.visibilityState === "hidden") {
-        if (state.raf) { cancelAnimationFrame(state.raf); state.raf = 0; }
-        if (video) video.pause();
-      } else if (state.motion && video && !root.classList.contains("akashic-404--novideo")) {
-        const p = video.play();
-        if (p && typeof p.catch === "function") p.catch(() => {});
-      }
-    });
-  }
-
-  initReducedMotion();
-  initVideo();
-  initParallax();
-  initVisibilityHandling();
+  /* Visibility */
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      if (state.raf) { cancelAnimationFrame(state.raf); state.raf = 0; }
+      if (video) video.pause();
+    } else if (state.motion && video && !root.classList.contains("akashic-404--novideo")) {
+      play();
+    }
+  });
 });
 </script>
 </body>
