@@ -67,12 +67,13 @@ app/
             landing/
                 about.html
                 base.html
+                contact.html
                 index.html
                 information.html
             legal/
-                contact.html
                 disclaimer.html
-                system-description.html
+                privacy.html
+                terms.html
     .env
     .gitignore
     README.md
