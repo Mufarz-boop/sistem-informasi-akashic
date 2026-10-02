@@ -12,3 +12,4 @@ APScheduler
 Shapely
 pywebpush
 cryptography
+bcrypt
