@@ -10,9 +10,9 @@ def admin_dashboard():
 def admin_events():
     return render_template("admin/events.html")
 
-@admin_bp.route("/information")
+@admin_bp.route("/information_admin")
 def admin_information():
-    return render_template("admin/information.html")
+    return render_template("admin/information_admin.html")
 
 @admin_bp.route("/news")
 def admin_news():

@@ -1,938 +1,506 @@
 {% extends "landing/base.html" %}
 
 {% block title %}Information — Akashic{% endblock %}
-
-{% block meta_description %}Jelajahi bagaimana Akashic menghubungkan informasi, event, dan news dengan konteks wilayah yang relevan.{% endblock %}
-
-{% block meta_keywords %}Akashic, information, regional information, event, news, location based information system{% endblock %}
-
+{% block meta_description %}Pusat eksplorasi informasi regional Akashic: Information, Event, dan News yang dihubungkan dengan konteks wilayah geografis.{% endblock %}
 {% block body_class %}akashic-page akashic-information{% endblock %}
 
 {% block head %}
 <style>
-  /* ==========================================================
-     AKASHIC — INFORMATION
-     Semua class page-specific memakai prefix akashic-information-
-     ========================================================== */
-
-  .akashic-information-section {
-    overflow: hidden;
-    overflow: clip;
-    border-top: 1px solid var(--akashic-border);
-  }
-  .akashic-information-surface { background: var(--akashic-surface); }
+  .akashic-information-section { overflow: hidden; overflow: clip; border-top: 1px solid var(--akashic-border); }
+  .akashic-information-split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(28px, 6vw, 96px); align-items: center; }
+  .akashic-information-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: clamp(24px, 3vw, 40px); }
   .akashic-information-bg { position: absolute; inset: 0; pointer-events: none; opacity: .7; }
-  .akashic-information-actions {
-    display: flex; flex-wrap: wrap; align-items: center;
-    gap: 12px 24px; margin-top: clamp(28px, 3vw, 44px);
-  }
-  .akashic-information-split {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(28px, 6vw, 96px);
-    align-items: center;
-  }
-  .akashic-information-split--top { align-items: start; }
-  .akashic-information-split--wide-left { grid-template-columns: minmax(0, 1.15fr) minmax(0, .85fr); }
-  .akashic-information-split--wide-right { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); }
-  .akashic-information-prose { max-width: 56ch; display: grid; gap: 18px; }
-  .akashic-information-prose p { font-size: clamp(1rem, 1.3vw, 1.125rem); color: var(--akashic-muted); }
-  .akashic-information-prose p.akashic-information-id { color: var(--akashic-ivory); }
-  .akashic-information-section-light .akashic-information-prose p.akashic-information-id { color: var(--akashic-ink); }
 
-  /* ---------- SVG shared ---------- */
+  /* SVG */
   .akashic-information-svg { display: block; width: 100%; height: auto; color: var(--akashic-ivory); overflow: visible; }
-  .akashic-information-svg text { font-family: var(--akashic-mono); font-size: 14px; letter-spacing: .14em; fill: currentColor; }
-  .akashic-information-svg .akashic-information-svg-small { font-size: 11px; opacity: .6; }
-  .akashic-information-svg-stroke { fill: none; stroke: currentColor; stroke-width: 1.2; }
-  .akashic-information-svg-faint { fill: none; stroke: currentColor; stroke-width: .8; opacity: .16; }
-  .akashic-information-svg-blue { fill: none; stroke: var(--akashic-blue); stroke-width: 1; opacity: .5; }
-  .akashic-information-svg-dash { fill: none; stroke: currentColor; stroke-width: 1.1; stroke-dasharray: 4 6; opacity: .55; }
-  .akashic-information-svg-accent { fill: none; stroke: var(--akashic-accent); stroke-width: 1.6; }
-  .akashic-information-svg-fill-accent { fill: var(--akashic-accent); }
-  .akashic-information-svg-fill-ivory { fill: var(--akashic-ivory); }
-  .akashic-information-svg-fill-soft { fill: var(--akashic-surface-soft); stroke: currentColor; stroke-width: 1; stroke-opacity: .35; }
-  .akashic-information-svg-fill-region { fill: rgba(184, 107, 67, .1); stroke: var(--akashic-accent); stroke-width: 1.6; }
+  .akashic-information-svg text { font-family: var(--akashic-mono); font-size: 13px; letter-spacing: .14em; fill: currentColor; }
+  .akashic-information-faint { fill: none; stroke: currentColor; stroke-width: .8; opacity: .16; }
+  .akashic-information-blue { fill: none; stroke: var(--akashic-blue); stroke-width: 1; opacity: .45; }
+  .akashic-information-dash { fill: none; stroke: currentColor; stroke-width: 1.1; stroke-dasharray: 4 6; opacity: .5; }
+  .akashic-information-line { fill: none; stroke: currentColor; stroke-width: 1.2; opacity: .55; }
+  .akashic-information-region { fill: rgba(184, 107, 67, .1); stroke: var(--akashic-accent); stroke-width: 1.6; }
+  .akashic-information-dot { fill: var(--akashic-accent); }
+  .akashic-information-ring { fill: none; stroke: var(--akashic-accent); stroke-width: 1.4; opacity: .5; }
+  .akashic-information-icon { width: 36px; height: 36px; color: var(--akashic-ivory); }
+  .akashic-information-icon * { fill: none; stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; stroke-linejoin: round; }
+  .akashic-information-icon .akashic-information-icon-dot { fill: var(--akashic-accent); stroke: none; }
 
-  .js .akashic-information-draw .akashic-information-line {
-    stroke-dasharray: 1; stroke-dashoffset: 1;
-    transition: stroke-dashoffset 1.8s var(--akashic-ease) .3s;
-  }
-  .js .akashic-information-draw.is-visible .akashic-information-line { stroke-dashoffset: 0; }
-  .js .akashic-information-draw .akashic-information-pop {
-    opacity: 0; transition: opacity .8s ease calc(.5s + var(--n, 0) * .18s);
-  }
-  .js .akashic-information-draw.is-visible .akashic-information-pop { opacity: 1; }
-
-  /* ==========================================================
-     01 HERO
-     ========================================================== */
-  .akashic-information-hero {
-    position: relative; overflow: hidden; overflow: clip;
-    padding-block: clamp(40px, 6vw, 96px) clamp(56px, 8vw, 120px);
-  }
+  /* Hero */
+  .akashic-information-hero { position: relative; overflow: hidden; overflow: clip; padding-block: clamp(40px, 6vw, 96px); }
   .akashic-information-hero .akashic-container { position: relative; }
-  .akashic-information-hero-title {
-    margin: 22px 0 26px;
-    font-size: clamp(3rem, 7vw, 7.4rem);
-    font-weight: 600; line-height: .96; letter-spacing: -.05em;
-    overflow-wrap: break-word;
-  }
-  .akashic-information-hero-title span { display: block; }
-  .akashic-information-hero-title span + span { color: var(--akashic-muted); }
-  .akashic-information-hero-visual { max-width: 600px; width: 100%; margin-inline: auto; }
+  .akashic-information-hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(32px, 5vw, 80px); align-items: center; }
+  .akashic-information-hero-title { margin: 24px 0 26px; font-size: clamp(2.5rem, 5.2vw, 5.4rem); font-weight: 600; line-height: .98; letter-spacing: -.045em; overflow-wrap: break-word; }
+  .akashic-information-hero-visual { max-width: 560px; width: 100%; margin-inline: auto; }
 
-  /* ==========================================================
-     02 INTRODUCTION
-     ========================================================== */
-  .akashic-information-flowline {
-    display: flex; flex-wrap: wrap; align-items: center;
-    gap: 8px clamp(10px, 2vw, 28px);
-    margin-top: clamp(48px, 7vw, 104px);
-    padding-top: clamp(24px, 3vw, 40px);
-    border-top: 1px solid var(--akashic-border);
-  }
-  .akashic-information-flowline-item {
-    font-size: clamp(1.6rem, 4.4vw, 4.4rem);
-    font-weight: 600; letter-spacing: -.035em; line-height: 1.1;
-    opacity: calc(.3 + var(--i, 0) * .23);
-  }
-  .akashic-information-flowline-item:last-of-type { color: var(--akashic-accent); }
-  .akashic-information-flowline-arrow { width: clamp(18px, 2.6vw, 36px); height: clamp(18px, 2.6vw, 36px); color: var(--akashic-muted); flex: none; }
+  /* Intro flow */
+  .akashic-information-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px clamp(10px, 2vw, 28px); margin-top: clamp(40px, 6vw, 88px); padding-top: clamp(24px, 3vw, 40px); border-top: 1px solid var(--akashic-border); }
+  .akashic-information-flow-item { font-size: clamp(1.6rem, 4.4vw, 4.4rem); font-weight: 600; letter-spacing: -.035em; line-height: 1.1; opacity: calc(.3 + var(--i, 0) * .23); }
+  .akashic-information-flow-item:last-of-type { color: var(--akashic-accent); }
+  .akashic-information-flow-arrow { width: clamp(18px, 2.6vw, 36px); height: clamp(18px, 2.6vw, 36px); color: var(--akashic-muted); flex: none; }
 
-  /* ==========================================================
-     03 ECOSYSTEM
-     ========================================================== */
-  .akashic-information-ecosystem-list {
-    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: clamp(20px, 3vw, 48px);
-  }
-  .akashic-information-source { padding-top: 24px; border-top: 1px solid var(--akashic-border-strong); display: flex; flex-direction: column; gap: 14px; }
-  .akashic-information-source h3 { font-size: clamp(1.8rem, 3.4vw, 3.2rem); font-weight: 600; letter-spacing: -.04em; line-height: 1; }
-  .akashic-information-source p { font-size: 15px; color: var(--akashic-muted); max-width: 32ch; }
-  .akashic-information-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .akashic-information-tag {
-    padding: 4px 8px; border: 1px solid var(--akashic-border-strong); border-radius: 2px;
-    font-family: var(--akashic-mono); font-size: 10px; letter-spacing: .14em;
-    text-transform: uppercase; color: var(--akashic-muted);
-  }
+  /* Cards */
+  .akashic-information-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 32px); }
+  .akashic-information-card { display: flex; flex-direction: column; gap: 14px; }
+  .akashic-information-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .akashic-information-card h3 { font-size: clamp(1.4rem, 2.2vw, 2rem); font-weight: 600; letter-spacing: -.03em; }
+  .akashic-information-card p { font-size: 15px; color: var(--akashic-muted); }
+  .akashic-information-card .akashic-meta { margin-top: auto; padding-top: 16px; border-top: 1px dashed var(--akashic-border-strong); }
 
-  /* ==========================================================
-     04 INFORMATION (asymmetric)
-     ========================================================== */
-  .akashic-information-type-word {
-    font-size: clamp(2.8rem, 9vw, 9rem);
-    font-weight: 700; line-height: .9; letter-spacing: -.06em;
-    margin-bottom: 20px;
-  }
-  .akashic-information-type-attrs { display: grid; }
-  .akashic-information-type-attrs li {
-    display: flex; align-items: center; justify-content: space-between; gap: 16px;
-    padding: 18px 0; border-bottom: 1px solid var(--akashic-border);
-    font-family: var(--akashic-mono); font-size: 12px; letter-spacing: .22em;
-  }
-  .akashic-information-type-attrs li:first-child { border-top: 1px solid var(--akashic-border); }
-  .akashic-information-type-attrs li:nth-child(even) { padding-left: clamp(0px, 5vw, 72px); }
+  /* Panel (concept rows) */
+  .akashic-information-panel { position: relative; background: var(--akashic-surface); border: 1px solid var(--akashic-border-strong); border-radius: 4px; }
+  .akashic-information-panel-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border-bottom: 1px solid var(--akashic-border); }
+  .akashic-information-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 16px; align-items: baseline; padding: 18px 20px; border-bottom: 1px solid var(--akashic-border); margin: 0; }
+  .akashic-information-row dt { font-family: var(--akashic-mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase; color: var(--akashic-muted); }
+  .akashic-information-row dd { margin: 0; font-size: 1.05rem; font-weight: 500; letter-spacing: -.01em; }
+  .akashic-information-panel-note { padding: 14px 20px; }
+  .akashic-information-panel dl { margin: 0; }
 
-  /* ==========================================================
-     05 EVENT / 06 NEWS
-     ========================================================== */
-  .akashic-information-visual-wide { max-width: 760px; width: 100%; margin-inline: auto; }
-  .akashic-information-equation {
-    display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px;
-    margin-top: 28px; font-family: var(--akashic-mono);
-    font-size: 12px; letter-spacing: .22em; color: var(--akashic-ivory);
-  }
-  .akashic-information-source .akashic-information-equation { margin-top: 6px; gap: 4px 12px; font-size: 11px; }
-  .akashic-information-equation li:nth-child(even) { color: var(--akashic-accent); }
-  .akashic-information-notes { display: grid; margin-top: 28px; }
-  .akashic-information-notes li {
-    display: flex; align-items: center; gap: 14px;
-    padding: 14px 0; border-bottom: 1px solid var(--akashic-border);
-    font-family: var(--akashic-mono); font-size: 12px; letter-spacing: .2em;
-  }
-  .akashic-information-notes li:first-child { border-top: 1px solid var(--akashic-border); }
+  /* Vertical chain */
+  .akashic-information-chain { display: grid; margin-top: 28px; }
+  .akashic-information-chain li { position: relative; display: flex; align-items: center; gap: 16px; padding-block: 13px; font-family: var(--akashic-mono); font-size: 12px; letter-spacing: .2em; text-transform: uppercase; }
+  .akashic-information-chain li:not(:last-child)::after { content: ""; position: absolute; left: 3px; top: calc(50% + 10px); width: 1px; height: 26px; background: var(--akashic-border-strong); }
+  .akashic-information-chain .akashic-node::after { animation: none; display: none; }
 
-  /* ==========================================================
-     07 RELEVANCE (light)
-     ========================================================== */
-  .akashic-information-relevance-title {
-    font-size: clamp(2.8rem, 6.6vw, 7.2rem);
-    font-weight: 600; line-height: .95; letter-spacing: -.05em; margin-bottom: 28px;
-  }
-  .akashic-information-relevance-title span { display: block; color: var(--akashic-muted); }
-  .akashic-information-funnel { display: grid; justify-items: start; }
-  .akashic-information-funnel li {
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    min-height: 76px; padding: 16px 22px;
-    font-family: var(--akashic-mono); font-size: 11px; letter-spacing: .18em; text-transform: uppercase;
-    border: 1px solid rgba(17, 20, 23, .3); border-radius: 3px;
-  }
-  .akashic-information-funnel li:nth-child(1) { width: 100%; border-style: dashed; }
-  .akashic-information-funnel li:nth-child(3) { width: 62%; }
-  .akashic-information-funnel li:nth-child(5) { width: 38%; min-width: 200px; background: var(--akashic-ink); color: var(--akashic-ivory); border-color: var(--akashic-ink); }
-  .akashic-information-funnel li.akashic-information-funnel-link {
-    width: 1px; min-height: 32px; height: 32px; margin-left: 28px; padding: 0;
-    border: 0; border-left: 1px solid rgba(17, 20, 23, .35); border-radius: 0;
-  }
+  /* Relevance (light) */
+  .akashic-information-steps { display: grid; gap: 10px; }
+  .akashic-information-step { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 60px; padding: 14px 20px; border: 1px solid rgba(17, 20, 23, .3); border-radius: 3px; font-family: var(--akashic-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; }
+  .akashic-information-step:nth-child(1) { width: 100%; border-style: dashed; }
+  .akashic-information-step:nth-child(2) { width: 86%; }
+  .akashic-information-step:nth-child(3) { width: 72%; }
+  .akashic-information-step:nth-child(4) { width: 58%; }
+  .akashic-information-step:nth-child(5) { width: 44%; min-width: 180px; background: var(--akashic-ink); color: var(--akashic-ivory); border-color: var(--akashic-ink); }
+  .akashic-information-title-light { font-size: clamp(2.6rem, 6vw, 6.4rem); font-weight: 600; line-height: .96; letter-spacing: -.05em; margin-bottom: 24px; }
+  .akashic-information-title-light span { display: block; color: var(--akashic-muted); }
 
-  /* ==========================================================
-     08 REGION CONTEXT
-     ========================================================== */
-  .akashic-information-region-panel {
-    position: relative; background: var(--akashic-bg);
-    border: 1px solid var(--akashic-border-strong); border-radius: 4px;
-  }
-  .akashic-information-region-bar {
-    display: flex; align-items: center; justify-content: space-between; gap: 12px;
-    padding: 14px 20px; border-bottom: 1px solid var(--akashic-border);
-  }
-  .akashic-information-region-title {
-    padding: 22px 20px 18px; font-size: clamp(1.6rem, 3vw, 2.6rem);
-    font-weight: 600; letter-spacing: -.04em;
-  }
-  .akashic-information-region-row {
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
-    gap: 16px; align-items: baseline;
-    padding: 18px 20px; border-top: 1px solid var(--akashic-border);
-  }
-  .akashic-information-region-row dt { font-family: var(--akashic-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--akashic-ivory); }
-  .akashic-information-region-row dd { margin: 0; font-size: 14px; color: var(--akashic-muted); }
-  .akashic-information-region-note { padding: 14px 20px; border-top: 1px solid var(--akashic-border); }
+  /* Big flow diagram */
+  .akashic-information-pipe { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0; counter-reset: pipe; }
+  .akashic-information-pipe li { position: relative; padding: 52px 12px 0 0; border-top: 1px solid var(--akashic-border-strong); font-family: var(--akashic-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; line-height: 1.5; overflow-wrap: anywhere; }
+  .akashic-information-pipe li::before { counter-increment: pipe; content: counter(pipe, decimal-leading-zero); position: absolute; top: 16px; left: 0; color: var(--akashic-muted); }
+  .akashic-information-pipe li .akashic-node { position: absolute; top: -4px; left: 0; }
+  .akashic-information-pipe li:nth-child(5) { color: var(--akashic-accent); }
 
-  /* ==========================================================
-     09 FLOW / 13 ARCHITECTURE
-     ========================================================== */
-  .akashic-information-flow-visual { max-width: 460px; width: 100%; margin-inline: auto; }
-  .akashic-information-architecture-visual { max-width: 560px; width: 100%; margin-inline: auto; }
+  /* Paths */
+  .akashic-information-paths { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 32px); }
+  .akashic-information-path h3 { font-size: 1.3rem; font-weight: 600; letter-spacing: -.02em; margin-bottom: 10px; }
+  .akashic-information-path p { font-size: 15px; color: var(--akashic-muted); margin-bottom: 16px; }
+  .akashic-information-path ol { display: grid; gap: 8px; font-family: var(--akashic-mono); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
 
-  /* ==========================================================
-     10 DISCOVERY
-     ========================================================== */
-  .akashic-information-discovery-grid {
-    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
-    border-top: 1px solid var(--akashic-border-strong);
-  }
-  .akashic-information-block { padding: clamp(24px, 3vw, 40px) clamp(16px, 2.4vw, 36px) clamp(24px, 3vw, 40px) 0; display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
-  .akashic-information-block + .akashic-information-block { padding-left: clamp(16px, 2.4vw, 36px); border-left: 1px solid var(--akashic-border); }
-  .akashic-information-block h3 { font-size: clamp(1.8rem, 3.4vw, 3.2rem); font-weight: 600; letter-spacing: -.04em; line-height: 1; }
-  .akashic-information-block-question { font-size: clamp(1rem, 1.4vw, 1.2rem); color: var(--akashic-ivory); max-width: 26ch; }
-  .akashic-information-block p { font-size: 15px; color: var(--akashic-muted); max-width: 32ch; }
-  .akashic-information-block p.akashic-information-block-question { color: var(--akashic-ivory); font-size: clamp(1rem, 1.4vw, 1.2rem); }
-  .akashic-information-block-current {
-    padding: 14px 16px; border: 1px dashed var(--akashic-border-strong); border-radius: 3px;
-    display: grid; gap: 6px; width: 100%;
-  }
-  .akashic-information-types { display: grid; width: 100%; }
-  .akashic-information-types li {
-    display: grid; grid-template-columns: 32px minmax(0, 1fr); gap: 4px 10px;
-    padding: 12px 0; border-bottom: 1px solid var(--akashic-border);
-  }
-  .akashic-information-types li:first-child { border-top: 1px solid var(--akashic-border); }
-  .akashic-information-types strong { font-family: var(--akashic-mono); font-size: 12px; font-weight: 500; letter-spacing: .2em; }
-  .akashic-information-types span:last-child { grid-column: 2; font-size: 13px; color: var(--akashic-muted); }
-  .akashic-information-time-visual { max-width: 320px; width: 100%; }
+  /* Conceptual feed */
+  .akashic-information-feed { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(16px, 2.4vw, 32px); }
+  .akashic-information-feed-card { border: 1px dashed var(--akashic-border-strong); border-radius: 4px; padding: 24px; background: var(--akashic-bg); display: flex; flex-direction: column; gap: 10px; }
+  .akashic-information-feed-card h3 { font-size: 1.25rem; font-weight: 500; letter-spacing: -.02em; }
+  .akashic-information-feed-card p { font-size: 14px; color: var(--akashic-muted); }
+  .akashic-information-feed-card .akashic-marker { align-self: flex-start; }
+  .akashic-information-ready { display: flex; align-items: flex-start; gap: 16px; padding: clamp(20px, 3vw, 36px); border: 1px solid var(--akashic-border-strong); border-radius: 4px; }
+  .akashic-information-ready .akashic-node { margin-top: 8px; }
 
-  /* ==========================================================
-     11 CONCEPTUAL CARD
-     ========================================================== */
-  .akashic-information-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: clamp(20px, 3vw, 40px); }
-  .akashic-information-card {
-    position: relative; padding: clamp(22px, 3vw, 36px);
-    background: var(--akashic-surface); border: 1px dashed var(--akashic-border-strong); border-radius: 4px;
-    display: flex; flex-direction: column; align-items: flex-start; gap: 18px;
-  }
-  .akashic-information-card--event { margin-top: clamp(0px, 4vw, 56px); }
-  .akashic-information-card h3 { font-size: clamp(1.5rem, 2.6vw, 2.4rem); font-weight: 600; letter-spacing: -.035em; line-height: 1.05; }
-  .akashic-information-card dl { margin: 0; display: grid; width: 100%; }
-  .akashic-information-card dl div {
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 12px;
-    padding: 12px 0; border-top: 1px solid var(--akashic-border);
-  }
-  .akashic-information-card dt { font-family: var(--akashic-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--akashic-muted); }
-  .akashic-information-card dd { margin: 0; font-size: 14px; color: var(--akashic-ivory); }
-  .akashic-information-card-more { font-family: var(--akashic-mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--akashic-muted); }
+  /* Tree */
+  .akashic-information-tree { display: grid; gap: 28px; }
+  .akashic-information-tree-box { display: inline-flex; align-items: center; gap: 12px; padding: 14px 20px; border: 1px solid var(--akashic-border-strong); border-radius: 3px; font-family: var(--akashic-mono); font-size: 12px; letter-spacing: .18em; text-transform: uppercase; background: var(--akashic-bg); }
+  .akashic-information-tree-box--accent { border-color: var(--akashic-accent); }
+  .akashic-information-tree-children { display: grid; gap: 10px; margin: 14px 0 0 24px; padding-left: 24px; border-left: 1px dashed var(--akashic-border-strong); }
+  .akashic-information-tree-children li { position: relative; }
+  .akashic-information-tree-children li::before { content: ""; position: absolute; left: -24px; top: 50%; width: 24px; border-top: 1px dashed var(--akashic-border-strong); }
+  .akashic-information-tree-seq { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
 
-  /* ==========================================================
-     12 FEED FUTURE STATE
-     ========================================================== */
-  .akashic-information-feed-box {
-    position: relative; max-width: 960px; margin-inline: auto;
-    padding: clamp(32px, 6vw, 88px) clamp(20px, 4vw, 64px);
-    border: 1px dashed var(--akashic-border-strong); border-radius: 4px; text-align: center;
-    background-image:
-      linear-gradient(to right, rgba(255,255,255,.04) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(255,255,255,.04) 1px, transparent 1px);
-    background-size: 48px 48px;
-  }
-  .akashic-information-feed-status {
-    display: inline-flex; align-items: center; gap: 12px;
-    font-family: var(--akashic-mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase;
-    color: var(--akashic-ivory); margin: 18px 0 16px;
-  }
-  .akashic-information-feed-title { font-size: clamp(1.6rem, 3.6vw, 3.2rem); font-weight: 600; letter-spacing: -.045em; line-height: 1.08; max-width: 22ch; margin-inline: auto; }
-  .akashic-information-feed-box p.akashic-information-feed-copy { margin: 18px auto 0; max-width: 46ch; color: var(--akashic-muted); }
-  .akashic-information-feed-slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 36px; }
-  .akashic-information-feed-slots li { height: 56px; border: 1px dashed var(--akashic-border); border-radius: 3px; }
+  /* Privacy */
+  .akashic-information-privacy-list li { display: grid; grid-template-columns: 44px 1fr; gap: 12px; padding: 18px 0; border-bottom: 1px solid var(--akashic-border); font-size: clamp(1rem, 1.3vw, 1.15rem); }
+  .akashic-information-privacy-list li:first-child { border-top: 1px solid var(--akashic-border); }
 
-  /* ==========================================================
-     14 CONTENT RELATIONSHIP
-     ========================================================== */
-  .akashic-information-relations { display: grid; }
-  .akashic-information-relations li {
-    display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 12px;
-    padding: 18px 0; border-bottom: 1px solid var(--akashic-border);
-  }
-  .akashic-information-relations li:first-child { border-top: 1px solid var(--akashic-border); }
-  .akashic-information-relations h3 { font-family: var(--akashic-mono); font-size: 13px; font-weight: 500; letter-spacing: .22em; margin-bottom: 4px; }
-  .akashic-information-relations p { font-size: 14px; color: var(--akashic-muted); }
-  .akashic-information-sum { display: grid; margin-top: clamp(40px, 6vw, 80px); }
-  .akashic-information-sum li {
-    display: flex; align-items: baseline; gap: 18px; padding: 12px 0;
-    border-bottom: 1px solid var(--akashic-border);
-    font-size: clamp(1.8rem, 4.4vw, 4rem); font-weight: 600; letter-spacing: -.04em; line-height: 1.1;
-  }
-  .akashic-information-sum li:first-child { border-top: 1px solid var(--akashic-border); }
-  .akashic-information-sum li:last-child { color: var(--akashic-accent); }
-  .akashic-information-sum .akashic-meta { min-width: 18px; }
+  /* Connections */
+  .akashic-information-link-card { display: flex; flex-direction: column; align-items: flex-start; gap: 14px; }
+  .akashic-information-link-card h3 { font-size: clamp(1.4rem, 2.2vw, 2rem); font-weight: 600; letter-spacing: -.03em; }
+  .akashic-information-link-card p { font-size: 15px; color: var(--akashic-muted); }
+  .akashic-information-link-card .akashic-button { margin-top: auto; }
 
-  /* ==========================================================
-     15 PRIVACY (quiet)
-     ========================================================== */
-  .akashic-information-privacy-title { font-size: clamp(2rem, 4.4vw, 4.4rem); font-weight: 600; line-height: 1.02; letter-spacing: -.045em; max-width: 16ch; }
-  .akashic-information-privacy .akashic-information-prose { margin-top: 24px; }
+  /* Final */
+  .akashic-information-cta { position: relative; text-align: center; padding-block: clamp(96px, 14vw, 200px); }
+  .akashic-information-cta .akashic-container { position: relative; z-index: 1; }
+  .akashic-information-cta-title { font-size: clamp(2.8rem, 9vw, 9rem); font-weight: 600; line-height: .95; letter-spacing: -.05em; margin: 24px 0 28px; }
+  .akashic-information-cta .akashic-lead { margin-inline: auto; }
+  .akashic-information-cta .akashic-information-actions { justify-content: center; }
 
-  /* ==========================================================
-     16-18 CONNECTIONS
-     ========================================================== */
-  .akashic-information-connection-row {
-    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: clamp(24px, 6vw, 96px); align-items: center;
-    padding: clamp(40px, 6vw, 88px) 0; border-top: 1px solid var(--akashic-border);
-  }
-  .akashic-information-connection-row:first-child { border-top: 0; padding-top: 0; }
-  .akashic-information-connection-row:last-child { padding-bottom: 0; }
-  .akashic-information-connection-row h2 { font-size: clamp(1.8rem, 3.6vw, 3.4rem); font-weight: 600; letter-spacing: -.04em; line-height: 1.05; }
-  .akashic-information-connection-row p { color: var(--akashic-muted); max-width: 44ch; }
-
-  /* ==========================================================
-     19 FINAL
-     ========================================================== */
-  .akashic-information-final { position: relative; text-align: center; padding-block: clamp(96px, 14vw, 220px); }
-  .akashic-information-final .akashic-container { position: relative; z-index: 1; }
-  .akashic-information-final-title { font-size: clamp(3rem, 10vw, 10rem); font-weight: 600; line-height: .94; letter-spacing: -.055em; }
-  .akashic-information-final-title span { display: block; }
-  .akashic-information-final-title span + span { color: var(--akashic-muted); }
-  .akashic-information-final .akashic-lead { margin-inline: auto; }
-  .akashic-information-final .akashic-information-actions { justify-content: center; }
-  .akashic-information-final .akashic-section-heading { margin-bottom: 0; }
-
-  /* ==========================================================
-     RESPONSIVE
-     ========================================================== */
   @media (max-width: 1024px) {
-    .akashic-information-split,
-    .akashic-information-split--wide-left,
-    .akashic-information-split--wide-right,
-    .akashic-information-connection-row,
-    .akashic-information-ecosystem-list,
-    .akashic-information-discovery-grid,
-    .akashic-information-cards { grid-template-columns: minmax(0, 1fr); }
-    .akashic-information-block { padding-right: 0; }
-    .akashic-information-block + .akashic-information-block { padding-left: 0; border-left: 0; border-top: 1px solid var(--akashic-border); }
-    .akashic-information-card--event { margin-top: 0; }
+    .akashic-information-hero-grid, .akashic-information-split { grid-template-columns: minmax(0, 1fr); }
+    .akashic-information-grid, .akashic-information-feed { grid-template-columns: minmax(0, 1fr); }
+    .akashic-information-pipe { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 28px; column-gap: 24px; }
+    .akashic-information-pipe li:nth-child(5) { grid-column: auto; }
   }
   @media (max-width: 767px) {
+    .akashic-information-paths { grid-template-columns: minmax(0, 1fr); }
     .akashic-information-actions .akashic-button { width: 100%; justify-content: center; }
-    .akashic-information-hero .akashic-contour { opacity: .6; }
-    .akashic-information-region-row,
-    .akashic-information-card dl div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
-    .akashic-information-funnel li:nth-child(3) { width: 80%; }
-    .akashic-information-funnel li:nth-child(5) { width: 64%; }
-    .akashic-information-feed-slots { grid-template-columns: minmax(0, 1fr); }
-    .akashic-information-type-attrs li:nth-child(even) { padding-left: 0; }
-    .akashic-information-svg text { font-size: 17px; }
-    .akashic-information-svg .akashic-information-svg-small { display: none; }
+    .akashic-information-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+    .akashic-information-step:nth-child(n) { width: 100%; }
+    .akashic-information-svg text { font-size: 16px; }
   }
-
-  /* ==========================================================
-     REDUCED MOTION
-     ========================================================== */
-  @media (prefers-reduced-motion: reduce) {
-    .js .akashic-information-draw .akashic-information-line { stroke-dasharray: none; stroke-dashoffset: 0; transition: none; }
-    .js .akashic-information-draw .akashic-information-pop { opacity: 1; transition: none; }
+  @media (max-width: 400px) {
+    .akashic-information-pipe { grid-template-columns: minmax(0, 1fr); }
+    .akashic-information-privacy-list li { grid-template-columns: 34px 1fr; }
   }
 </style>
 {% endblock %}
 
 {% block content %}
 
-<!-- 01 — HERO -->
+<!-- 1 HERO -->
 <section class="akashic-information-hero" aria-labelledby="information-hero-title">
   <div class="akashic-grid-bg akashic-grid-bg--fade akashic-information-bg" aria-hidden="true"></div>
   <div class="akashic-contour" aria-hidden="true"></div>
-
   <div class="akashic-container">
-    <div class="akashic-information-split">
+    <div class="akashic-information-hero-grid">
       <div>
-        <div class="akashic-section-heading akashic-reveal">
-          <span class="akashic-section-watermark" aria-hidden="true">Information</span>
-          <p class="akashic-eyebrow">Information / 01</p>
-          <h1 class="akashic-information-hero-title" id="information-hero-title">
-            <span>Information</span>
-            <span>in context.</span>
-          </h1>
-          <p class="akashic-lead">Akashic menghubungkan informasi dengan wilayah, sehingga informasi tidak hanya tersedia — tetapi memiliki konteks.</p>
-        </div>
-        <div class="akashic-information-actions akashic-reveal" style="--akashic-delay:.12s">
-          <a class="akashic-button akashic-button-primary" href="#information-system">Explore the system</a>
-          <a class="akashic-button akashic-button-secondary" href="{{ url_for('index') }}">Back to Akashic</a>
+        <p class="akashic-eyebrow akashic-reveal">Information / Regional Knowledge</p>
+        <h1 class="akashic-information-hero-title akashic-reveal" id="information-hero-title" style="--akashic-delay:.08s">Informasi yang hadir dalam konteks yang tepat.</h1>
+        <p class="akashic-lead akashic-reveal" style="--akashic-delay:.16s">Akashic menghubungkan informasi dengan wilayah geografis, sehingga Anda dapat menemukan informasi yang relevan dengan tempat Anda.</p>
+        <div class="akashic-information-actions akashic-reveal" style="--akashic-delay:.24s">
+          <a class="akashic-button akashic-button-primary" href="#ecosystem">Explore Information</a>
+          <a class="akashic-button akashic-button-secondary" href="#how">How Akashic Works</a>
         </div>
       </div>
-
-      <figure class="akashic-information-hero-visual akashic-information-draw akashic-reveal" style="--akashic-delay:.15s" aria-hidden="true">
+      <figure class="akashic-information-hero-visual akashic-reveal" style="--akashic-delay:.2s" aria-hidden="true">
         <svg class="akashic-information-svg" viewBox="0 0 600 560" focusable="false" xmlns="http://www.w3.org/2000/svg">
-          <path class="akashic-information-svg-faint" d="M0 70H600M0 140H600M0 210H600M0 280H600M0 350H600M0 420H600M0 490H600M75 0V560M150 0V560M225 0V560M300 0V560M375 0V560M450 0V560M525 0V560"/>
-          <g transform="rotate(-8 300 280)">
-            <ellipse cx="300" cy="280" rx="250" ry="190" class="akashic-information-svg-blue" style="opacity:.22"/>
-            <ellipse cx="300" cy="280" rx="190" ry="140" class="akashic-information-svg-blue" style="opacity:.32"/>
-            <ellipse cx="300" cy="280" rx="130" ry="92" class="akashic-information-svg-blue" style="opacity:.45"/>
+          <path class="akashic-information-faint" d="M0 80H600M0 160H600M0 240H600M0 320H600M0 400H600M0 480H600M80 0V560M160 0V560M240 0V560M320 0V560M400 0V560M480 0V560"/>
+          <g transform="rotate(-10 320 280)">
+            <ellipse cx="320" cy="280" rx="230" ry="170" class="akashic-information-blue" style="opacity:.25"/>
+            <ellipse cx="320" cy="280" rx="160" ry="115" class="akashic-information-blue" style="opacity:.35"/>
+            <ellipse cx="320" cy="280" rx="90" ry="60" class="akashic-information-blue"/>
           </g>
-          <polygon points="190,230 270,170 370,185 420,270 380,360 280,390 205,340" class="akashic-information-svg-dash"/>
-          <polygon points="190,230 270,170 370,185 420,270 380,360 280,390 205,340" class="akashic-information-svg-fill-region akashic-information-line" pathLength="1"/>
-
-          <path class="akashic-information-svg-stroke akashic-information-line" pathLength="1" d="M300 275L300 90" style="opacity:.6"/>
-          <path class="akashic-information-svg-stroke akashic-information-line" pathLength="1" d="M300 285L110 440" style="opacity:.6"/>
-          <path class="akashic-information-svg-stroke akashic-information-line" pathLength="1" d="M300 285L500 440" style="opacity:.6"/>
-
-          <circle cx="300" cy="90" r="9" class="akashic-information-svg-fill-soft akashic-information-pop" style="--n:1"/>
-          <circle cx="110" cy="440" r="9" class="akashic-information-svg-fill-soft akashic-information-pop" style="--n:2"/>
-          <circle cx="500" cy="440" r="9" class="akashic-information-svg-fill-soft akashic-information-pop" style="--n:3"/>
-          <text x="318" y="82" class="akashic-information-pop" style="--n:1">INFORMATION</text>
-          <text x="40" y="478" class="akashic-information-pop" style="--n:2">EVENT</text>
-          <text x="470" y="478" class="akashic-information-pop" style="--n:3">NEWS</text>
-
-          <path class="akashic-information-svg-stroke" d="M300 245V315M265 280H335" style="opacity:.5"/>
-          <circle cx="300" cy="280" r="24" class="akashic-information-svg-accent" style="opacity:.5"/>
-          <circle cx="300" cy="280" r="6" class="akashic-information-svg-fill-accent"/>
-          <text x="318" y="318">REGION</text>
-
-          <text x="20" y="20" class="akashic-information-svg-small">X·01</text>
-          <text x="520" y="548" class="akashic-information-svg-small">Y·03</text>
+          <polygon points="110,200 250,120 420,150 500,280 430,410 270,450 140,380" class="akashic-information-dash"/>
+          <polygon points="250,120 420,150 460,250 340,300 230,260" class="akashic-information-region"/>
+          <path class="akashic-information-line" d="M340 215L470 120M340 215L520 330M340 215L190 330"/>
+          <rect x="462" y="112" width="16" height="16" rx="2" class="akashic-information-region" style="fill:var(--akashic-bg)"/>
+          <rect x="512" y="322" width="16" height="16" rx="2" class="akashic-information-region" style="fill:var(--akashic-bg)"/>
+          <rect x="182" y="322" width="16" height="16" rx="2" class="akashic-information-region" style="fill:var(--akashic-bg)"/>
+          <circle cx="340" cy="215" r="24" class="akashic-information-ring"/>
+          <circle cx="340" cy="215" r="6" class="akashic-information-dot"/>
+          <text x="356" y="196">LOCATION</text>
+          <text x="262" y="110">REGION</text>
+          <text x="400" y="364">INFORMATION</text>
+          <text x="20" y="548" style="font-size:11px;opacity:.6">CONCEPTUAL MAP</text>
         </svg>
       </figure>
     </div>
   </div>
 </section>
 
-<!-- 02 — INTRODUCTION -->
-<section id="information-system" class="akashic-section akashic-information-section akashic-information-introduction" aria-labelledby="information-intro-title">
+<!-- 2 INTRODUCTION -->
+<section class="akashic-section akashic-information-section" id="how" aria-labelledby="information-intro-title">
   <div class="akashic-container">
     <div class="akashic-section-heading akashic-reveal">
-      <span class="akashic-section-watermark" aria-hidden="true">Context</span>
-      <h2 class="akashic-section-title" id="information-intro-title">Information becomes useful<br>when context gives it meaning.</h2>
+      <span class="akashic-section-watermark" aria-hidden="true">Akashic</span>
+      <span class="akashic-section-kicker">Introduction</span>
+      <h2 class="akashic-section-title" id="information-intro-title">Informasi apa yang relevan dengan tempat ini?</h2>
     </div>
-
-    <div class="akashic-information-prose akashic-reveal">
-      <p class="akashic-information-id">Informasi menjadi lebih bermakna ketika konteks membantu menjelaskan mengapa informasi tersebut relevan.</p>
+    <div class="akashic-information-split" style="align-items:start">
+      <p class="akashic-lead akashic-reveal">Akashic tidak sekadar menampilkan kumpulan informasi. Ia mencoba menjawab satu pertanyaan: informasi apa yang relevan dengan tempat ini?</p>
+      <p class="akashic-lead akashic-reveal" style="--akashic-delay:.1s">Lokasi diterjemahkan menjadi wilayah, wilayah menentukan relevansi, dan relevansi menentukan informasi yang dapat dihadirkan.</p>
     </div>
-
-    <div class="akashic-information-flowline akashic-reveal" role="list" aria-label="Content, region, context, relevance">
-      <span class="akashic-information-flowline-item" style="--i:0" role="listitem">Content</span>
-      <svg class="akashic-information-flowline-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg>
-      <span class="akashic-information-flowline-item" style="--i:1" role="listitem">Region</span>
-      <svg class="akashic-information-flowline-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg>
-      <span class="akashic-information-flowline-item" style="--i:2" role="listitem">Context</span>
-      <svg class="akashic-information-flowline-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg>
-      <span class="akashic-information-flowline-item" style="--i:3" role="listitem">Relevance</span>
+    <div class="akashic-information-flow akashic-reveal" role="list" aria-label="Location, Region, Relevance, Information">
+      <span class="akashic-information-flow-item" style="--i:0" role="listitem">Location</span>
+      <svg class="akashic-information-flow-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg>
+      <span class="akashic-information-flow-item" style="--i:1" role="listitem">Region</span>
+      <svg class="akashic-information-flow-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg>
+      <span class="akashic-information-flow-item" style="--i:2" role="listitem">Relevance</span>
+      <svg class="akashic-information-flow-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg>
+      <span class="akashic-information-flow-item" style="--i:3" role="listitem">Information</span>
     </div>
   </div>
 </section>
 
-<!-- 03 — INFORMATION ECOSYSTEM -->
-<section class="akashic-section akashic-information-section akashic-information-surface akashic-information-ecosystem" aria-labelledby="information-ecosystem-title">
+<!-- 3 ECOSYSTEM -->
+<section class="akashic-section akashic-section--surface akashic-information-section" id="ecosystem" aria-labelledby="information-eco-title">
   <div class="akashic-container">
     <div class="akashic-section-heading akashic-reveal">
       <span class="akashic-section-watermark" aria-hidden="true">Ecosystem</span>
-      <h2 class="akashic-section-title" id="information-ecosystem-title">Three sources.<br>One regional context.</h2>
+      <span class="akashic-section-kicker">Information Ecosystem</span>
+      <h2 class="akashic-section-title" id="information-eco-title">Tiga jenis konten, satu konteks wilayah.</h2>
     </div>
-
-    <div class="akashic-information-ecosystem-list">
-      <article class="akashic-information-source akashic-reveal">
-        <span class="akashic-meta">01</span>
+    <div class="akashic-information-grid">
+      <article class="akashic-card akashic-information-card akashic-reveal">
+        <div class="akashic-information-card-top">
+          <svg class="akashic-information-icon" viewBox="0 0 36 36" aria-hidden="true" focusable="false"><rect x="7" y="5" width="22" height="26" rx="2"/><path d="M12 12h12M12 17h12M12 22h7"/></svg>
+          <span class="akashic-meta">01</span>
+        </div>
         <h3>Information</h3>
         <p>Informasi yang dibuat dan dikelola dalam sistem Akashic.</p>
-        <ul class="akashic-information-tags" aria-label="Kategori konseptual">
-          <li class="akashic-information-tag">public information</li>
-          <li class="akashic-information-tag">regional information</li>
-          <li class="akashic-information-tag">announcements</li>
-        </ul>
+        <span class="akashic-meta">Dikelola internal</span>
       </article>
-
-      <article class="akashic-information-source akashic-reveal" style="--akashic-delay:.1s">
-        <span class="akashic-meta">02</span>
+      <article class="akashic-card akashic-information-card akashic-reveal" style="--akashic-delay:.1s">
+        <div class="akashic-information-card-top">
+          <svg class="akashic-information-icon" viewBox="0 0 36 36" aria-hidden="true" focusable="false"><rect x="5" y="8" width="26" height="23" rx="2"/><path d="M5 15h26M12 4v7M24 4v7"/><circle class="akashic-information-icon-dot" cx="18" cy="23" r="2.5"/></svg>
+          <span class="akashic-meta">02</span>
+        </div>
         <h3>Event</h3>
-        <p>Peristiwa yang memiliki konteks waktu dan wilayah.</p>
-        <ul class="akashic-information-equation" aria-label="Time plus location plus event">
-          <li>TIME</li><li>+</li><li>LOCATION</li><li>+</li><li>EVENT</li>
-        </ul>
+        <p>Informasi mengenai kegiatan atau kejadian yang memiliki konteks waktu dan wilayah.</p>
+        <span class="akashic-meta">Waktu + wilayah</span>
       </article>
-
-      <article class="akashic-information-source akashic-reveal" style="--akashic-delay:.2s">
-        <span class="akashic-meta">03</span>
+      <article class="akashic-card akashic-information-card akashic-reveal" style="--akashic-delay:.2s">
+        <div class="akashic-information-card-top">
+          <svg class="akashic-information-icon" viewBox="0 0 36 36" aria-hidden="true" focusable="false"><rect x="5" y="7" width="26" height="22" rx="2"/><path d="M10 13h8v6h-8zM22 13h5M22 18h5M10 24h17"/></svg>
+          <span class="akashic-meta">03</span>
+        </div>
         <h3>News</h3>
-        <p>Berita eksternal yang dapat dikaitkan dengan wilayah berdasarkan sumber dan relevansinya.</p>
-        <ul class="akashic-information-equation" aria-label="External source plus regional relevance">
-          <li>EXTERNAL SOURCE</li><li>+</li><li>REGIONAL RELEVANCE</li>
+        <p>Informasi dari sumber berita eksternal yang dapat dikaitkan dengan wilayah tertentu.</p>
+        <span class="akashic-meta">Sumber eksternal</span>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 4 INFORMATION -->
+<section class="akashic-section akashic-information-section" aria-labelledby="information-info-title">
+  <div class="akashic-container akashic-information-split">
+    <div>
+      <span class="akashic-section-kicker akashic-reveal">01 — Information</span>
+      <h2 class="akashic-section-title akashic-reveal" id="information-info-title" style="margin-bottom:24px">Konten yang dikelola dalam sistem.</h2>
+      <p class="akashic-lead akashic-reveal">Information adalah konten yang dibuat dan dikelola langsung di dalam Akashic, lalu dikaitkan dengan wilayah dan kategori tertentu agar relevan bagi pembaca di tempat yang tepat.</p>
+    </div>
+    <div class="akashic-information-panel akashic-reveal" style="--akashic-delay:.1s">
+      <div class="akashic-information-panel-bar"><span class="akashic-marker"><span class="akashic-node akashic-node--blue" aria-hidden="true"></span>Information</span><span class="akashic-meta">Struktur</span></div>
+      <dl>
+        <div class="akashic-information-row"><dt>Information</dt><dd>Konten yang dikelola</dd></div>
+        <div class="akashic-information-row"><dt>Region</dt><dd>Wilayah terkait</dd></div>
+        <div class="akashic-information-row"><dt>Category</dt><dd>Pengelompokan topik</dd></div>
+        <div class="akashic-information-row" style="border-bottom:0"><dt>Relevance</dt><dd>Kecocokan dengan konteks tempat</dd></div>
+      </dl>
+      <p class="akashic-meta akashic-information-panel-note" style="border-top:1px solid var(--akashic-border)">Ilustrasi struktur. Bukan data aktif.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 5 EVENT -->
+<section class="akashic-section akashic-section--surface akashic-information-section" aria-labelledby="information-event-title">
+  <div class="akashic-container akashic-information-split">
+    <div class="akashic-information-panel akashic-reveal">
+      <div class="akashic-information-panel-bar"><span class="akashic-marker"><span class="akashic-node" aria-hidden="true"></span>Conceptual Content</span><span class="akashic-meta">Event</span></div>
+      <dl>
+        <div class="akashic-information-row"><dt>Nama kegiatan</dt><dd>Judul event</dd></div>
+        <div class="akashic-information-row"><dt>Waktu</dt><dd>Tanggal dan jam</dd></div>
+        <div class="akashic-information-row"><dt>Lokasi</dt><dd>Tempat berlangsung</dd></div>
+        <div class="akashic-information-row"><dt>Region</dt><dd>Wilayah relevan</dd></div>
+        <div class="akashic-information-row" style="border-bottom:0"><dt>Deskripsi</dt><dd>Penjelasan singkat</dd></div>
+      </dl>
+      <p class="akashic-meta akashic-information-panel-note" style="border-top:1px solid var(--akashic-border)">Contoh struktur. Bukan event nyata.</p>
+    </div>
+    <div>
+      <span class="akashic-section-kicker akashic-reveal">02 — Event</span>
+      <h2 class="akashic-section-title akashic-reveal" id="information-event-title" style="margin-bottom:24px">Peristiwa dengan waktu dan tempat.</h2>
+      <p class="akashic-lead akashic-reveal">Event memiliki nama kegiatan, waktu, lokasi, region, dan deskripsi. Relevansi geografisnya membantu menentukan siapa yang perlu mengetahuinya.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 6 NEWS -->
+<section class="akashic-section akashic-information-section" aria-labelledby="information-news-title">
+  <div class="akashic-container akashic-information-split">
+    <div>
+      <span class="akashic-section-kicker akashic-reveal">03 — News</span>
+      <h2 class="akashic-section-title akashic-reveal" id="information-news-title" style="margin-bottom:24px">Berita eksternal, dikaitkan dengan wilayah.</h2>
+      <p class="akashic-lead akashic-reveal">News dapat berasal dari sumber eksternal melalui mekanisme pengumpulan berita yang nantinya dihubungkan dengan region yang relevan.</p>
+    </div>
+    <ol class="akashic-information-chain akashic-reveal" aria-label="Alur konseptual News" style="--akashic-delay:.1s">
+      <li><span class="akashic-node" aria-hidden="true"></span>External Source</li>
+      <li><span class="akashic-node" aria-hidden="true"></span>News Collector</li>
+      <li><span class="akashic-node akashic-node--blue" aria-hidden="true"></span>Region Relevance</li>
+      <li><span class="akashic-node" aria-hidden="true"></span>Akashic Feed</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 7 RELEVANCE -->
+<section class="akashic-section akashic-section--light akashic-information-section" aria-labelledby="information-relevance-title">
+  <div class="akashic-container akashic-information-split">
+    <div>
+      <div class="akashic-section-heading akashic-reveal">
+        <span class="akashic-section-watermark" aria-hidden="true">Relevance</span>
+        <span class="akashic-section-kicker">Relevance System</span>
+        <h2 class="akashic-information-title-light" id="information-relevance-title"><span>Not everything is</span>relevant everywhere.</h2>
+      </div>
+      <p class="akashic-lead akashic-reveal">Informasi dapat memiliki relevansi geografis yang berbeda. Akashic dirancang untuk mendukung hierarki wilayah dari tingkat luas hingga area lokal.</p>
+    </div>
+    <ol class="akashic-information-steps akashic-reveal" aria-label="Contoh hierarki wilayah" style="--akashic-delay:.1s">
+      <li class="akashic-information-step">Indonesia</li>
+      <li class="akashic-information-step">Aceh</li>
+      <li class="akashic-information-step">Aceh Tamiang</li>
+      <li class="akashic-information-step">Kecamatan</li>
+      <li class="akashic-information-step">Area Lokal</li>
+    </ol>
+  </div>
+  <div class="akashic-container"><p class="akashic-meta akashic-reveal" style="margin-top:28px">Contoh hierarki konseptual yang dirancang untuk didukung. Bukan indikasi data wilayah aktif.</p></div>
+</section>
+
+<!-- 8 REGION CONTEXT -->
+<section class="akashic-section akashic-information-section" aria-labelledby="information-region-title">
+  <div class="akashic-container akashic-information-split">
+    <div>
+      <span class="akashic-section-kicker akashic-reveal">Region Context</span>
+      <h2 class="akashic-section-title akashic-reveal" id="information-region-title" style="margin-bottom:24px">Region bukan sekadar nama tempat.</h2>
+      <p class="akashic-lead akashic-reveal">Region menjadi penghubung antara location, content, dan relevance: ia mengubah posisi menjadi konteks yang dapat dipakai untuk memilih informasi.</p>
+    </div>
+    <ol class="akashic-information-chain akashic-reveal" aria-label="User location, region engine, region, relevant content" style="--akashic-delay:.1s">
+      <li><span class="akashic-node" aria-hidden="true"></span>User Location</li>
+      <li><span class="akashic-node" aria-hidden="true"></span>Region Engine</li>
+      <li><span class="akashic-node akashic-node--blue" aria-hidden="true"></span>Region</li>
+      <li><span class="akashic-node" aria-hidden="true"></span>Relevant Content</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 9 REGIONAL INFORMATION FLOW -->
+<section class="akashic-section akashic-section--surface akashic-information-section" aria-labelledby="information-flow-title">
+  <div class="akashic-container">
+    <div class="akashic-section-heading akashic-reveal">
+      <span class="akashic-section-watermark" aria-hidden="true">Flow</span>
+      <span class="akashic-section-kicker">Regional Information Flow</span>
+      <h2 class="akashic-section-title" id="information-flow-title">Dari lokasi hingga pengalaman pengguna.</h2>
+    </div>
+    <ol class="akashic-information-pipe akashic-reveal" aria-label="Alur informasi regional">
+      <li><span class="akashic-node" aria-hidden="true"></span>Location</li>
+      <li><span class="akashic-node" aria-hidden="true"></span>Region Engine</li>
+      <li><span class="akashic-node akashic-node--blue" aria-hidden="true"></span>Region Identification</li>
+      <li><span class="akashic-node" aria-hidden="true"></span>Relevance</li>
+      <li><span class="akashic-node" aria-hidden="true"></span>Information / Event / News</li>
+      <li><span class="akashic-node" aria-hidden="true"></span>Feed</li>
+      <li><span class="akashic-node" aria-hidden="true"></span>User Experience</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 10 DISCOVERY -->
+<section class="akashic-section akashic-information-section" aria-labelledby="information-discovery-title">
+  <div class="akashic-container">
+    <div class="akashic-section-heading akashic-reveal">
+      <span class="akashic-section-watermark" aria-hidden="true">Discovery</span>
+      <span class="akashic-section-kicker">Discovery Experience</span>
+      <h2 class="akashic-section-title" id="information-discovery-title">Dengan atau tanpa lokasi.</h2>
+    </div>
+    <div class="akashic-information-paths">
+      <article class="akashic-card akashic-information-path akashic-reveal">
+        <h3>Jika lokasi tersedia</h3>
+        <p>Sistem dapat meminta izin lokasi, lalu menggunakannya sebagai konteks geografis.</p>
+        <ol><li>Location</li><li>Region</li><li>Relevant information</li></ol>
+      </article>
+      <article class="akashic-card akashic-information-path akashic-reveal" style="--akashic-delay:.1s">
+        <h3>Jika lokasi tidak diberikan</h3>
+        <p>Anda tetap dapat menggunakan Akashic dengan informasi umum yang tersedia.</p>
+        <ol><li>Tanpa izin lokasi</li><li>Informasi umum</li></ol>
+      </article>
+    </div>
+    <p class="akashic-lead akashic-reveal" style="margin-top:28px">Lokasi digunakan sebagai konteks geografis, bukan identitas pengguna. Halaman ini tidak meminta izin lokasi; ia hanya menjelaskan konsepnya.</p>
+  </div>
+</section>
+
+<!-- 11 + 12 CONCEPTUAL CONTENT / FUTURE FEED -->
+<section class="akashic-section akashic-section--surface akashic-information-section" aria-labelledby="information-feed-title">
+  <div class="akashic-container">
+    <div class="akashic-section-heading akashic-reveal">
+      <span class="akashic-section-watermark" aria-hidden="true">Feed</span>
+      <span class="akashic-section-kicker">Conceptual Content Area</span>
+      <h2 class="akashic-section-title" id="information-feed-title">System ready for content.</h2>
+    </div>
+    <div class="akashic-information-feed">
+      <article class="akashic-information-feed-card akashic-reveal">
+        <span class="akashic-marker"><span class="akashic-node" aria-hidden="true"></span>Conceptual Content</span>
+        <span class="akashic-meta">Information</span>
+        <h3>Region Context</h3>
+        <p>Content will appear here when connected to the information service.</p>
+      </article>
+      <article class="akashic-information-feed-card akashic-reveal" style="--akashic-delay:.1s">
+        <span class="akashic-marker"><span class="akashic-node" aria-hidden="true"></span>Conceptual Content</span>
+        <span class="akashic-meta">Event</span>
+        <h3>Regional Event</h3>
+        <p>Content will appear here when event data is available.</p>
+      </article>
+      <article class="akashic-information-feed-card akashic-reveal" style="--akashic-delay:.2s">
+        <span class="akashic-marker"><span class="akashic-node" aria-hidden="true"></span>Conceptual Content</span>
+        <span class="akashic-meta">News</span>
+        <h3>Regional News</h3>
+        <p>Content will appear here when news sources are connected.</p>
+      </article>
+    </div>
+    <div class="akashic-information-ready akashic-reveal" style="margin-top:clamp(20px,3vw,40px)">
+      <span class="akashic-node akashic-node--blue" aria-hidden="true"></span>
+      <p class="akashic-lead" style="max-width:70ch">Halaman ini dirancang untuk menjadi titik eksplorasi informasi regional Akashic. Konten dinamis akan muncul ketika layanan informasi telah terhubung.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 13 CONTENT RELATIONSHIP -->
+<section class="akashic-section akashic-information-section" aria-labelledby="information-rel-title">
+  <div class="akashic-container akashic-information-split">
+    <div>
+      <span class="akashic-section-kicker akashic-reveal">Content Relationship</span>
+      <h2 class="akashic-section-title akashic-reveal" id="information-rel-title" style="margin-bottom:24px">Satu region, tiga jenis konten.</h2>
+      <p class="akashic-lead akashic-reveal">Region menaungi Information, Event, dan News. Dari region, relevansi menentukan apa yang masuk ke feed pengguna.</p>
+    </div>
+    <div class="akashic-information-tree akashic-reveal" style="--akashic-delay:.1s">
+      <div>
+        <span class="akashic-information-tree-box akashic-information-tree-box--accent"><span class="akashic-node" aria-hidden="true"></span>Region</span>
+        <ul class="akashic-information-tree-children">
+          <li><span class="akashic-information-tree-box">Information</span></li>
+          <li><span class="akashic-information-tree-box">Event</span></li>
+          <li><span class="akashic-information-tree-box">News</span></li>
         </ul>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- 04 — INFORMATION -->
-<section class="akashic-section akashic-information-section akashic-information-type" aria-labelledby="information-type-title">
-  <div class="akashic-container">
-    <div class="akashic-information-split akashic-information-split--wide-right akashic-information-split--top">
-      <div>
-        <div class="akashic-section-heading akashic-reveal">
-          <span class="akashic-section-watermark" aria-hidden="true">Type</span>
-          <span class="akashic-section-kicker">01 / Information</span>
-          <h2 class="akashic-section-title" id="information-type-title">Information made for the region.</h2>
-        </div>
-        <div class="akashic-information-prose akashic-reveal">
-          <p>Information dalam Akashic dapat dibuat dan dikelola sebagai konten yang memiliki hubungan dengan wilayah tertentu.</p>
-        </div>
       </div>
-
-      <div class="akashic-reveal" style="--akashic-delay:.1s">
-        <p class="akashic-information-type-word" aria-hidden="true">INFORMATION</p>
-        <ul class="akashic-information-type-attrs" aria-label="Atribut konseptual information">
-          <li><span>CATEGORY</span><span class="akashic-node" aria-hidden="true"></span></li>
-          <li><span>REGION</span><span class="akashic-node akashic-node--blue" aria-hidden="true"></span></li>
-          <li><span>TIME</span><span class="akashic-node" aria-hidden="true"></span></li>
-          <li><span>CONTENT</span><span class="akashic-node akashic-node--blue" aria-hidden="true"></span></li>
-        </ul>
+      <div class="akashic-information-tree-seq" aria-label="Region, relevance, user feed">
+        <span class="akashic-information-tree-box akashic-information-tree-box--accent">Region</span>
+        <svg class="akashic-information-flow-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg>
+        <span class="akashic-information-tree-box">Relevance</span>
+        <svg class="akashic-information-flow-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg>
+        <span class="akashic-information-tree-box">User Feed</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 05 — EVENT -->
-<section class="akashic-section akashic-information-section akashic-information-surface akashic-information-event" aria-labelledby="information-event-title">
-  <div class="akashic-container">
-    <div class="akashic-section-heading akashic-reveal">
-      <span class="akashic-section-watermark" aria-hidden="true">Event</span>
-      <span class="akashic-section-kicker">02 / Event</span>
-      <h2 class="akashic-section-title" id="information-event-title">Events have a place and a time.</h2>
-    </div>
-
-    <div class="akashic-information-split">
-      <div>
-        <div class="akashic-information-prose akashic-reveal">
-          <p>Event memiliki dua konteks penting: kapan sesuatu berlangsung dan di mana sesuatu berlangsung.</p>
-        </div>
-        <ul class="akashic-information-equation akashic-reveal" aria-label="Event berarti time plus region">
-          <li>EVENT</li><li>→</li><li>TIME</li><li>+</li><li>REGION</li>
-        </ul>
-      </div>
-
-      <figure class="akashic-information-visual-wide akashic-information-draw akashic-reveal" aria-hidden="true">
-        <svg class="akashic-information-svg" viewBox="0 0 560 360" focusable="false" xmlns="http://www.w3.org/2000/svg">
-          <path class="akashic-information-svg-faint" d="M0 60H560M0 120H560M0 180H560M0 240H560M0 300H560M70 0V360M140 0V360M210 0V360M280 0V360M350 0V360M420 0V360M490 0V360"/>
-          <text x="20" y="34">TIME</text>
-          <path class="akashic-information-svg-stroke akashic-information-line" pathLength="1" d="M60 100H500" style="opacity:.6"/>
-          <circle cx="110" cy="100" r="6" class="akashic-information-svg-fill-accent akashic-information-pop" style="--n:1"/>
-          <circle cx="450" cy="100" r="6" class="akashic-information-svg-fill-ivory akashic-information-pop" style="--n:2"/>
-          <text x="110" y="74" text-anchor="middle">START</text>
-          <text x="450" y="74" text-anchor="middle">END</text>
-
-          <text x="20" y="196">LOCATION</text>
-          <path class="akashic-information-svg-dash" d="M280 100V230"/>
-          <polygon points="170,240 250,214 340,222 400,272 360,328 270,340 190,312" class="akashic-information-svg-fill-region akashic-information-line" pathLength="1"/>
-          <circle cx="280" cy="280" r="5" class="akashic-information-svg-fill-accent"/>
-          <text x="410" y="304" class="akashic-information-pop" style="--n:3">REGION</text>
-        </svg>
-      </figure>
-    </div>
-  </div>
-</section>
-
-<!-- 06 — NEWS -->
-<section class="akashic-section akashic-information-section akashic-information-news" aria-labelledby="information-news-title">
-  <div class="akashic-container">
-    <div class="akashic-section-heading akashic-reveal">
-      <span class="akashic-section-watermark" aria-hidden="true">News</span>
-      <span class="akashic-section-kicker">03 / News</span>
-      <h2 class="akashic-section-title" id="information-news-title">News can enter the regional context.</h2>
-    </div>
-
-    <div class="akashic-information-split akashic-information-split--wide-left">
-      <figure class="akashic-information-draw akashic-reveal" aria-hidden="true">
-        <svg class="akashic-information-svg" viewBox="0 0 640 220" focusable="false" xmlns="http://www.w3.org/2000/svg">
-          <path class="akashic-information-svg-faint" d="M0 55H640M0 110H640M0 165H640M80 0V220M160 0V220M240 0V220M320 0V220M400 0V220M480 0V220M560 0V220"/>
-          <rect x="10" y="80" width="120" height="60" rx="3" class="akashic-information-svg-fill-soft" style="stroke-dasharray:4 4"/>
-          <rect x="180" y="80" width="120" height="60" rx="3" class="akashic-information-svg-fill-soft"/>
-          <rect x="350" y="80" width="120" height="60" rx="3" class="akashic-information-svg-fill-region"/>
-          <rect x="520" y="80" width="110" height="60" rx="3" class="akashic-information-svg-fill-soft"/>
-          <path class="akashic-information-svg-stroke akashic-information-line" pathLength="1" d="M130 110H180M300 110H350M470 110H520" style="opacity:.6"/>
-          <text x="70" y="115" text-anchor="middle" style="font-size:10px">EXTERNAL</text>
-          <text x="240" y="115" text-anchor="middle" style="font-size:10px">METADATA</text>
-          <text x="410" y="115" text-anchor="middle" style="font-size:10px">REGIONAL</text>
-          <text x="575" y="115" text-anchor="middle" style="font-size:10px">AKASHIC</text>
-        </svg>
-      </figure>
-
-      <div>
-        <div class="akashic-information-prose akashic-reveal">
-          <p>Akashic dapat dirancang untuk mengumpulkan metadata berita dari sumber eksternal dan menghubungkannya dengan konteks wilayah yang relevan.</p>
-        </div>
-        <ol class="akashic-information-notes akashic-reveal" aria-label="Alur konseptual news">
-          <li><span class="akashic-node" aria-hidden="true"></span>EXTERNAL SOURCE</li>
-          <li><span class="akashic-node akashic-node--blue" aria-hidden="true"></span>NEWS METADATA</li>
-          <li><span class="akashic-node" aria-hidden="true"></span>REGIONAL RELEVANCE</li>
-          <li><span class="akashic-node" aria-hidden="true"></span>AKASHIC</li>
-        </ol>
+<!-- 14 PRIVACY -->
+<section class="akashic-section akashic-section--surface akashic-information-section" aria-labelledby="information-privacy-title">
+  <div class="akashic-container akashic-information-split" style="align-items:start">
+    <div>
+      <span class="akashic-section-kicker akashic-reveal">Privacy &amp; Location</span>
+      <h2 class="akashic-section-title akashic-reveal" id="information-privacy-title" style="margin-bottom:24px">Location is context, not identity.</h2>
+      <div class="akashic-information-actions akashic-reveal">
+        <a class="akashic-button akashic-button-secondary" href="{{ url_for('privacy') }}">Read Privacy Principles</a>
       </div>
     </div>
-  </div>
-</section>
-
-<!-- 07 — RELEVANCE -->
-<section class="akashic-section akashic-section--light akashic-information-section akashic-information-section-light akashic-information-relevance" aria-labelledby="information-relevance-title">
-  <div class="akashic-container">
-    <div class="akashic-information-split">
-      <div>
-        <div class="akashic-section-heading akashic-reveal">
-          <span class="akashic-section-watermark" aria-hidden="true">Relevance</span>
-          <h2 class="akashic-information-relevance-title" id="information-relevance-title"><span>Not everything</span>belongs everywhere.</h2>
-        </div>
-        <div class="akashic-information-prose akashic-reveal">
-          <p class="akashic-information-id">Akashic dirancang untuk mempertimbangkan hubungan antara konten dan wilayah sebelum informasi dianggap relevan.</p>
-        </div>
-      </div>
-
-      <ul class="akashic-information-funnel akashic-reveal" aria-label="All information, region, relevant content" style="--akashic-delay:.1s">
-        <li>All Information <span class="akashic-node" aria-hidden="true" style="background:currentColor"></span></li>
-        <li class="akashic-information-funnel-link" aria-hidden="true"></li>
-        <li>Region <span class="akashic-node" aria-hidden="true"></span></li>
-        <li class="akashic-information-funnel-link" aria-hidden="true"></li>
-        <li>Relevant Content</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- 08 — REGION CONTEXT -->
-<section class="akashic-section akashic-information-section akashic-information-surface akashic-information-region" aria-labelledby="information-region-title">
-  <div class="akashic-container">
-    <div class="akashic-information-split">
-      <div>
-        <div class="akashic-section-heading akashic-reveal">
-          <span class="akashic-section-watermark" aria-hidden="true">Region</span>
-          <h2 class="akashic-section-title" id="information-region-title">Every piece of information can have a place.</h2>
-        </div>
-        <div class="akashic-information-prose akashic-reveal">
-          <p>Setiap konten dapat dipahami melalui metadata konseptual: wilayah, kategori, waktu, dan relevansi.</p>
-        </div>
-      </div>
-
-      <div class="akashic-information-region-panel akashic-reveal" style="--akashic-delay:.1s">
-        <span class="akashic-crosshair" aria-hidden="true" style="top:-11px;left:-11px"></span>
-        <span class="akashic-crosshair" aria-hidden="true" style="bottom:-11px;right:-11px"></span>
-        <div class="akashic-information-region-bar">
-          <span class="akashic-meta">Conceptual metadata</span>
-          <span class="akashic-node akashic-node--blue" aria-hidden="true"></span>
-        </div>
-        <p class="akashic-information-region-title">INFORMATION</p>
-        <dl style="margin:0">
-          <div class="akashic-information-region-row"><dt>Region</dt><dd>Wilayah yang terkait dengan konten</dd></div>
-          <div class="akashic-information-region-row"><dt>Category</dt><dd>Jenis konten</dd></div>
-          <div class="akashic-information-region-row"><dt>Time</dt><dd>Kapan konten berlaku</dd></div>
-          <div class="akashic-information-region-row"><dt>Relevance</dt><dd>Hubungan konten dengan konteks</dd></div>
-        </dl>
-        <p class="akashic-meta akashic-information-region-note">Struktur konseptual. Bukan data aktif.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 09 — REGIONAL INFORMATION FLOW -->
-<section class="akashic-section akashic-information-section akashic-information-flow" aria-labelledby="information-flow-title">
-  <div class="akashic-container">
-    <div class="akashic-information-split">
-      <div>
-        <div class="akashic-section-heading akashic-reveal">
-          <span class="akashic-section-watermark" aria-hidden="true">Flow</span>
-          <h2 class="akashic-section-title" id="information-flow-title">From place<br>to information.</h2>
-        </div>
-        <div class="akashic-information-prose akashic-reveal">
-          <p>Lokasi menjadi wilayah, wilayah dihubungkan dengan konten, dan konten yang relevan menjadi informasi.</p>
-        </div>
-      </div>
-
-      <figure class="akashic-information-flow-visual akashic-information-draw akashic-reveal" aria-hidden="true">
-        <svg class="akashic-information-svg" viewBox="0 0 400 520" focusable="false" xmlns="http://www.w3.org/2000/svg">
-          <path class="akashic-information-svg-faint" d="M0 52H400M0 104H400M0 156H400M0 208H400M0 260H400M0 312H400M0 364H400M0 416H400M0 468H400M80 0V520M160 0V520M240 0V520M320 0V520"/>
-          <path class="akashic-information-svg-stroke akashic-information-line" pathLength="1" d="M200 60V440" style="opacity:.55"/>
-
-          <circle cx="200" cy="50" r="7" class="akashic-information-svg-fill-accent akashic-information-pop" style="--n:0"/>
-          <rect x="130" y="130" width="140" height="44" rx="3" class="akashic-information-svg-fill-region akashic-information-pop" style="--n:1"/>
-          <rect x="130" y="230" width="140" height="44" rx="3" class="akashic-information-svg-fill-soft akashic-information-pop" style="--n:2"/>
-          <rect x="130" y="330" width="140" height="44" rx="3" class="akashic-information-svg-fill-soft akashic-information-pop" style="--n:3"/>
-          <circle cx="200" cy="470" r="9" class="akashic-information-svg-accent akashic-information-pop" style="--n:4"/>
-          <circle cx="200" cy="470" r="3" class="akashic-information-svg-fill-accent akashic-information-pop" style="--n:4"/>
-
-          <text x="224" y="55" class="akashic-information-pop" style="--n:0">LOCATION</text>
-          <text x="200" y="158" text-anchor="middle" class="akashic-information-pop" style="--n:1">REGION</text>
-          <text x="200" y="258" text-anchor="middle" class="akashic-information-pop" style="--n:2">CONTENT</text>
-          <text x="200" y="358" text-anchor="middle" class="akashic-information-pop" style="--n:3">RELEVANCE</text>
-          <text x="224" y="475" class="akashic-information-pop" style="--n:4">INFORMATION</text>
-        </svg>
-      </figure>
-    </div>
-  </div>
-</section>
-
-<!-- 10 — DISCOVERY -->
-<section class="akashic-section akashic-information-section akashic-information-surface akashic-information-discovery" aria-labelledby="information-discovery-title">
-  <div class="akashic-container">
-    <div class="akashic-section-heading akashic-reveal">
-      <span class="akashic-section-watermark" aria-hidden="true">Explore</span>
-      <h2 class="akashic-section-title" id="information-discovery-title">Explore by context.</h2>
-    </div>
-
-    <div class="akashic-information-discovery-grid">
-      <article class="akashic-information-block akashic-reveal">
-        <span class="akashic-meta">01</span>
-        <h3>Region</h3>
-        <p class="akashic-information-block-question">Where does this information belong?</p>
-        <div class="akashic-information-block-current">
-          <span class="akashic-meta">Current context</span>
-          <p>Location-aware exploration can be connected here.</p>
-        </div>
-        <a class="akashic-button akashic-button-secondary" href="{{ url_for('index') }}#location">Set Your Location</a>
-      </article>
-
-      <article class="akashic-information-block akashic-reveal" style="--akashic-delay:.08s">
-        <span class="akashic-meta">02</span>
-        <h3>Type</h3>
-        <p class="akashic-information-block-question">What kind of information is it?</p>
-        <ol class="akashic-information-types">
-          <li><span class="akashic-meta">01</span><strong>INFORMATION</strong><span>Konten yang dikelola dalam sistem.</span></li>
-          <li><span class="akashic-meta">02</span><strong>EVENT</strong><span>Peristiwa dengan waktu dan wilayah.</span></li>
-          <li><span class="akashic-meta">03</span><strong>NEWS</strong><span>Berita eksternal yang relevan secara regional.</span></li>
-        </ol>
-      </article>
-
-      <article class="akashic-information-block akashic-reveal" style="--akashic-delay:.16s">
-        <span class="akashic-meta">03</span>
-        <h3>Time</h3>
-        <p class="akashic-information-block-question">When does it matter?</p>
-        <figure class="akashic-information-time-visual akashic-information-draw akashic-reveal" aria-hidden="true">
-          <svg class="akashic-information-svg" viewBox="0 0 320 90" focusable="false" xmlns="http://www.w3.org/2000/svg">
-            <path class="akashic-information-svg-stroke akashic-information-line" pathLength="1" d="M10 44H310" style="opacity:.6"/>
-            <circle cx="160" cy="44" r="6" class="akashic-information-svg-fill-accent"/>
-            <circle cx="160" cy="44" r="14" class="akashic-information-svg-accent" style="opacity:.45"/>
-            <text x="10" y="76" style="font-size:10px">PAST</text>
-            <text x="160" y="20" text-anchor="middle" style="font-size:10px">NOW</text>
-            <text x="310" y="76" text-anchor="end" style="font-size:10px">FUTURE</text>
-          </svg>
-        </figure>
-        <p>Sebagian informasi memiliki relevansi yang bergantung pada waktu — terutama event dan news.</p>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- 11 — CONCEPTUAL CONTENT -->
-<section class="akashic-section akashic-information-section akashic-information-card-section" aria-labelledby="information-card-title">
-  <div class="akashic-container">
-    <div class="akashic-section-heading akashic-reveal">
-      <span class="akashic-section-watermark" aria-hidden="true">Preview</span>
-      <h2 class="akashic-section-title" id="information-card-title">How information can look.</h2>
-    </div>
-
-    <div class="akashic-information-cards">
-      <article class="akashic-information-card akashic-reveal" aria-label="Contoh konseptual: information">
-        <span class="akashic-marker"><span class="akashic-node akashic-node--blue" aria-hidden="true"></span>Conceptual content</span>
-        <h3>Information</h3>
-        <dl>
-          <div><dt>Regional context</dt><dd>Region</dd></div>
-          <div><dt>Category</dt><dd>Category</dd></div>
-          <div><dt>Time</dt><dd>Time</dd></div>
-        </dl>
-        <span class="akashic-information-card-more" aria-hidden="true">Read more →</span>
-      </article>
-
-      <article class="akashic-information-card akashic-information-card--event akashic-reveal" style="--akashic-delay:.1s" aria-label="Contoh konseptual: event">
-        <span class="akashic-marker"><span class="akashic-node" aria-hidden="true"></span>Conceptual content</span>
-        <h3>Event</h3>
-        <dl>
-          <div><dt>Regional context</dt><dd>Region</dd></div>
-          <div><dt>Category</dt><dd>Category</dd></div>
-          <div><dt>Time</dt><dd>Start / End</dd></div>
-        </dl>
-        <span class="akashic-information-card-more" aria-hidden="true">Read more →</span>
-      </article>
-    </div>
-  </div>
-</section>
-
-<!-- 12 — INFORMATION FEED (FUTURE STATE) -->
-<section class="akashic-section akashic-information-section akashic-information-surface akashic-information-feed" aria-labelledby="information-feed-title">
-  <div class="akashic-container">
-    <div class="akashic-information-feed-box akashic-reveal">
-      <span class="akashic-crosshair" aria-hidden="true" style="top:-11px;left:-11px"></span>
-      <span class="akashic-crosshair" aria-hidden="true" style="bottom:-11px;right:-11px"></span>
-      <span class="akashic-meta">Akashic Information Feed</span>
-      <p class="akashic-information-feed-status"><span class="akashic-node akashic-node--blue" aria-hidden="true"></span>System ready for content</p>
-      <h2 class="akashic-information-feed-title" id="information-feed-title">Information can appear here once the feed service is connected.</h2>
-      <p class="akashic-information-feed-copy">Dynamic regional information will appear here when the Akashic feed service is connected.</p>
-      <ul class="akashic-information-feed-slots" aria-hidden="true">
-        <li></li><li></li><li></li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<!-- 13 — ARCHITECTURE -->
-<section class="akashic-section akashic-information-section akashic-information-architecture" aria-labelledby="information-architecture-title">
-  <div class="akashic-container">
-    <div class="akashic-information-split">
-      <div>
-        <div class="akashic-section-heading akashic-reveal">
-          <span class="akashic-section-watermark" aria-hidden="true">Inside</span>
-          <h2 class="akashic-section-title" id="information-architecture-title">Inside the information flow.</h2>
-        </div>
-        <div class="akashic-information-prose akashic-reveal">
-          <p>Diagram ini bersifat konseptual. Garis putus-putus menandai komponen yang dirancang untuk terhubung pada tahap integrasi backend.</p>
-        </div>
-      </div>
-
-      <figure class="akashic-information-architecture-visual akashic-information-draw akashic-reveal" aria-hidden="true">
-        <svg class="akashic-information-svg" viewBox="0 0 560 600" focusable="false" xmlns="http://www.w3.org/2000/svg" style="font-size:15px">
-          <path class="akashic-information-svg-faint" d="M0 76H560M0 152H560M0 228H560M0 304H560M0 380H560M0 456H560M0 532H560M80 0V600M160 0V600M240 0V600M320 0V600M400 0V600M480 0V600"/>
-
-          <rect x="170" y="10" width="220" height="48" rx="3" class="akashic-information-svg-fill-soft"/>
-          <text x="280" y="40" text-anchor="middle">LOCATION</text>
-          <path class="akashic-information-svg-stroke akashic-information-line" pathLength="1" d="M280 58V108" style="opacity:.6"/>
-
-          <rect x="170" y="108" width="220" height="48" rx="3" class="akashic-information-svg-fill-soft" style="stroke-dasharray:4 4"/>
-          <text x="280" y="138" text-anchor="middle">REGION ENGINE</text>
-          <path class="akashic-information-svg-stroke akashic-information-line" pathLength="1" d="M280 156V206" style="opacity:.6"/>
-
-          <rect x="170" y="206" width="220" height="48" rx="3" class="akashic-information-svg-fill-region"/>
-          <text x="280" y="236" text-anchor="middle">RELEVANCE</text>
-          <path class="akashic-information-svg-stroke akashic-information-line" pathLength="1" d="M280 254V290M280 290H90V320M280 290V320M280 290H470V320" style="opacity:.6"/>
-
-          <rect x="10" y="320" width="160" height="48" rx="3" class="akashic-information-svg-fill-soft"/>
-          <rect x="200" y="320" width="160" height="48" rx="3" class="akashic-information-svg-fill-soft"/>
-          <rect x="390" y="320" width="160" height="48" rx="3" class="akashic-information-svg-fill-soft"/>
-          <text x="90" y="350" text-anchor="middle" style="font-size:12px">INFORMATION</text>
-          <text x="280" y="350" text-anchor="middle" style="font-size:12px">EVENT</text>
-          <text x="470" y="350" text-anchor="middle" style="font-size:12px">NEWS</text>
-          <path class="akashic-information-svg-stroke akashic-information-line" pathLength="1" d="M90 368V404H280V440M280 368V440M470 368V404H280" style="opacity:.6"/>
-
-          <rect x="170" y="440" width="220" height="48" rx="3" class="akashic-information-svg-fill-soft" style="stroke-dasharray:4 4"/>
-          <text x="280" y="470" text-anchor="middle">FEED</text>
-          <path class="akashic-information-svg-stroke akashic-information-line" pathLength="1" d="M280 488V538" style="opacity:.6"/>
-
-          <rect x="170" y="538" width="220" height="48" rx="3" class="akashic-information-svg-fill-soft"/>
-          <text x="280" y="568" text-anchor="middle">USER</text>
-        </svg>
-      </figure>
-    </div>
-  </div>
-</section>
-
-<!-- 14 — CONTENT RELATIONSHIP -->
-<section class="akashic-section akashic-information-section akashic-information-surface akashic-information-relationship" aria-labelledby="information-relationship-title">
-  <div class="akashic-container">
-    <div class="akashic-information-split akashic-information-split--top">
-      <div>
-        <div class="akashic-section-heading akashic-reveal">
-          <span class="akashic-section-watermark" aria-hidden="true">Relation</span>
-          <h2 class="akashic-section-title" id="information-relationship-title">Content has relationships.</h2>
-        </div>
-        <div class="akashic-information-prose akashic-reveal">
-          <p>Akashic tidak hanya memiliki konten. Konten memiliki hubungan dengan wilayah, kategori, waktu, dan sumber — dan hubungan tersebut membantu menentukan relevansi.</p>
-          <p>Ini adalah model konseptual, bukan formula algoritmik.</p>
-        </div>
-      </div>
-
-      <ul class="akashic-information-relations" aria-label="Region, category, time, source">
-        <li class="akashic-reveal"><span class="akashic-meta">01</span><div><h3>REGION</h3><p>Wilayah yang berkaitan dengan konten.</p></div></li>
-        <li class="akashic-reveal" style="--akashic-delay:.06s"><span class="akashic-meta">02</span><div><h3>CATEGORY</h3><p>Jenis konten.</p></div></li>
-        <li class="akashic-reveal" style="--akashic-delay:.12s"><span class="akashic-meta">03</span><div><h3>TIME</h3><p>Konteks waktu konten.</p></div></li>
-        <li class="akashic-reveal" style="--akashic-delay:.18s"><span class="akashic-meta">04</span><div><h3>SOURCE</h3><p>Asal konten.</p></div></li>
-      </ul>
-    </div>
-
-    <ul class="akashic-information-sum" aria-label="Content plus context equals relevance">
-      <li class="akashic-reveal"><span class="akashic-meta" aria-hidden="true">&nbsp;</span>CONTENT</li>
-      <li class="akashic-reveal" style="--akashic-delay:.08s"><span class="akashic-meta" aria-hidden="true">+</span>CONTEXT</li>
-      <li class="akashic-reveal" style="--akashic-delay:.16s"><span class="akashic-meta" aria-hidden="true">=</span>RELEVANCE</li>
+    <ul class="akashic-information-privacy-list">
+      <li class="akashic-reveal"><span class="akashic-meta">01</span><span>Lokasi digunakan sebagai konteks geografis.</span></li>
+      <li class="akashic-reveal"><span class="akashic-meta">02</span><span>Anda dapat menolak izin lokasi.</span></li>
+      <li class="akashic-reveal"><span class="akashic-meta">03</span><span>Situs tetap dapat digunakan tanpa lokasi.</span></li>
+      <li class="akashic-reveal"><span class="akashic-meta">04</span><span>Tidak ada pelacakan pengguna, riwayat lokasi, atau profil berdasarkan lokasi.</span></li>
     </ul>
   </div>
 </section>
 
-<!-- 15 — PRIVACY -->
-<section class="akashic-section akashic-information-section akashic-information-privacy" aria-labelledby="information-privacy-title">
+<!-- 15 + 16 CONNECTIONS -->
+<section class="akashic-section akashic-information-section" aria-labelledby="information-connect-title">
   <div class="akashic-container">
-    <h2 class="akashic-information-privacy-title akashic-reveal" id="information-privacy-title">Information should not require giving up context control.</h2>
-    <div class="akashic-information-prose akashic-reveal">
-      <p>Pengguna tetap dapat menjelajah Akashic tanpa memberikan lokasi browser. Pengalaman berbasis lokasi bersifat opsional dan dimulai setelah tindakan pengguna.</p>
-    </div>
-    <div class="akashic-information-actions akashic-reveal">
-      <a class="akashic-link" href="{{ url_for('privacy') }}">Learn about privacy <svg class="akashic-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg></a>
+    <h2 class="akashic-sr-only" id="information-connect-title">Terhubung dengan Location dan Subscription</h2>
+    <div class="akashic-information-paths">
+      <article class="akashic-card akashic-information-link-card akashic-reveal">
+        <span class="akashic-section-kicker">Connection / Location</span>
+        <h3>Understand Your Location Context</h3>
+        <p>Akashic nantinya dapat menggunakan lokasi browser untuk membantu menentukan region yang relevan.</p>
+        <a class="akashic-button akashic-button-primary" href="{{ url_for('index') }}#location">Explore Location</a>
+      </article>
+      <article class="akashic-card akashic-information-link-card akashic-reveal" style="--akashic-delay:.1s">
+        <span class="akashic-section-kicker">Connection / Subscription</span>
+        <h3>Regional updates, by context</h3>
+        <p>Subscription nantinya berkaitan dengan informasi regional yang relevan terhadap konteks geografis pengguna.</p>
+        <a class="akashic-button akashic-button-secondary" href="{{ url_for('index') }}#subscription">Explore Subscription</a>
+      </article>
     </div>
   </div>
 </section>
 
-<!-- 16–18 — LOCATION / SUBSCRIPTION / ABOUT CONNECTIONS -->
-<section class="akashic-section akashic-information-section akashic-information-surface" aria-label="Langkah berikutnya">
-  <div class="akashic-container">
-    <div class="akashic-information-connection-row akashic-information-location akashic-reveal">
-      <h2>Want information closer to your context?</h2>
-      <div>
-        <p>Location dapat membantu Akashic menentukan konteks wilayah yang relevan.</p>
-        <div class="akashic-information-actions"><a class="akashic-button akashic-button-primary" href="{{ url_for('index') }}#location">Set Your Location</a></div>
-      </div>
-    </div>
-
-    <div class="akashic-information-connection-row akashic-information-subscription akashic-reveal">
-      <h2>Want to stay informed?</h2>
-      <div>
-        <p>Subscription dapat menjadi cara untuk menerima informasi yang relevan dengan konteks wilayah pengguna.</p>
-        <div class="akashic-information-actions"><a class="akashic-button akashic-button-secondary" href="{{ url_for('index') }}#subscription">Explore Subscription</a></div>
-      </div>
-    </div>
-
-    <div class="akashic-information-connection-row akashic-information-about akashic-reveal">
-      <h2>Understand the system.</h2>
-      <div>
-        <p>Pelajari bagaimana lokasi, wilayah, relevansi, dan informasi bekerja sebagai satu konsep.</p>
-        <div class="akashic-information-actions"><a class="akashic-link" href="{{ url_for('about') }}">About Akashic <svg class="akashic-arrow" aria-hidden="true" focusable="false"><use href="#akashic-arrow"></use></svg></a></div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- 19 — FINAL CTA -->
-<section class="akashic-information-section akashic-information-final" aria-labelledby="information-final-title">
+<!-- 17 FINAL CTA -->
+<section class="akashic-information-section akashic-information-cta" aria-labelledby="information-final-title">
   <div class="akashic-grid-bg akashic-grid-bg--fade akashic-information-bg" aria-hidden="true"></div>
   <div class="akashic-contour" aria-hidden="true"></div>
   <div class="akashic-container">
-    <div class="akashic-section-heading akashic-reveal">
-      <span class="akashic-section-watermark" aria-hidden="true">Explore</span>
-      <h2 class="akashic-information-final-title" id="information-final-title">
-        <span>Information</span>
-        <span>has a place.</span>
-      </h2>
-    </div>
-    <p class="akashic-lead akashic-reveal" style="--akashic-delay:.1s">Akashic mencoba membuat hubungan antara tempat, wilayah, dan informasi menjadi lebih jelas.</p>
-    <div class="akashic-information-actions akashic-reveal" style="--akashic-delay:.18s">
+    <h2 class="akashic-information-cta-title akashic-reveal" id="information-final-title">Setiap informasi memiliki tempatnya.</h2>
+    <p class="akashic-lead akashic-reveal" style="--akashic-delay:.1s">Akashic dirancang untuk mempertemukan informasi dengan konteks geografis yang tepat.</p>
+    <div class="akashic-information-actions akashic-reveal" style="--akashic-delay:.2s">
       <a class="akashic-button akashic-button-primary" href="{{ url_for('index') }}">Back to Akashic</a>
       <a class="akashic-button akashic-button-secondary" href="{{ url_for('about') }}">About Akashic</a>
     </div>

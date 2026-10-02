@@ -53,7 +53,7 @@ app/
             admin/
                 dashboard-admin.html
                 events.html
-                information.html
+                information_admin.html
                 news.html
                 profile.html
                 regions.html
