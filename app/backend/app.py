@@ -24,8 +24,16 @@ app.config.from_object(Config)
 
 from routes.auth_routes import auth_bp
 from routes.admin_routes import admin_bp
+from routes.region_routes import region_bp
+from routes.event_routes import event_bp
+from routes.news_routes import news_bp
+from routes.information_routes import information_bp
 app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp)
+app.register_blueprint(region_bp)
+app.register_blueprint(event_bp)
+app.register_blueprint(news_bp)
+app.register_blueprint(information_bp)
 
 # =========================================================
 # DATABASE HEALTH CHECK
