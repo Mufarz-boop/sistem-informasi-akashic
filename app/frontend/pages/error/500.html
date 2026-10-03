@@ -5,88 +5,85 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#eeeeec">
+  <meta name="theme-color" content="#f1f1f1">
   <title>Maaf, terjadi gangguan | Akashic</title>
 
   <style>
-    /* =========================================================
-       AKASHIC — SYSTEM INTERRUPTION (HTTP 500)
-       Standalone page. Semua class memakai prefix akashic-500.
-       ========================================================= */
-
+    /* AKASHIC — HTTP 500 (monokrom). Halaman standalone; semua class berawalan akashic-500. */
     :root {
-      --akashic-500-bg: #eeeeec;
-      --akashic-500-charcoal: #444444;
-      --akashic-500-ink: #2f2f2f;
-      --akashic-500-muted: #6b6b6b;
-      --akashic-500-line: rgba(68, 68, 68, 0.07);
-      --akashic-500-orange: #f7931e;
-      --akashic-500-orange-deep: #a85a00;
-      --akashic-500-blue: #2f6f9f;
+      --akashic-500-bg: #f1f1f1;
+      --akashic-500-black: #0f0f0f;
+      --akashic-500-ink: #1a1a1a;
+      --akashic-500-grey: #8a8a8a;
+      --akashic-500-muted: #5a5a5a;
+      --akashic-500-line: rgba(15, 15, 15, 0.1);
       --akashic-500-ease: cubic-bezier(0.22, 1, 0.36, 1);
       --akashic-500-serif: Georgia, "Times New Roman", Times, serif;
       --akashic-500-sans: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
-
-      /* Kekuatan lapisan terang di atas gambar latar (0 = gambar polos, 1 = tertutup penuh) */
-      --akashic-500-veil-start: 0.86;
-      --akashic-500-veil-end: 0.52;
     }
 
     *, *::before, *::after { box-sizing: border-box; }
-
-    html {
-      -webkit-text-size-adjust: 100%;
-      text-size-adjust: 100%;
-    }
+    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
 
     body {
       margin: 0;
       min-height: 100vh;
       min-height: 100dvh;
       overflow-x: hidden;
-      background-color: var(--akashic-500-bg);
-      background-image: radial-gradient(ellipse 70% 60% at 30% 50%, #f6f5f2 0%, rgba(246, 245, 242, 0) 70%);
-      color: var(--akashic-500-charcoal);
+      background: var(--akashic-500-bg);
+      color: var(--akashic-500-ink);
       font-family: var(--akashic-500-sans);
       -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      animation: akashic-500-fade 600ms var(--akashic-500-ease) both;
     }
 
-    /* ---------- Gambar latar ---------- */
+    /* ---------- Latar: video hitam-putih (gambar sebagai cadangan) ---------- */
     .akashic-500__bg {
       position: fixed;
       inset: 0;
-      z-index: -3;
+      z-index: -2;
+      overflow: hidden;
       pointer-events: none;
-      background-color: var(--akashic-500-bg);
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
-      transform-origin: 60% 50%;
-      animation:
-        akashic-500-bg-in 1600ms var(--akashic-500-ease) both,
-        akashic-500-bg-drift 28s ease-in-out 1.6s infinite alternate;
+      background: var(--akashic-500-bg) center / cover no-repeat;
+      filter: grayscale(1) contrast(1.05);
+      animation: akashic-500-fade 1400ms var(--akashic-500-ease) both;
     }
 
-    /* Lapisan terang agar teks tetap terbaca di atas gambar apa pun */
+    .akashic-500__video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    /* Lapisan terang agar teks tetap terbaca di atas video apa pun */
     .akashic-500__bg::after {
       content: "";
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(
-          90deg,
-          rgba(238, 238, 236, var(--akashic-500-veil-start)) 0%,
-          rgba(238, 238, 236, var(--akashic-500-veil-end)) 100%
-        ),
-        radial-gradient(ellipse 90% 80% at 50% 50%, rgba(238, 238, 236, 0) 40%, rgba(238, 238, 236, 0.55) 100%);
+        linear-gradient(90deg, rgba(241, 241, 241, 0.9) 0%, rgba(241, 241, 241, 0.58) 100%),
+        radial-gradient(ellipse 90% 80% at 50% 50%, rgba(241, 241, 241, 0) 40%, rgba(241, 241, 241, 0.5) 100%);
     }
 
-    /* ---------- Root layout ---------- */
+    /* Grid tipis */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      background-image:
+        linear-gradient(to right, var(--akashic-500-line) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--akashic-500-line) 1px, transparent 1px);
+      background-size: 76px 76px;
+      -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 15%, transparent 78%);
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 15%, transparent 78%);
+    }
+
+    /* ---------- Layout ---------- */
     .akashic-500 {
-      position: relative;
-      isolation: isolate;
       min-height: 100vh;
       min-height: 100dvh;
       display: grid;
@@ -97,51 +94,10 @@
       padding: clamp(18px, 2.6vw, 36px) clamp(20px, 5vw, 64px);
     }
 
-    /* Grid arsitektural tipis + noise halus (full viewport) */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: -2;
-      pointer-events: none;
-      background-image:
-        linear-gradient(to right, var(--akashic-500-line) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--akashic-500-line) 1px, transparent 1px);
-      background-size: 76px 76px;
-      -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 15%, transparent 78%);
-      mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 15%, transparent 78%);
-    }
+    .akashic-500__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
 
-    body::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      opacity: 0.35;
-      mix-blend-mode: multiply;
-      background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.27  0 0 0 0 0.27  0 0 0 0 0.27  0 0 0 0.07 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
-    }
-
-    /* ---------- Header ---------- */
-    .akashic-500__header {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .akashic-500__brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      color: inherit;
-      text-decoration: none;
-      border-radius: 6px;
-    }
-
+    .akashic-500__brand { display: flex; align-items: center; gap: 12px; color: inherit; text-decoration: none; border-radius: 6px; }
     .akashic-500__brand-mark { width: 26px; height: 26px; flex: none; }
-
     .akashic-500__brand-text { display: flex; flex-direction: column; gap: 3px; }
 
     .akashic-500__wordmark {
@@ -149,37 +105,28 @@
       font-size: 1.15rem;
       font-weight: 700;
       letter-spacing: 0.22em;
-      color: var(--akashic-500-ink);
       line-height: 1;
+      color: var(--akashic-500-black);
     }
 
-    .akashic-500__tagline {
-      font-size: 0.62rem;
+    .akashic-500__tagline,
+    .akashic-500__code {
+      font-size: 0.66rem;
       letter-spacing: 0.16em;
       text-transform: uppercase;
       color: var(--akashic-500-muted);
-      line-height: 1.2;
+      line-height: 1.4;
     }
 
-    .akashic-500__code {
-      text-align: right;
-      font-size: 0.66rem;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--akashic-500-muted);
-      line-height: 1.5;
-    }
-
+    .akashic-500__code { text-align: right; }
     .akashic-500__code strong {
       display: block;
       font-family: var(--akashic-500-serif);
       font-size: 1.05rem;
       letter-spacing: 0.12em;
-      font-weight: 700;
-      color: var(--akashic-500-orange-deep);
+      color: var(--akashic-500-black);
     }
 
-    /* ---------- Main ---------- */
     .akashic-500__main {
       display: grid;
       grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
@@ -188,14 +135,9 @@
       padding: clamp(24px, 5vh, 56px) 0;
     }
 
-    /* Ilustrasi (kini berisi angka 500) */
-    .akashic-500__illustration {
-      width: 100%;
-      max-width: 640px;
-      justify-self: start;
-    }
+    /* ---------- Angka 500: geometris, hitam-putih-abu-abu ---------- */
+    .akashic-500__illustration { width: 100%; max-width: 640px; }
 
-    /* Angka 500: digambar sebagai garis SVG (konsisten di semua font/perangkat) */
     .akashic-500__number {
       display: block;
       width: 100%;
@@ -206,36 +148,21 @@
       animation: akashic-500-rise 1000ms var(--akashic-500-ease) 200ms both;
     }
 
-    .akashic-500__num-layer {
-      fill: none;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
+    .akashic-500__layer { fill: none; stroke-linecap: butt; stroke-linejoin: miter; }
 
-    /* Bayangan tebal di belakang angka */
-    .akashic-500__num-shadow {
-      stroke: rgba(68, 68, 68, 0.10);
-      stroke-width: 34;
-    }
+    /* Bayangan datar abu-abu, bergeser tegas (tanpa blur) */
+    .akashic-500__shadow { stroke: rgba(15, 15, 15, 0.16); stroke-width: 30; }
 
-    /* Garis tipis ala blueprint, bergeser dari angka utama */
-    .akashic-500__num-blueprint {
-      stroke: var(--akashic-500-orange);
-      stroke-width: 2;
-      stroke-opacity: 0.85;
-    }
+    /* Garis kontur tipis abu-abu di belakang angka */
+    .akashic-500__contour { stroke: var(--akashic-500-grey); stroke-width: 1.5; stroke-dasharray: 3 6; }
 
-    /* Angka utama */
-    .akashic-500__num-main {
-      stroke: url(#akashic-500-ink-grad);
-      stroke-width: 34;
-    }
+    /* Angka solid hitam */
+    .akashic-500__solid { stroke: var(--akashic-500-black); stroke-width: 30; }
 
-    .akashic-500__num-main--accent {
-      stroke: var(--akashic-500-orange);
-    }
+    /* Angka garis tepi: tepi hitam, isi putih */
+    .akashic-500__edge { stroke: var(--akashic-500-black); stroke-width: 36; }
+    .akashic-500__fill { stroke: #fff; stroke-width: 22; }
 
-    /* Efek menggambar angka satu per satu */
     .akashic-500__draw {
       stroke-dasharray: 1;
       stroke-dashoffset: 1;
@@ -245,22 +172,12 @@
     .akashic-500__draw--2 { animation-delay: 700ms; }
     .akashic-500__draw--3 { animation-delay: 1050ms; }
 
-    /* Cahaya di balik angka "0" tengah */
-    .akashic-500__num-glow {
-      opacity: 0.5;
-      animation: akashic-500-pulse 4.2s ease-in-out 1.6s infinite alternate;
-    }
-
-    /* Titik lokasi + gelombang radar di dalam angka "0" tengah */
-    .akashic-500__pin {
-      opacity: 0;
-      animation: akashic-500-fade 700ms var(--akashic-500-ease) 1.8s both;
-    }
+    .akashic-500__pin { opacity: 0; animation: akashic-500-fade 700ms var(--akashic-500-ease) 1.8s both; }
 
     .akashic-500__ping {
       fill: none;
-      stroke: var(--akashic-500-orange);
-      stroke-width: 2;
+      stroke: var(--akashic-500-black);
+      stroke-width: 1.5;
       opacity: 0;
       transform-box: fill-box;
       transform-origin: center;
@@ -268,64 +185,20 @@
     }
     .akashic-500__ping--b { animation-delay: 3.1s; }
 
-    /* Glitch singkat sesekali (kesan error) */
+    /* Garis tanda kecil (skala teknis) */
+    .akashic-500__tick { stroke: var(--akashic-500-grey); stroke-width: 1.5; fill: none; }
+
+    /* Glitch singkat sesekali (kesan gangguan) */
     .akashic-500__glitch {
       fill: none;
-      stroke: var(--akashic-500-blue);
-      stroke-width: 34;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      mix-blend-mode: multiply;
+      stroke: var(--akashic-500-grey);
+      stroke-width: 30;
       opacity: 0;
       animation: akashic-500-glitch 7s steps(1, end) 3s infinite;
     }
 
-    .akashic-500__scene {
-      display: block;
-      width: 100%;
-      height: auto;
-      overflow: visible;
-    }
-
-    .akashic-500__figure {
-      transform-box: fill-box;
-      transform-origin: 50% 100%;
-      animation: akashic-500-rise-svg 900ms var(--akashic-500-ease) 300ms both;
-    }
-
-    .akashic-500__bubble {
-      transform-box: fill-box;
-      transform-origin: 50% 100%;
-      animation: akashic-500-rise-svg 900ms var(--akashic-500-ease) 150ms both;
-    }
-
-    .akashic-500__bubble-float {
-      transform-box: fill-box;
-      transform-origin: 30% 100%;
-      animation: akashic-500-float 7s ease-in-out 1.2s infinite alternate;
-    }
-
-    .akashic-500__tick { animation: akashic-500-tick 3.6s ease-in-out 1.2s infinite alternate; }
-    .akashic-500__tick--b { animation-delay: 1.6s; }
-    .akashic-500__tick--c { animation-delay: 2.2s; }
-
-    .akashic-500__glow {
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: akashic-500-glow 6s ease-in-out infinite alternate;
-    }
-
-    .akashic-500__cursor { animation: akashic-500-cursor 3.4s ease-in-out infinite; }
-    .akashic-500__led { animation: akashic-500-led 4.5s ease-in-out infinite; }
-
-    .akashic-500__signal { animation: akashic-500-signal 5s ease-in-out infinite; }
-    .akashic-500__signal--b { animation-delay: 1s; }
-
-    /* Konten teks */
-    .akashic-500__content {
-      max-width: 32rem;
-      justify-self: start;
-    }
+    /* ---------- Teks ---------- */
+    .akashic-500__content { max-width: 32rem; }
 
     .akashic-500__title {
       margin: 0 0 clamp(18px, 3vh, 28px);
@@ -334,19 +207,12 @@
       font-size: clamp(2.4rem, 4.8vw, 4.3rem);
       line-height: 1.06;
       letter-spacing: -0.02em;
-      color: var(--akashic-500-ink);
+      color: var(--akashic-500-black);
       animation: akashic-500-rise 900ms var(--akashic-500-ease) 450ms both;
     }
+    .akashic-500__title span { display: block; margin-top: 0.1em; color: var(--akashic-500-grey); }
 
-    .akashic-500__title-sub {
-      display: block;
-      margin-top: 0.1em;
-    }
-
-    .akashic-500__message {
-      animation: akashic-500-rise 900ms var(--akashic-500-ease) 600ms both;
-    }
-
+    .akashic-500__message { animation: akashic-500-rise 900ms var(--akashic-500-ease) 600ms both; }
     .akashic-500__message p {
       margin: 0 0 0.7em;
       font-family: var(--akashic-500-serif);
@@ -354,7 +220,6 @@
       line-height: 1.65;
       color: var(--akashic-500-muted);
     }
-
     .akashic-500__message p:last-child { margin-bottom: 0; }
 
     .akashic-500__actions {
@@ -366,7 +231,6 @@
       animation: akashic-500-rise 900ms var(--akashic-500-ease) 750ms both;
     }
 
-    /* CTA utama */
     .akashic-500__cta {
       display: inline-flex;
       align-items: center;
@@ -374,8 +238,8 @@
       min-height: 52px;
       padding: 0 26px;
       border-radius: 999px;
-      background: var(--akashic-500-charcoal);
-      color: #ffffff;
+      background: var(--akashic-500-black);
+      color: #fff;
       font-size: 0.78rem;
       font-weight: 600;
       letter-spacing: 0.16em;
@@ -384,37 +248,18 @@
       text-decoration-color: transparent;
       text-decoration-thickness: 2px;
       text-underline-offset: 6px;
-      transition: opacity 260ms var(--akashic-500-ease), text-decoration-color 260ms var(--akashic-500-ease);
+      transition: background 260ms var(--akashic-500-ease), text-decoration-color 260ms var(--akashic-500-ease);
       -webkit-tap-highlight-color: transparent;
     }
+    .akashic-500__cta svg { width: 18px; height: 18px; flex: none; transition: transform 320ms var(--akashic-500-ease); }
+    .akashic-500__cta:hover { background: #2b2b2b; text-decoration-color: #fff; }
+    .akashic-500__cta:hover svg { transform: translateX(5px); }
 
-    .akashic-500__cta-arrow {
-      width: 18px;
-      height: 18px;
-      flex: none;
-      color: var(--akashic-500-orange);
-      transition: transform 320ms var(--akashic-500-ease);
-    }
-
-    .akashic-500__cta:hover {
-      opacity: 0.92;
-      text-decoration-color: var(--akashic-500-orange);
-    }
-    .akashic-500__cta:hover .akashic-500__cta-arrow { transform: translateX(5px); }
-
-    .akashic-500__cta:focus-visible,
-    .akashic-500__retry:focus-visible,
-    .akashic-500__brand:focus-visible {
-      outline: 3px solid var(--akashic-500-blue);
-      outline-offset: 4px;
-    }
-
-    /* Aksi sekunder */
     .akashic-500__retry {
       appearance: none;
       background: none;
       border: 0;
-      padding: 10px 2px;
+      padding: 12px 2px;
       font: inherit;
       font-size: 0.72rem;
       font-weight: 600;
@@ -424,147 +269,62 @@
       cursor: pointer;
       text-decoration: underline;
       text-decoration-color: transparent;
-      text-decoration-thickness: 1px;
       text-underline-offset: 6px;
       transition: color 260ms var(--akashic-500-ease), text-decoration-color 260ms var(--akashic-500-ease);
     }
     .akashic-500__retry[hidden] { display: none; }
-    .akashic-500__retry:hover {
-      color: var(--akashic-500-ink);
-      text-decoration-color: currentColor;
+    .akashic-500__retry:hover { color: var(--akashic-500-black); text-decoration-color: currentColor; }
+    .akashic-500__retry:disabled { cursor: progress; opacity: 0.7; }
+
+    .akashic-500__cta:focus-visible,
+    .akashic-500__retry:focus-visible,
+    .akashic-500__brand:focus-visible {
+      outline: 3px solid var(--akashic-500-black);
+      outline-offset: 4px;
     }
 
-    /* ---------- Footer ---------- */
     .akashic-500__meta {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
       gap: 6px 24px;
       padding-top: 16px;
-      border-top: 1px solid rgba(68, 68, 68, 0.12);
+      border-top: 1px solid rgba(15, 15, 15, 0.16);
       font-size: 0.62rem;
       letter-spacing: 0.16em;
       text-transform: uppercase;
-      color: #747472;
+      color: #595959;
       animation: akashic-500-fade 900ms var(--akashic-500-ease) 800ms both;
     }
 
     /* ---------- Keyframes ---------- */
-    @keyframes akashic-500-fade {
-      from { opacity: 0; }
-      to   { opacity: 1; }
-    }
-
-    @keyframes akashic-500-bg-in {
-      from { opacity: 0; transform: scale(1.08); }
-      to   { opacity: 1; transform: scale(1.02); }
-    }
-
-    @keyframes akashic-500-bg-drift {
-      from { transform: scale(1.02) translate3d(0, 0, 0); }
-      to   { transform: scale(1.07) translate3d(-1.2%, -0.8%, 0); }
-    }
-
-    @keyframes akashic-500-pulse {
-      from { opacity: 0.35; }
-      to   { opacity: 0.75; }
-    }
-
-    @keyframes akashic-500-draw {
-      to { stroke-dashoffset: 0; }
-    }
-
+    @keyframes akashic-500-fade { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes akashic-500-rise { from { opacity: 0; transform: translate3d(0, 16px, 0); } to { opacity: 1; transform: none; } }
+    @keyframes akashic-500-draw { to { stroke-dashoffset: 0; } }
     @keyframes akashic-500-ping {
       0%   { opacity: 0;   transform: scale(0.25); }
-      15%  { opacity: 0.8; }
+      15%  { opacity: 0.7; }
       100% { opacity: 0;   transform: scale(1); }
     }
-
     @keyframes akashic-500-glitch {
-      0%, 100% { opacity: 0;    transform: translate3d(0, 0, 0); }
-      90%      { opacity: 0.55; transform: translate3d(-7px, 2px, 0); }
-      92%      { opacity: 0.55; transform: translate3d(6px, -2px, 0); }
-      94%      { opacity: 0.35; transform: translate3d(-3px, 0, 0); }
-      96%      { opacity: 0;    transform: translate3d(0, 0, 0); }
+      0%, 100% { opacity: 0;    transform: none; }
+      90%      { opacity: 0.5;  transform: translate3d(-7px, 2px, 0); }
+      92%      { opacity: 0.5;  transform: translate3d(6px, -2px, 0); }
+      94%      { opacity: 0.3;  transform: translate3d(-3px, 0, 0); }
+      96%      { opacity: 0;    transform: none; }
     }
 
-    @keyframes akashic-500-rise {
-      from { opacity: 0; transform: translate3d(0, 16px, 0); }
-      to   { opacity: 1; transform: translate3d(0, 0, 0); }
-    }
-
-    @keyframes akashic-500-rise-svg {
-      from { opacity: 0; transform: translate3d(0, 10px, 0); }
-      to   { opacity: 1; transform: translate3d(0, 0, 0); }
-    }
-
-    @keyframes akashic-500-float {
-      from { transform: translate3d(0, 0, 0) rotate(-1deg); }
-      to   { transform: translate3d(0, -4px, 0) rotate(1.5deg); }
-    }
-
-    @keyframes akashic-500-tick {
-      from { opacity: 0.4; }
-      to   { opacity: 1; }
-    }
-
-    @keyframes akashic-500-glow {
-      from { opacity: 0.35; transform: scale(0.97); }
-      to   { opacity: 0.7;  transform: scale(1.03); }
-    }
-
-    @keyframes akashic-500-cursor {
-      0%, 100% { transform: translate3d(0, 0, 0); opacity: 1; }
-      45%      { transform: translate3d(6px, 0, 0); opacity: 1; }
-      60%      { transform: translate3d(6px, 0, 0); opacity: 0.25; }
-      80%      { transform: translate3d(0, 0, 0); opacity: 1; }
-    }
-
-    @keyframes akashic-500-led {
-      0%, 100% { opacity: 1; }
-      50%      { opacity: 0.35; }
-    }
-
-    @keyframes akashic-500-signal {
-      0%, 100% { opacity: 0.15; }
-      50%      { opacity: 0.65; }
-    }
-
-    /* Jeda animasi saat tab tidak aktif */
-    .akashic-500-paused *,
-    .akashic-500-paused *::before,
-    .akashic-500-paused *::after {
+    /* Jeda animasi saat tab tidak terlihat */
+    .akashic-500-paused *, .akashic-500-paused *::before, .akashic-500-paused *::after {
       animation-play-state: paused !important;
     }
 
     /* ---------- Responsive ---------- */
     @media (max-width: 880px) {
-      .akashic-500__main {
-        grid-template-columns: minmax(0, 1fr);
-        row-gap: clamp(12px, 3vh, 28px);
-        padding: 20px 0 32px;
-      }
-      .akashic-500__illustration {
-        justify-self: center;
-        max-width: min(460px, 100%);
-      }
-      .akashic-500__content {
-        justify-self: center;
-        max-width: 34rem;
-        width: 100%;
-      }
-      .akashic-500 {
-        --akashic-500-veil-start: 0.8;
-        --akashic-500-veil-end: 0.7;
-      }
-      .akashic-500__bg::after {
-        background:
-          linear-gradient(
-            180deg,
-            rgba(238, 238, 236, 0.72) 0%,
-            rgba(238, 238, 236, 0.88) 100%
-          );
-      }
+      .akashic-500__main { grid-template-columns: minmax(0, 1fr); row-gap: clamp(12px, 3vh, 28px); padding: 20px 0 32px; }
+      .akashic-500__illustration { justify-self: center; max-width: min(460px, 100%); }
+      .akashic-500__content { justify-self: center; max-width: 34rem; width: 100%; }
+      .akashic-500__bg::after { background: linear-gradient(180deg, rgba(241, 241, 241, 0.76) 0%, rgba(241, 241, 241, 0.92) 100%); }
     }
 
     @media (max-width: 520px) {
@@ -580,13 +340,9 @@
       .akashic-500__illustration { max-width: 500px; }
     }
 
-    /* ---------- Reduced motion ---------- */
+    /* ---------- Reduced motion: tanpa animasi; video dijeda lewat JavaScript ---------- */
     @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation: none !important;
-        transition: none !important;
-        scroll-behavior: auto !important;
-      }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
       .akashic-500__draw { stroke-dashoffset: 0 !important; }
       .akashic-500__pin { opacity: 1 !important; }
     }
@@ -594,92 +350,78 @@
 </head>
 
 <body>
-  <!-- Gambar latar -->
-  <div class="akashic-500__bg" aria-hidden="true" style="background-image: url('{{ url_for('static', filename='image/gambar-02.jpg') }}');"></div>
+  <!-- Latar video (diubah ke hitam-putih lewat CSS). Gambar tampil jika video gagal, belum siap, atau gerak dikurangi. -->
+  <div class="akashic-500__bg" aria-hidden="true" style="background-image: url('{{ url_for('static', filename='image/gambar-02.jpg') }}');">
+    <video class="akashic-500__video" id="akashic-500-video"
+           autoplay muted loop playsinline preload="auto" disablepictureinpicture tabindex="-1"
+           poster="{{ url_for('static', filename='image/gambar-02.jpg') }}">
+      <source src="{{ url_for('static', filename='video/animasi-02.mp4') }}" type="video/mp4">
+    </video>
+  </div>
 
   <div class="akashic-500">
 
-    <!-- Header minimal -->
     <header class="akashic-500__header">
       <a class="akashic-500__brand" href="{{ url_for('index') }}" aria-label="Akashic, kembali ke beranda">
         <svg class="akashic-500__brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-          <path d="M16 3.5c-5.2 0-9.2 4-9.2 9 0 6.6 9.2 16 9.2 16s9.2-9.4 9.2-16c0-5-4-9-9.2-9Z" fill="#444444"/>
-          <circle cx="16" cy="12.5" r="3.6" fill="#f7931e"/>
+          <path d="M16 3.5c-5.2 0-9.2 4-9.2 9 0 6.6 9.2 16 9.2 16s9.2-9.4 9.2-16c0-5-4-9-9.2-9Z" fill="#0f0f0f"/>
+          <circle cx="16" cy="12.5" r="3.6" fill="#ffffff"/>
         </svg>
         <span class="akashic-500__brand-text">
           <span class="akashic-500__wordmark">AKASHIC</span>
           <span class="akashic-500__tagline">Location-Based Information System</span>
         </span>
       </a>
-
-      <div class="akashic-500__code" aria-hidden="true">
-        HTTP
-        <strong>500</strong>
-      </div>
+      <div class="akashic-500__code">HTTP <strong>500</strong></div>
     </header>
 
-    <!-- Konten utama -->
     <main class="akashic-500__main" id="main">
 
       <div class="akashic-500__illustration">
-        <svg class="akashic-500__number" viewBox="0 0 590 240" aria-hidden="true" focusable="false">
+        <svg class="akashic-500__number" viewBox="0 0 590 250" aria-hidden="true" focusable="false">
           <defs>
-            <linearGradient id="akashic-500-ink-grad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="0" y2="240">
-              <stop offset="0%" stop-color="#2f2f2f"/>
-              <stop offset="100%" stop-color="#6b6b6b"/>
-            </linearGradient>
-            <filter id="akashic-500-blur" x="-40%" y="-40%" width="180%" height="180%">
-              <feGaussianBlur stdDeviation="16"/>
-            </filter>
-
-            <!-- Bentuk angka (garis tengah), dipakai ulang di tiap lapisan -->
-            <path id="akashic-500-five" pathLength="1"
-                  d="M168 34H64L56 112C78 96 112 92 136 106C168 126 170 172 138 192C108 210 70 204 44 180"/>
-            <ellipse id="akashic-500-zero-a" pathLength="1" cx="285" cy="120" rx="62" ry="86"/>
-            <ellipse id="akashic-500-zero-b" pathLength="1" cx="480" cy="120" rx="62" ry="86"/>
+            <!-- Bentuk geometris angka (garis tengah); dipakai ulang di tiap lapisan -->
+            <path id="akashic-500-five" pathLength="1" d="M164 36H62V112H112A48 48 0 0 1 112 208H44"/>
+            <rect id="akashic-500-zero-a" pathLength="1" x="220" y="34" width="130" height="172" rx="65"/>
+            <rect id="akashic-500-zero-b" pathLength="1" x="415" y="34" width="130" height="172" rx="65"/>
           </defs>
 
-          <!-- Cahaya di balik "0" tengah -->
-          <use class="akashic-500__num-layer akashic-500__num-main--accent akashic-500__num-glow"
-               href="#akashic-500-zero-a" style="stroke-width:34" filter="url(#akashic-500-blur)"/>
+          <!-- Skala teknis di bawah angka -->
+          <path class="akashic-500__tick" d="M14 236H576M14 230V242M110 233V239M206 233V239M302 230V242M398 233V239M494 233V239M576 230V242"/>
 
-          <!-- Angka 5 -->
+          <!-- 5: solid hitam -->
           <g class="akashic-500__draw akashic-500__draw--1">
             <g transform="translate(14 14)">
-              <use class="akashic-500__num-layer akashic-500__num-shadow" href="#akashic-500-five"/>
-              <use class="akashic-500__num-layer akashic-500__num-blueprint" href="#akashic-500-five"/>
+              <use class="akashic-500__layer akashic-500__shadow" href="#akashic-500-five"/>
+              <use class="akashic-500__layer akashic-500__contour" href="#akashic-500-five" style="stroke-dasharray:3 6"/>
             </g>
-            <use class="akashic-500__num-layer akashic-500__num-main" href="#akashic-500-five"/>
+            <use class="akashic-500__layer akashic-500__solid" href="#akashic-500-five"/>
           </g>
 
-          <!-- Angka 0 (tengah, aksen oranye) -->
+          <!-- 0 tengah: garis tepi hitam, isi putih -->
           <g class="akashic-500__draw akashic-500__draw--2">
             <g transform="translate(14 14)">
-              <use class="akashic-500__num-layer akashic-500__num-shadow" href="#akashic-500-zero-a"/>
-              <use class="akashic-500__num-layer akashic-500__num-blueprint" href="#akashic-500-zero-a"/>
+              <use class="akashic-500__layer akashic-500__shadow" href="#akashic-500-zero-a"/>
             </g>
-            <use class="akashic-500__num-layer akashic-500__num-main akashic-500__num-main--accent" href="#akashic-500-zero-a"/>
+            <use class="akashic-500__layer akashic-500__edge" href="#akashic-500-zero-a"/>
+            <use class="akashic-500__layer akashic-500__fill" href="#akashic-500-zero-a"/>
           </g>
 
-          <!-- Titik lokasi + radar di dalam "0" tengah -->
+          <!-- Titik lokasi dan radar di dalam angka 0 tengah -->
           <circle class="akashic-500__ping" cx="285" cy="120" r="46"/>
           <circle class="akashic-500__ping akashic-500__ping--b" cx="285" cy="120" r="46"/>
-          <circle class="akashic-500__pin" cx="285" cy="120" r="11" fill="#f7931e"/>
+          <circle class="akashic-500__pin" cx="285" cy="120" r="10" fill="#0f0f0f"/>
 
-          <!-- Angka 0 (kanan) -->
+          <!-- 0 kanan: solid hitam -->
           <g class="akashic-500__draw akashic-500__draw--3">
             <g transform="translate(14 14)">
-              <use class="akashic-500__num-layer akashic-500__num-shadow" href="#akashic-500-zero-b"/>
-              <use class="akashic-500__num-layer akashic-500__num-blueprint" href="#akashic-500-zero-b"/>
+              <use class="akashic-500__layer akashic-500__shadow" href="#akashic-500-zero-b"/>
             </g>
-            <use class="akashic-500__num-layer akashic-500__num-main" href="#akashic-500-zero-b"/>
+            <use class="akashic-500__layer akashic-500__solid" href="#akashic-500-zero-b"/>
           </g>
 
-          <!-- Glitch sesekali -->
           <g class="akashic-500__glitch">
-            <use href="#akashic-500-five"/>
-            <use href="#akashic-500-zero-a"/>
-            <use href="#akashic-500-zero-b"/>
+            <use href="#akashic-500-five"/><use href="#akashic-500-zero-a"/><use href="#akashic-500-zero-b"/>
           </g>
         </svg>
       </div>
@@ -687,7 +429,7 @@
       <div class="akashic-500__content">
         <h1 class="akashic-500__title">
           Maaf...
-          <span class="akashic-500__title-sub">Ini bukan salahmu.</span>
+          <span>Ini bukan salahmu.</span>
         </h1>
 
         <div class="akashic-500__message">
@@ -698,16 +440,13 @@
         <div class="akashic-500__actions">
           <a class="akashic-500__cta" href="{{ url_for('index') }}">
             <span>Kembali ke Akashic</span>
-            <svg class="akashic-500__cta-arrow" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-              <path d="M3 10h13M11 4.5 16.5 10 11 15.5"/>
-            </svg>
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 10h13M11 4.5 16.5 10 11 15.5"/></svg>
           </a>
           <button class="akashic-500__retry" type="button" id="akashic-500-retry" hidden>Coba lagi</button>
         </div>
       </div>
     </main>
 
-    <!-- Footer / meta -->
     <footer class="akashic-500__meta" aria-hidden="true">
       <span>Akashic / Internal Server Error / 500</span>
       <span>System status: sementara tidak tersedia</span>
@@ -720,6 +459,8 @@
 
       const root = document.documentElement;
       const retry = document.getElementById('akashic-500-retry');
+      const video = document.getElementById('akashic-500-video');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
       // Tombol "Coba lagi" hanya tampil jika JavaScript aktif
       if (retry) {
@@ -732,11 +473,24 @@
         });
       }
 
-      // Jeda animasi saat tab tidak terlihat
+      // Video hanya diputar saat tab terlihat dan pengguna tidak meminta gerak dikurangi
+      const syncVideo = () => {
+        if (!video) return;
+        if (document.hidden || reduceMotion.matches) { video.pause(); return; }
+        const attempt = video.play();
+        if (attempt && attempt.catch) attempt.catch(() => {});
+      };
+
+      // Jika file video gagal dimuat, sembunyikan elemen video agar gambar latar tetap terlihat
+      if (video) video.addEventListener('error', () => { video.hidden = true; }, true);
+
       const syncVisibility = () => {
         root.classList.toggle('akashic-500-paused', document.hidden);
+        syncVideo();
       };
+
       document.addEventListener('visibilitychange', syncVisibility);
+      if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', syncVideo);
       syncVisibility();
     });
   </script>

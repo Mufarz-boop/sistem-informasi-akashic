@@ -74,6 +74,7 @@ app/
                 index.html
                 information.html
             legal/
+                base.html
                 disclaimer.html
                 privacy.html
                 terms.html

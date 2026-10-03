@@ -4,6 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#111417">
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='image/icon-akashic.png') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='image/icon-akashic.png') }}">
   <title>{% block title %}Akashic — Informasi yang hadir di tempat yang tepat.{% endblock %}</title>
   <meta name="description" content="{% block meta_description %}Akashic adalah sistem informasi berbasis lokasi yang menghadirkan informasi sesuai konteks wilayah.{% endblock %}">
   <meta name="keywords" content="{% block meta_keywords %}Akashic, location based information system, informasi berbasis lokasi{% endblock %}">
@@ -172,6 +174,7 @@
     }
     .akashic-brand-mark {
       width: 28px; height: 28px;
+      object-fit: contain;
       color: var(--akashic-ivory);
       transition: transform .6s var(--akashic-ease);
     }
@@ -836,7 +839,7 @@
     <header class="akashic-header" id="akashic-header">
       <nav class="akashic-nav" aria-label="Navigasi utama">
         <a class="akashic-brand" href="{{ url_for('index') }}" aria-label="Akashic — beranda">
-          <svg class="akashic-brand-mark" aria-hidden="true" focusable="false"><use href="#akashic-mark"></use></svg>
+          <img class="akashic-brand-mark" src="{{ url_for('static', filename='image/icon-akashic.png') }}" alt="" width="28" height="28" decoding="async">
           <span>Akashic</span>
         </a>
 
@@ -888,7 +891,7 @@
         <div class="akashic-footer-inner">
           <div class="akashic-footer-brand">
             <a class="akashic-brand" href="{{ url_for('index') }}" aria-label="Akashic — beranda">
-              <svg class="akashic-brand-mark" aria-hidden="true" focusable="false"><use href="#akashic-mark"></use></svg>
+              <img class="akashic-brand-mark" src="{{ url_for('static', filename='image/icon-akashic.png') }}" alt="" width="28" height="28" decoding="async">
               <span>Akashic</span>
             </a>
             <p class="akashic-footer-tagline">Informasi yang hadir di tempat yang tepat.</p>
