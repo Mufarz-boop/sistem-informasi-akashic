@@ -51,6 +51,7 @@ app/
             service_worker.js
         pages/
             admin/
+                base.html
                 dashboard-admin.html
                 events.html
                 information_admin.html

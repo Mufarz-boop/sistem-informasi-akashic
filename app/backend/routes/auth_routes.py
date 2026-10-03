@@ -12,8 +12,8 @@ def register():
 
 @auth_bp.route("/forgot-password")
 def forgot_password():
-    return render_template("auth/forgot_password.html")
+    return render_template("auth/forgot-password.html")
 
 @auth_bp.route("/reset-password")
 def reset_password():
-    return render_template("auth/reset_password.html")
+    return render_template("auth/reset-password.html")

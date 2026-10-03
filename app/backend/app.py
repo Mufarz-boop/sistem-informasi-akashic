@@ -1,6 +1,7 @@
 from pathlib import Path
 from flask import Flask, abort, render_template
 from config import Config
+from database.connection import get_connection
 
 # =========================================================
 # BASE DIRECTORY
@@ -25,6 +26,49 @@ from routes.auth_routes import auth_bp
 from routes.admin_routes import admin_bp
 app.register_blueprint(auth_bp)
 app.register_blueprint(admin_bp)
+
+# =========================================================
+# DATABASE HEALTH CHECK
+# =========================================================
+@app.route("/api/health")
+def database_health():
+    connection = None
+    cursor = None
+
+    try:
+        connection = get_connection()
+
+        cursor = connection.cursor()
+        cursor.execute("SELECT DATABASE(), VERSION()")
+
+        result = cursor.fetchone()
+
+        return {
+            "success": True,
+            "application": "Akashic",
+            "database": {
+                "name": result[0],
+                "mysql_version": result[1],
+                "status": "connected"
+            }
+        }, 200
+
+    except Exception as error:
+        return {
+            "success": False,
+            "application": "Akashic",
+            "database": {
+                "status": "disconnected"
+            },
+            "error": str(error)
+        }, 500
+
+    finally:
+        if cursor is not None:
+            cursor.close()
+
+        if connection is not None and connection.is_connected():
+            connection.close()
 
 # =========================================================
 # LANDING PAGE
