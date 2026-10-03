@@ -1,498 +1,253 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="robots" content="noindex, nofollow">
-  <meta name="color-scheme" content="light">
-  <meta name="theme-color" content="#f1f1f1">
-  <title>Maaf, terjadi gangguan | Akashic</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<meta name="description" content="Akashic — Terjadi masalah internal pada server.">
+<meta name="theme-color" content="#111417">
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='image/icon-akashic.png') }}">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='image/icon-akashic.png') }}">
+<title>500</title>
+<style>
+.akashic-500{
+  --a4-bg:#111417;--a4-ivory:#F2EFE8;--a4-muted:#8C9295;--a4-accent:#B86B43;--a4-blue:#5D8494;
+  --a4-line:rgba(255,255,255,.10);--a4-line2:rgba(255,255,255,.22);--a4-glass:rgba(23,27,31,.55);
+  --a4-sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --a4-mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --a4-ease:cubic-bezier(.22,1,.36,1);
+  --a4-mx:0;--a4-my:0;
+}
 
-  <style>
-    /* AKASHIC — HTTP 500 (monokrom). Halaman standalone; semua class berawalan akashic-500. */
-    :root {
-      --akashic-500-bg: #f1f1f1;
-      --akashic-500-black: #0f0f0f;
-      --akashic-500-ink: #1a1a1a;
-      --akashic-500-grey: #8a8a8a;
-      --akashic-500-muted: #5a5a5a;
-      --akashic-500-line: rgba(15, 15, 15, 0.1);
-      --akashic-500-ease: cubic-bezier(0.22, 1, 0.36, 1);
-      --akashic-500-serif: Georgia, "Times New Roman", Times, serif;
-      --akashic-500-sans: Inter, "Helvetica Neue", Helvetica, Arial, sans-serif;
-    }
+/* Scrollbar tersembunyi, scroll tetap berfungsi */
+html{background:#111417;overflow-y:scroll;overflow-x:hidden;scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{width:0;height:0;display:none}
+body{margin:0;background:#CBC7BF;padding:clamp(8px,2vw,28px);overflow-x:hidden;scrollbar-width:none}
 
-    *, *::before, *::after { box-sizing: border-box; }
-    html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+.akashic-500,.akashic-500 *,.akashic-500 *::before,.akashic-500 *::after{box-sizing:border-box}
+.akashic-500 :is(h1,p){margin:0}
+.akashic-500 a{color:inherit;text-decoration:none}
+.akashic-500 :focus-visible{outline:2px solid var(--a4-accent);outline-offset:4px;border-radius:4px}
+.akashic-500 .a4-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      min-height: 100dvh;
-      overflow-x: hidden;
-      background: var(--akashic-500-bg);
-      color: var(--akashic-500-ink);
-      font-family: var(--akashic-500-sans);
-      -webkit-font-smoothing: antialiased;
-    }
+/* Stage */
+.akashic-500{
+  position:relative;width:100%;max-width:1440px;margin:0 auto;
+  min-height:calc(100vh - clamp(16px,4vw,56px));min-height:calc(100svh - clamp(16px,4vw,56px));
+  display:grid;grid-template-rows:auto 1fr auto;overflow:hidden;isolation:isolate;
+  padding:0 clamp(20px,4vw,56px);
+  background:var(--a4-bg);color:var(--a4-ivory);font-family:var(--a4-sans);
+  border-radius:clamp(10px,2vw,24px);
+  box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 30px 70px -30px rgba(17,20,23,.6);
+  -webkit-font-smoothing:antialiased;
+}
 
-    /* ---------- Latar: video hitam-putih (gambar sebagai cadangan) ---------- */
-    .akashic-500__bg {
-      position: fixed;
-      inset: 0;
-      z-index: -2;
-      overflow: hidden;
-      pointer-events: none;
-      background: var(--akashic-500-bg) center / cover no-repeat;
-      filter: grayscale(1) contrast(1.05);
-      animation: akashic-500-fade 1400ms var(--akashic-500-ease) both;
-    }
+/* Background layers */
+.akashic-500__fallback{position:absolute;inset:-3%;z-index:0;pointer-events:none;
+  background:radial-gradient(60% 50% at 70% 35%,rgba(184,107,67,.16),transparent 70%),radial-gradient(50% 45% at 20% 80%,rgba(93,132,148,.18),transparent 70%),#111417;
+  transform:translate3d(calc(var(--a4-mx)*-3px),calc(var(--a4-my)*-3px),0)}
+.akashic-500__video{position:absolute;inset:0;z-index:1;width:100%;height:100%;object-fit:cover;opacity:0;pointer-events:none;
+  filter:grayscale(.9) contrast(1.1) brightness(.55);mix-blend-mode:luminosity;
+  transform:translate3d(calc(var(--a4-mx)*-6px),calc(var(--a4-my)*-6px),0) scale(1.04);transition:opacity 1.8s var(--a4-ease)}
+.akashic-500--video .akashic-500__video{opacity:.55}
+.akashic-500--novideo .akashic-500__video{display:none}
+.akashic-500__overlay{position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:radial-gradient(90% 70% at 50% 45%,transparent 30%,rgba(17,20,23,.85) 100%),linear-gradient(180deg,rgba(17,20,23,.5),rgba(17,20,23,.2) 40%,rgba(17,20,23,.7))}
+.akashic-500__grid{position:absolute;inset:0;z-index:3;pointer-events:none;
+  background-image:linear-gradient(to right,rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(to bottom,rgba(255,255,255,.05) 1px,transparent 1px);
+  background-size:64px 64px;
+  -webkit-mask-image:radial-gradient(ellipse at center,#000 20%,transparent 75%);mask-image:radial-gradient(ellipse at center,#000 20%,transparent 75%);
+  transform:translate3d(calc(var(--a4-mx)*3px),calc(var(--a4-my)*3px),0)}
 
-    .akashic-500__video {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-    }
+/* Header */
+.akashic-500__header{position:relative;z-index:7;padding-top:clamp(20px,3vw,32px);animation:akashic-500-rise 1s var(--a4-ease) .2s both;--a4-y:-10px}
+.akashic-500__header-row{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-bottom:18px;border-bottom:1px solid var(--a4-line)}
+.akashic-500__brand{display:flex;align-items:center;gap:12px;font-size:13px;font-weight:700;letter-spacing:.32em}
+.akashic-500__brand :is(svg,img){width:26px;height:26px;object-fit:contain}
+.akashic-500__meta{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border:1px solid var(--a4-line2);border-radius:999px;background:var(--a4-glass);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font:11px/1 var(--a4-mono);letter-spacing:.12em;color:var(--a4-muted)}
+.akashic-500__meta b{color:var(--a4-ivory);font-weight:600}
+.akashic-500__meta i{width:7px;height:7px;border-radius:50%;background:var(--a4-accent);animation:akashic-500-pulse 2.4s ease-in-out infinite}
 
-    /* Lapisan terang agar teks tetap terbaca di atas video apa pun */
-    .akashic-500__bg::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(90deg, rgba(241, 241, 241, 0.9) 0%, rgba(241, 241, 241, 0.58) 100%),
-        radial-gradient(ellipse 90% 80% at 50% 50%, rgba(241, 241, 241, 0) 40%, rgba(241, 241, 241, 0.5) 100%);
-    }
+/* Content */
+.akashic-500__content{position:relative;z-index:7;display:grid;place-items:center;align-content:center;text-align:center;padding:32px 0}
+.akashic-500__statement{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border:1px solid var(--a4-line2);border-radius:999px;background:var(--a4-glass);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:11px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--a4-muted);
+  animation:akashic-500-rise 1.1s var(--a4-ease) .4s both;--a4-y:14px}
+.akashic-500__statement::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--a4-accent)}
+.akashic-500__lead{margin-top:18px;font-size:clamp(1.1rem,2.2vw,1.6rem);font-weight:500;letter-spacing:-.02em;color:var(--a4-ivory);animation:akashic-500-rise 1.1s var(--a4-ease) .5s both;--a4-y:14px}
+.akashic-500__depth{transform:translate3d(calc(var(--a4-mx)*8px),calc(var(--a4-my)*8px),0)}
+.akashic-500__code{font-weight:700;font-size:clamp(7rem,28vw,24rem);line-height:.85;letter-spacing:-.06em;margin:.04em 0;user-select:none;
+  background:linear-gradient(180deg,var(--a4-ivory) 10%,rgba(242,239,232,.08) 95%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;
+  filter:drop-shadow(0 0 40px rgba(184,107,67,.18));
+  animation:akashic-500-rise 1.6s var(--a4-ease) .65s both,akashic-500-breathe 11s ease-in-out 2.2s infinite;--a4-y:30px}
 
-    /* Grid tipis */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      background-image:
-        linear-gradient(to right, var(--akashic-500-line) 1px, transparent 1px),
-        linear-gradient(to bottom, var(--akashic-500-line) 1px, transparent 1px);
-      background-size: 76px 76px;
-      -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 15%, transparent 78%);
-      mask-image: radial-gradient(ellipse 80% 70% at 50% 45%, #000 15%, transparent 78%);
-    }
+/* Actions */
+.akashic-500__actions{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:12px 24px;margin-top:24px;animation:akashic-500-rise 1.1s var(--a4-ease) 1s both;--a4-y:12px}
+.akashic-500__cta{display:inline-flex;align-items:center;gap:14px;min-height:52px;padding:0 26px 0 22px;border-radius:999px;background:var(--a4-ivory);color:#6B3A1F;
+  font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;box-shadow:inset 0 -2px 0 var(--a4-accent);
+  transition:background-color .3s,color .3s,transform .4s var(--a4-ease)}
+.akashic-500__cta svg{width:18px;height:18px;transition:transform .45s var(--a4-ease)}
+.akashic-500__cta:hover{background:#fff;color:#4E2A14;transform:translateY(-2px)}
+.akashic-500__cta:hover svg{transform:translateX(-5px)}
+.akashic-500__retry{appearance:none;background:none;border:0;padding:12px 2px;font:inherit;font-size:12px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--a4-muted);cursor:pointer;
+  text-decoration:underline;text-decoration-color:transparent;text-underline-offset:6px;transition:color .3s,text-decoration-color .3s}
+.akashic-500__retry[hidden]{display:none}
+.akashic-500__retry:hover{color:var(--a4-ivory);text-decoration-color:currentColor}
+.akashic-500__retry:disabled{cursor:progress;opacity:.7}
 
-    /* ---------- Layout ---------- */
-    .akashic-500 {
-      min-height: 100vh;
-      min-height: 100dvh;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      width: 100%;
-      max-width: 1320px;
-      margin: 0 auto;
-      padding: clamp(18px, 2.6vw, 36px) clamp(20px, 5vw, 64px);
-    }
+/* Footer */
+.akashic-500__footer{position:relative;z-index:7;padding-bottom:clamp(20px,3vw,32px);transform:translate3d(calc(var(--a4-mx)*4px),calc(var(--a4-my)*4px),0)}
+.akashic-500__footer-row{display:flex;justify-content:space-between;gap:24px;padding-top:18px;border-top:1px solid var(--a4-line);font:10px/1.9 var(--a4-mono);letter-spacing:.14em;color:var(--a4-muted);animation:akashic-500-fade 1.4s var(--a4-ease) 1.2s both}
+.akashic-500__footer-row p:last-child{text-align:right}
+.akashic-500__footer-row b{color:var(--a4-ivory);font-weight:600}
 
-    .akashic-500__header { display: flex; align-items: flex-start; justify-content: space-between; gap: 24px; }
+@keyframes akashic-500-fade{from{opacity:0}to{opacity:1}}
+@keyframes akashic-500-rise{from{opacity:0;transform:translate3d(0,var(--a4-y,16px),0)}to{opacity:1;transform:none}}
+@keyframes akashic-500-breathe{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.008);opacity:.92}}
+@keyframes akashic-500-pulse{0%,100%{box-shadow:0 0 0 0 rgba(184,107,67,.5)}50%{box-shadow:0 0 0 6px rgba(184,107,67,0)}}
 
-    .akashic-500__brand { display: flex; align-items: center; gap: 12px; color: inherit; text-decoration: none; border-radius: 6px; }
-    .akashic-500__brand-mark { width: 26px; height: 26px; flex: none; }
-    .akashic-500__brand-text { display: flex; flex-direction: column; gap: 3px; }
+@media (max-width:768px){
+  body{padding:0}
+  .akashic-500{max-width:none;min-height:100vh;min-height:100svh;border-radius:0;box-shadow:none}
+  .akashic-500__grid{background-size:44px 44px}
+  .akashic-500__actions{flex-direction:column;width:100%;gap:6px}
+  .akashic-500__cta{width:100%;max-width:320px;justify-content:center}
+}
+@media (max-width:520px){
+  .akashic-500__meta span{display:none}
+  .akashic-500__footer-row{font-size:9px;letter-spacing:.1em}
+}
+@media (max-width:360px){.akashic-500__code{font-size:6.5rem}}
 
-    .akashic-500__wordmark {
-      font-family: var(--akashic-500-serif);
-      font-size: 1.15rem;
-      font-weight: 700;
-      letter-spacing: 0.22em;
-      line-height: 1;
-      color: var(--akashic-500-black);
-    }
-
-    .akashic-500__tagline,
-    .akashic-500__code {
-      font-size: 0.66rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--akashic-500-muted);
-      line-height: 1.4;
-    }
-
-    .akashic-500__code { text-align: right; }
-    .akashic-500__code strong {
-      display: block;
-      font-family: var(--akashic-500-serif);
-      font-size: 1.05rem;
-      letter-spacing: 0.12em;
-      color: var(--akashic-500-black);
-    }
-
-    .akashic-500__main {
-      display: grid;
-      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
-      align-items: center;
-      column-gap: clamp(32px, 6vw, 88px);
-      padding: clamp(24px, 5vh, 56px) 0;
-    }
-
-    /* ---------- Angka 500: geometris, hitam-putih-abu-abu ---------- */
-    .akashic-500__illustration { width: 100%; max-width: 640px; }
-
-    .akashic-500__number {
-      display: block;
-      width: 100%;
-      height: auto;
-      overflow: visible;
-      user-select: none;
-      -webkit-user-select: none;
-      animation: akashic-500-rise 1000ms var(--akashic-500-ease) 200ms both;
-    }
-
-    .akashic-500__layer { fill: none; stroke-linecap: butt; stroke-linejoin: miter; }
-
-    /* Bayangan datar abu-abu, bergeser tegas (tanpa blur) */
-    .akashic-500__shadow { stroke: rgba(15, 15, 15, 0.16); stroke-width: 30; }
-
-    /* Garis kontur tipis abu-abu di belakang angka */
-    .akashic-500__contour { stroke: var(--akashic-500-grey); stroke-width: 1.5; stroke-dasharray: 3 6; }
-
-    /* Angka solid hitam */
-    .akashic-500__solid { stroke: var(--akashic-500-black); stroke-width: 30; }
-
-    /* Angka garis tepi: tepi hitam, isi putih */
-    .akashic-500__edge { stroke: var(--akashic-500-black); stroke-width: 36; }
-    .akashic-500__fill { stroke: #fff; stroke-width: 22; }
-
-    .akashic-500__draw {
-      stroke-dasharray: 1;
-      stroke-dashoffset: 1;
-      animation: akashic-500-draw 1500ms var(--akashic-500-ease) both;
-    }
-    .akashic-500__draw--1 { animation-delay: 350ms; }
-    .akashic-500__draw--2 { animation-delay: 700ms; }
-    .akashic-500__draw--3 { animation-delay: 1050ms; }
-
-    .akashic-500__pin { opacity: 0; animation: akashic-500-fade 700ms var(--akashic-500-ease) 1.8s both; }
-
-    .akashic-500__ping {
-      fill: none;
-      stroke: var(--akashic-500-black);
-      stroke-width: 1.5;
-      opacity: 0;
-      transform-box: fill-box;
-      transform-origin: center;
-      animation: akashic-500-ping 3.4s cubic-bezier(0.2, 0.6, 0.3, 1) 2s infinite;
-    }
-    .akashic-500__ping--b { animation-delay: 3.1s; }
-
-    /* Garis tanda kecil (skala teknis) */
-    .akashic-500__tick { stroke: var(--akashic-500-grey); stroke-width: 1.5; fill: none; }
-
-    /* Glitch singkat sesekali (kesan gangguan) */
-    .akashic-500__glitch {
-      fill: none;
-      stroke: var(--akashic-500-grey);
-      stroke-width: 30;
-      opacity: 0;
-      animation: akashic-500-glitch 7s steps(1, end) 3s infinite;
-    }
-
-    /* ---------- Teks ---------- */
-    .akashic-500__content { max-width: 32rem; }
-
-    .akashic-500__title {
-      margin: 0 0 clamp(18px, 3vh, 28px);
-      font-family: var(--akashic-500-serif);
-      font-weight: 400;
-      font-size: clamp(2.4rem, 4.8vw, 4.3rem);
-      line-height: 1.06;
-      letter-spacing: -0.02em;
-      color: var(--akashic-500-black);
-      animation: akashic-500-rise 900ms var(--akashic-500-ease) 450ms both;
-    }
-    .akashic-500__title span { display: block; margin-top: 0.1em; color: var(--akashic-500-grey); }
-
-    .akashic-500__message { animation: akashic-500-rise 900ms var(--akashic-500-ease) 600ms both; }
-    .akashic-500__message p {
-      margin: 0 0 0.7em;
-      font-family: var(--akashic-500-serif);
-      font-size: clamp(1.02rem, 1.4vw, 1.18rem);
-      line-height: 1.65;
-      color: var(--akashic-500-muted);
-    }
-    .akashic-500__message p:last-child { margin-bottom: 0; }
-
-    .akashic-500__actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 12px 28px;
-      margin-top: clamp(24px, 4vh, 40px);
-      animation: akashic-500-rise 900ms var(--akashic-500-ease) 750ms both;
-    }
-
-    .akashic-500__cta {
-      display: inline-flex;
-      align-items: center;
-      gap: 14px;
-      min-height: 52px;
-      padding: 0 26px;
-      border-radius: 999px;
-      background: var(--akashic-500-black);
-      color: #fff;
-      font-size: 0.78rem;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      text-decoration: underline;
-      text-decoration-color: transparent;
-      text-decoration-thickness: 2px;
-      text-underline-offset: 6px;
-      transition: background 260ms var(--akashic-500-ease), text-decoration-color 260ms var(--akashic-500-ease);
-      -webkit-tap-highlight-color: transparent;
-    }
-    .akashic-500__cta svg { width: 18px; height: 18px; flex: none; transition: transform 320ms var(--akashic-500-ease); }
-    .akashic-500__cta:hover { background: #2b2b2b; text-decoration-color: #fff; }
-    .akashic-500__cta:hover svg { transform: translateX(5px); }
-
-    .akashic-500__retry {
-      appearance: none;
-      background: none;
-      border: 0;
-      padding: 12px 2px;
-      font: inherit;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--akashic-500-muted);
-      cursor: pointer;
-      text-decoration: underline;
-      text-decoration-color: transparent;
-      text-underline-offset: 6px;
-      transition: color 260ms var(--akashic-500-ease), text-decoration-color 260ms var(--akashic-500-ease);
-    }
-    .akashic-500__retry[hidden] { display: none; }
-    .akashic-500__retry:hover { color: var(--akashic-500-black); text-decoration-color: currentColor; }
-    .akashic-500__retry:disabled { cursor: progress; opacity: 0.7; }
-
-    .akashic-500__cta:focus-visible,
-    .akashic-500__retry:focus-visible,
-    .akashic-500__brand:focus-visible {
-      outline: 3px solid var(--akashic-500-black);
-      outline-offset: 4px;
-    }
-
-    .akashic-500__meta {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      gap: 6px 24px;
-      padding-top: 16px;
-      border-top: 1px solid rgba(15, 15, 15, 0.16);
-      font-size: 0.62rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: #595959;
-      animation: akashic-500-fade 900ms var(--akashic-500-ease) 800ms both;
-    }
-
-    /* ---------- Keyframes ---------- */
-    @keyframes akashic-500-fade { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes akashic-500-rise { from { opacity: 0; transform: translate3d(0, 16px, 0); } to { opacity: 1; transform: none; } }
-    @keyframes akashic-500-draw { to { stroke-dashoffset: 0; } }
-    @keyframes akashic-500-ping {
-      0%   { opacity: 0;   transform: scale(0.25); }
-      15%  { opacity: 0.7; }
-      100% { opacity: 0;   transform: scale(1); }
-    }
-    @keyframes akashic-500-glitch {
-      0%, 100% { opacity: 0;    transform: none; }
-      90%      { opacity: 0.5;  transform: translate3d(-7px, 2px, 0); }
-      92%      { opacity: 0.5;  transform: translate3d(6px, -2px, 0); }
-      94%      { opacity: 0.3;  transform: translate3d(-3px, 0, 0); }
-      96%      { opacity: 0;    transform: none; }
-    }
-
-    /* Jeda animasi saat tab tidak terlihat */
-    .akashic-500-paused *, .akashic-500-paused *::before, .akashic-500-paused *::after {
-      animation-play-state: paused !important;
-    }
-
-    /* ---------- Responsive ---------- */
-    @media (max-width: 880px) {
-      .akashic-500__main { grid-template-columns: minmax(0, 1fr); row-gap: clamp(12px, 3vh, 28px); padding: 20px 0 32px; }
-      .akashic-500__illustration { justify-self: center; max-width: min(460px, 100%); }
-      .akashic-500__content { justify-self: center; max-width: 34rem; width: 100%; }
-      .akashic-500__bg::after { background: linear-gradient(180deg, rgba(241, 241, 241, 0.76) 0%, rgba(241, 241, 241, 0.92) 100%); }
-    }
-
-    @media (max-width: 520px) {
-      .akashic-500__tagline { display: none; }
-      .akashic-500__actions { flex-direction: column; align-items: stretch; gap: 6px; }
-      .akashic-500__cta { justify-content: space-between; min-height: 56px; }
-      .akashic-500__retry { align-self: center; }
-      .akashic-500__meta { flex-direction: column; gap: 4px; }
-    }
-
-    @media (max-height: 640px) and (min-width: 881px) {
-      .akashic-500__main { padding: 12px 0; }
-      .akashic-500__illustration { max-width: 500px; }
-    }
-
-    /* ---------- Reduced motion: tanpa animasi; video dijeda lewat JavaScript ---------- */
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
-      .akashic-500__draw { stroke-dashoffset: 0 !important; }
-      .akashic-500__pin { opacity: 1 !important; }
-    }
-  </style>
+/* Reduced motion (override: FORCE_MOTION di JavaScript) */
+@media (prefers-reduced-motion:reduce){
+  .akashic-500:not(.akashic-500--force) *,.akashic-500:not(.akashic-500--force) *::before,.akashic-500:not(.akashic-500--force) *::after{animation:none!important;transition:none!important}
+  .akashic-500:not(.akashic-500--force) :is(.akashic-500__fallback,.akashic-500__grid,.akashic-500__depth,.akashic-500__footer){transform:none!important}
+  .akashic-500:not(.akashic-500--force) .akashic-500__video{transform:scale(1.04)!important}
+}
+</style>
 </head>
-
 <body>
-  <!-- Latar video (diubah ke hitam-putih lewat CSS). Gambar tampil jika video gagal, belum siap, atau gerak dikurangi. -->
-  <div class="akashic-500__bg" aria-hidden="true" style="background-image: url('{{ url_for('static', filename='image/gambar-02.jpg') }}');">
-    <video class="akashic-500__video" id="akashic-500-video"
-           autoplay muted loop playsinline preload="auto" disablepictureinpicture tabindex="-1"
-           poster="{{ url_for('static', filename='image/gambar-02.jpg') }}">
-      <source src="{{ url_for('static', filename='video/animasi-02.mp4') }}" type="video/mp4">
-    </video>
-  </div>
+<div class="akashic-500" id="akashic500">
 
-  <div class="akashic-500">
+  <div class="akashic-500__fallback" aria-hidden="true"></div>
+  <video class="akashic-500__video" autoplay muted loop playsinline preload="metadata" aria-hidden="true" tabindex="-1">
+    <source src="{{ url_for('static', filename='video/animasi-02.mp4') }}" type="video/mp4">
+  </video>
+  <div class="akashic-500__overlay" aria-hidden="true"></div>
+  <div class="akashic-500__grid" aria-hidden="true"></div>
 
-    <header class="akashic-500__header">
-      <a class="akashic-500__brand" href="{{ url_for('index') }}" aria-label="Akashic, kembali ke beranda">
-        <svg class="akashic-500__brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false">
-          <path d="M16 3.5c-5.2 0-9.2 4-9.2 9 0 6.6 9.2 16 9.2 16s9.2-9.4 9.2-16c0-5-4-9-9.2-9Z" fill="#0f0f0f"/>
-          <circle cx="16" cy="12.5" r="3.6" fill="#ffffff"/>
-        </svg>
-        <span class="akashic-500__brand-text">
-          <span class="akashic-500__wordmark">AKASHIC</span>
-          <span class="akashic-500__tagline">Location-Based Information System</span>
-        </span>
-      </a>
-      <div class="akashic-500__code">HTTP <strong>500</strong></div>
-    </header>
-
-    <main class="akashic-500__main" id="main">
-
-      <div class="akashic-500__illustration">
-        <svg class="akashic-500__number" viewBox="0 0 590 250" aria-hidden="true" focusable="false">
-          <defs>
-            <!-- Bentuk geometris angka (garis tengah); dipakai ulang di tiap lapisan -->
-            <path id="akashic-500-five" pathLength="1" d="M164 36H62V112H112A48 48 0 0 1 112 208H44"/>
-            <rect id="akashic-500-zero-a" pathLength="1" x="220" y="34" width="130" height="172" rx="65"/>
-            <rect id="akashic-500-zero-b" pathLength="1" x="415" y="34" width="130" height="172" rx="65"/>
-          </defs>
-
-          <!-- Skala teknis di bawah angka -->
-          <path class="akashic-500__tick" d="M14 236H576M14 230V242M110 233V239M206 233V239M302 230V242M398 233V239M494 233V239M576 230V242"/>
-
-          <!-- 5: solid hitam -->
-          <g class="akashic-500__draw akashic-500__draw--1">
-            <g transform="translate(14 14)">
-              <use class="akashic-500__layer akashic-500__shadow" href="#akashic-500-five"/>
-              <use class="akashic-500__layer akashic-500__contour" href="#akashic-500-five" style="stroke-dasharray:3 6"/>
-            </g>
-            <use class="akashic-500__layer akashic-500__solid" href="#akashic-500-five"/>
-          </g>
-
-          <!-- 0 tengah: garis tepi hitam, isi putih -->
-          <g class="akashic-500__draw akashic-500__draw--2">
-            <g transform="translate(14 14)">
-              <use class="akashic-500__layer akashic-500__shadow" href="#akashic-500-zero-a"/>
-            </g>
-            <use class="akashic-500__layer akashic-500__edge" href="#akashic-500-zero-a"/>
-            <use class="akashic-500__layer akashic-500__fill" href="#akashic-500-zero-a"/>
-          </g>
-
-          <!-- Titik lokasi dan radar di dalam angka 0 tengah -->
-          <circle class="akashic-500__ping" cx="285" cy="120" r="46"/>
-          <circle class="akashic-500__ping akashic-500__ping--b" cx="285" cy="120" r="46"/>
-          <circle class="akashic-500__pin" cx="285" cy="120" r="10" fill="#0f0f0f"/>
-
-          <!-- 0 kanan: solid hitam -->
-          <g class="akashic-500__draw akashic-500__draw--3">
-            <g transform="translate(14 14)">
-              <use class="akashic-500__layer akashic-500__shadow" href="#akashic-500-zero-b"/>
-            </g>
-            <use class="akashic-500__layer akashic-500__solid" href="#akashic-500-zero-b"/>
-          </g>
-
-          <g class="akashic-500__glitch">
-            <use href="#akashic-500-five"/><use href="#akashic-500-zero-a"/><use href="#akashic-500-zero-b"/>
-          </g>
-        </svg>
+  <header class="akashic-500__header">
+    <div class="akashic-500__header-row">
+      <div>
+        <p class="akashic-500__brand">
+          <img src="{{ url_for('static', filename='image/icon-akashic.png') }}" alt="" width="26" height="26" decoding="async">
+          AKASHIC
+        </p>
       </div>
+      <p class="akashic-500__meta"><i aria-hidden="true"></i><b>NO. 500</b><span>ERROR ARCHIVE</span></p>
+    </div>
+  </header>
 
-      <div class="akashic-500__content">
-        <h1 class="akashic-500__title">
-          Maaf...
-          <span>Ini bukan salahmu.</span>
-        </h1>
-
-        <div class="akashic-500__message">
-          <p>Sistem kami sedang mengalami masalah internal pada server.</p>
-          <p>Coba kembali beberapa saat lagi.</p>
-        </div>
-
-        <div class="akashic-500__actions">
-          <a class="akashic-500__cta" href="{{ url_for('index') }}">
-            <span>Kembali ke Akashic</span>
-            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M3 10h13M11 4.5 16.5 10 11 15.5"/></svg>
-          </a>
-          <button class="akashic-500__retry" type="button" id="akashic-500-retry" hidden>Coba lagi</button>
-        </div>
+  <main class="akashic-500__content">
+    <section aria-labelledby="akashic500Title">
+      <p class="akashic-500__statement">Terjadi kesalahan server</p>
+      <p class="akashic-500__lead">Coba kembali beberapa saat lagi.</p>
+      <div class="akashic-500__depth">
+        <h1 class="akashic-500__code" id="akashic500Title">500<span class="a4-sr"> — Terjadi kesalahan internal pada server</span></h1>
       </div>
-    </main>
+      <div class="akashic-500__actions">
+        <a class="akashic-500__cta" href="{{ url_for('index') }}">
+          <svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 9H2M7 4L2 9l5 5"/></svg>
+          Kembali ke Akashic
+        </a>
+        <button class="akashic-500__retry" type="button" id="akashic500Retry" hidden>Coba lagi</button>
+      </div>
+    </section>
+  </main>
 
-    <footer class="akashic-500__meta" aria-hidden="true">
-      <span>Akashic / Internal Server Error / 500</span>
-      <span>System status: sementara tidak tersedia</span>
-    </footer>
-  </div>
+  <footer class="akashic-500__footer" aria-hidden="true">
+    <div class="akashic-500__footer-row">
+      <p>DOCUMENT / <b>500</b><br>LOCATION / <b>INTERNAL SERVER</b></p>
+      <p>STATUS / <b>UNAVAILABLE</b><br>EST. 2026</p>
+    </div>
+  </footer>
+</div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      'use strict';
+<script>
+"use strict";
 
-      const root = document.documentElement;
-      const retry = document.getElementById('akashic-500-retry');
-      const video = document.getElementById('akashic-500-video');
-      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+/* Ubah ke true agar parallax, animasi, dan video tetap berjalan walau OS meminta reduced motion. */
+const FORCE_MOTION = false;
 
-      // Tombol "Coba lagi" hanya tampil jika JavaScript aktif
-      if (retry) {
-        retry.hidden = false;
-        retry.addEventListener('click', () => {
-          retry.textContent = 'Memuat ulang...';
-          retry.setAttribute('aria-busy', 'true');
-          retry.disabled = true;
-          window.location.reload();
-        });
-      }
+document.addEventListener("DOMContentLoaded", () => {
+  const root = document.getElementById("akashic500");
+  if (!root) return;
+  const video = root.querySelector(".akashic-500__video");
+  const retry = document.getElementById("akashic500Retry");
+  const mq = window.matchMedia ? window.matchMedia("(prefers-reduced-motion: reduce)") : null;
+  const state = { motion: FORCE_MOTION || !(mq && mq.matches), tx: 0, ty: 0, cx: 0, cy: 0, raf: 0 };
+  const play = () => { const p = video.play(); if (p && p.catch) p.catch(() => {}); };
 
-      // Video hanya diputar saat tab terlihat dan pengguna tidak meminta gerak dikurangi
-      const syncVideo = () => {
-        if (!video) return;
-        if (document.hidden || reduceMotion.matches) { video.pause(); return; }
-        const attempt = video.play();
-        if (attempt && attempt.catch) attempt.catch(() => {});
-      };
+  if (FORCE_MOTION) root.classList.add("akashic-500--force");
 
-      // Jika file video gagal dimuat, sembunyikan elemen video agar gambar latar tetap terlihat
-      if (video) video.addEventListener('error', () => { video.hidden = true; }, true);
-
-      const syncVisibility = () => {
-        root.classList.toggle('akashic-500-paused', document.hidden);
-        syncVideo();
-      };
-
-      document.addEventListener('visibilitychange', syncVisibility);
-      if (reduceMotion.addEventListener) reduceMotion.addEventListener('change', syncVideo);
-      syncVisibility();
+  /* Tombol "Coba lagi" hanya tampil jika JavaScript aktif */
+  if (retry) {
+    retry.hidden = false;
+    retry.addEventListener("click", () => {
+      retry.textContent = "Memuat ulang...";
+      retry.setAttribute("aria-busy", "true");
+      retry.disabled = true;
+      window.location.reload();
     });
-  </script>
+  }
+
+  /* Video + fallback */
+  if (video) {
+    const showVideo = () => root.classList.add("akashic-500--video");
+    const useFallback = () => {
+      root.classList.remove("akashic-500--video");
+      root.classList.add("akashic-500--novideo");
+      try { video.pause(); } catch (_) {}
+    };
+    video.addEventListener("loadeddata", () => { showVideo(); if (!state.motion) video.pause(); });
+    video.addEventListener("error", useFallback);
+    const source = video.querySelector("source");
+    if (source) source.addEventListener("error", useFallback);
+    if (video.readyState >= 2) showVideo();
+    if (state.motion) play(); else video.removeAttribute("autoplay");
+  }
+
+  /* Parallax pointer (lerp, loop hanya saat bergerak) */
+  function step() {
+    state.cx += (state.tx - state.cx) * 0.07;
+    state.cy += (state.ty - state.cy) * 0.07;
+    root.style.setProperty("--a4-mx", state.cx.toFixed(3));
+    root.style.setProperty("--a4-my", state.cy.toFixed(3));
+    const moving = Math.abs(state.tx - state.cx) + Math.abs(state.ty - state.cy) > 0.002;
+    state.raf = moving && document.visibilityState === "visible" ? requestAnimationFrame(step) : 0;
+  }
+  const fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  if (state.motion && fine) {
+    window.addEventListener("pointermove", (e) => {
+      if (window.innerWidth < 768 || (e.pointerType && e.pointerType !== "mouse")) return;
+      state.tx = (e.clientX / window.innerWidth - 0.5) * 2;
+      state.ty = (e.clientY / window.innerHeight - 0.5) * 2;
+      if (!state.raf && document.visibilityState === "visible") state.raf = requestAnimationFrame(step);
+    }, { passive: true });
+  }
+
+  /* Visibility */
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      if (state.raf) { cancelAnimationFrame(state.raf); state.raf = 0; }
+      if (video) video.pause();
+    } else if (state.motion && video && !root.classList.contains("akashic-500--novideo")) {
+      play();
+    }
+  });
+});
+</script>
 </body>
 </html>

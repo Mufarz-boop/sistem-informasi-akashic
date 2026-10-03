@@ -126,7 +126,7 @@ def internal_server_error(error):
 # =========================
 # ERROR TESTING
 # =========================
-@app.route("/test-500")
+@app.route("/500")
 def test_500():
     abort(500)
 

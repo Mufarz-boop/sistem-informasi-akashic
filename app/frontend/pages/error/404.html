@@ -6,7 +6,9 @@
 <meta name="robots" content="noindex">
 <meta name="description" content="Akashic — Halaman yang kamu cari tidak ditemukan.">
 <meta name="theme-color" content="#111417">
-<title>404 — Akashic</title>
+<link rel="icon" type="image/png" href="{{ url_for('static', filename='image/icon-akashic.png') }}">
+<link rel="apple-touch-icon" href="{{ url_for('static', filename='image/icon-akashic.png') }}">
+<title>404</title>
 <style>
 .akashic-404{
   --a4-bg:#111417;--a4-ivory:#F2EFE8;--a4-muted:#8C9295;--a4-accent:#B86B43;--a4-blue:#5D8494;
@@ -61,8 +63,7 @@ body{margin:0;background:#CBC7BF;padding:clamp(8px,2vw,28px);overflow-x:hidden;s
 .akashic-404__header{position:relative;z-index:7;padding-top:clamp(20px,3vw,32px);animation:akashic-404-rise 1s var(--a4-ease) .2s both;--a4-y:-10px}
 .akashic-404__header-row{display:flex;justify-content:space-between;align-items:center;gap:20px;padding-bottom:18px;border-bottom:1px solid var(--a4-line)}
 .akashic-404__brand{display:flex;align-items:center;gap:12px;font-size:13px;font-weight:700;letter-spacing:.32em}
-.akashic-404__brand svg{width:26px;height:26px}
-.akashic-404__sub{margin-top:4px;font-size:9.5px;font-weight:500;letter-spacing:.2em;color:var(--a4-muted)}
+.akashic-404__brand :is(svg,img){width:26px;height:26px;object-fit:contain}
 .akashic-404__meta{display:inline-flex;align-items:center;gap:10px;padding:8px 14px;border:1px solid var(--a4-line2);border-radius:999px;background:var(--a4-glass);
   -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font:11px/1 var(--a4-mono);letter-spacing:.12em;color:var(--a4-muted)}
 .akashic-404__meta b{color:var(--a4-ivory);font-weight:600}
@@ -107,7 +108,7 @@ body{margin:0;background:#CBC7BF;padding:clamp(8px,2vw,28px);overflow-x:hidden;s
   .akashic-404__cta{width:100%;max-width:320px;justify-content:center}
 }
 @media (max-width:520px){
-  .akashic-404__sub,.akashic-404__meta span{display:none}
+  .akashic-404__meta span{display:none}
   .akashic-404__footer-row{font-size:9px;letter-spacing:.1em}
 }
 @media (max-width:360px){.akashic-404__code{font-size:6.5rem}}
@@ -134,10 +135,9 @@ body{margin:0;background:#CBC7BF;padding:clamp(8px,2vw,28px);overflow-x:hidden;s
     <div class="akashic-404__header-row">
       <div>
         <p class="akashic-404__brand">
-          <svg viewBox="0 0 32 32" aria-hidden="true"><polygon points="4,11 13,4 28,8 27,24 12,28 5,21" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><line x1="16" y1="16" x2="27" y2="8" stroke="currentColor" stroke-dasharray="2 2"/><circle cx="16" cy="16" r="3.2" fill="#B86B43"/><circle cx="27" cy="8" r="1.6" fill="currentColor"/></svg>
+          <img src="{{ url_for('static', filename='image/icon-akashic.png') }}" alt="" width="26" height="26" decoding="async">
           AKASHIC
         </p>
-        <p class="akashic-404__sub">LOCATION-BASED INFORMATION SYSTEM</p>
       </div>
       <p class="akashic-404__meta"><i aria-hidden="true"></i><b>NO. 404</b><span>ERROR ARCHIVE</span></p>
     </div>
@@ -145,8 +145,8 @@ body{margin:0;background:#CBC7BF;padding:clamp(8px,2vw,28px);overflow-x:hidden;s
 
   <main class="akashic-404__content">
     <section aria-labelledby="akashic404Title">
-      <p class="akashic-404__statement">Dokumen tidak tersedia</p>
-      <p class="akashic-404__lead">Sepertinya kamu tersesat.</p>
+      <p class="akashic-404__statement">Halaman tidak ditemukan</p>
+      <p class="akashic-404__lead">Periksa kembali alamat yang kamu tuju.</p>
       <div class="akashic-404__depth">
         <h1 class="akashic-404__code" id="akashic404Title">404<span class="a4-sr"> — Halaman tidak ditemukan</span></h1>
       </div>
