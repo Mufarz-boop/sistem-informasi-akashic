@@ -1,399 +1,160 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#F7F5F2">
-<meta name="color-scheme" content="light">
-<title>Akashic — Kebijakan Privasi</title>
-<meta name="description" content="Kebijakan Privasi Akashic menjelaskan bagaimana informasi, konteks lokasi, dan teknologi terkait digunakan dalam sistem informasi berbasis lokasi.">
-<link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='image/favicon.svg') }}">
-<script>document.documentElement.classList.add('js')</script>
-<style>
-:root{--bg:#F7F5F2;--soft:#F1EEE9;--tx:#1C1C1E;--mu:#5C5C60;--sub:#8E8E93;--bd:rgba(28,28,30,.1);--ac:#9A6B4A;
---serif:Georgia,"Times New Roman",serif;--sans:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--nav:64px}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav) + 24px);-webkit-text-size-adjust:100%}
-body{font:clamp(.9375rem,.9rem + .2vw,1.0625rem)/1.75 var(--sans);color:var(--tx);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
-button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:left}
-ul{list-style:none}
-:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
-.wrap{width:100%;max-width:1240px;margin-inline:auto;padding-inline:clamp(1.25rem,4vw,3rem)}
-.skip{position:absolute;top:-100%;left:1rem;z-index:50;padding:.6rem 1rem;background:var(--tx);color:#fff;border-radius:4px}
-.skip:focus{top:1rem}
+{% extends "legal/base.html" %}
 
-/* Nav */
-#bar{position:fixed;top:0;left:0;height:2px;width:0;background:var(--ac);z-index:40}
-.nav{position:fixed;inset:0 0 auto;height:var(--nav);z-index:30;background:rgba(247,245,242,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
-.nav.s{border-color:var(--bd)}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:100%;gap:1.5rem}
-.brand{font:400 1.25rem var(--serif);letter-spacing:.08em}
-.nav-r{display:flex;align-items:center;gap:1.5rem;font-size:.875rem}
-.nav-r a{color:var(--mu);transition:color .15s}
-.nav-r a:hover{color:var(--tx)}
-.clock{padding-left:1.5rem;border-left:1px solid var(--bd);font-variant-numeric:tabular-nums;color:var(--tx)}
+{% block title %}Kebijakan Privasi{% endblock %}
+{% block description %}Kebijakan Privasi Akashic menjelaskan bagaimana informasi, konteks lokasi, dan teknologi terkait digunakan dalam sistem informasi berbasis lokasi.{% endblock %}
 
-/* Hero */
-main{flex:1;padding-top:var(--nav)}
-.hero{padding-block:clamp(3rem,7vw,5.5rem) clamp(2.5rem,5vw,4rem);border-bottom:1px solid var(--bd);background:radial-gradient(circle at 20% 20%,rgba(154,107,74,.09),transparent 55%),linear-gradient(180deg,#F7F5F2,#F2EEE8)}
-.hero h1{font:400 clamp(2.5rem,1.5rem + 5vw,5rem)/1.05 var(--serif);letter-spacing:-.025em;margin-bottom:1.25rem}
-.hero p{max-width:52ch;color:var(--mu);font-size:1.125rem;line-height:1.65}
-.hero small{display:block;margin-top:1.5rem;color:var(--sub);font-size:.875rem}
+{% block hero_title %}Kebijakan Privasi{% endblock %}
+{% block hero_desc %}Bagaimana Akashic memproses informasi untuk menghadirkan hal yang relevan berdasarkan konteks wilayah.{% endblock %}
 
-/* Layout */
-.layout{display:grid;grid-template-columns:250px 1fr;gap:clamp(2rem,5vw,4.5rem);padding-block:3rem 6rem;align-items:start}
-.toc{position:sticky;top:calc(var(--nav) + 24px);max-height:calc(100vh - var(--nav) - 48px);overflow-y:auto;scrollbar-width:none}
-.toc::-webkit-scrollbar{display:none}
-.toc p{font-size:.8125rem;color:var(--sub);padding-bottom:.75rem;margin-bottom:.5rem;border-bottom:1px solid var(--bd)}
-.toc button{display:block;width:100%;padding:.45rem .75rem;font-size:.875rem;line-height:1.4;color:var(--mu);border-left:2px solid transparent;transition:color .15s,background .15s}
-.toc button:hover{color:var(--tx);background:rgba(154,107,74,.05)}
-.toc button[aria-current]{color:var(--tx);border-color:var(--ac);background:rgba(154,107,74,.07)}
+{% block layout_class %} pt{% endblock %}
 
-/* Content */
-.content{max-width:760px;min-height:400px}
-.empty{padding-block:3rem}
-.empty h2{font:400 1.5rem/1.25 var(--serif);color:var(--mu);margin-bottom:.75rem;max-width:24ch}
-.empty p{color:var(--sub);max-width:50ch}
-.js [data-s]{display:none}
-.js [data-s].on{display:block}
-[data-s]{padding-bottom:2rem}
-[data-s] h2{font:400 clamp(1.75rem,1.3rem + 1.6vw,2.375rem)/1.15 var(--serif);letter-spacing:-.015em;margin-bottom:1.25rem}
-.content p{color:var(--mu);margin-bottom:1rem}
-.content strong{color:var(--tx);font-weight:600}
-.content h3{font-size:1rem;font-weight:600;margin:1.75rem 0 .6rem}
-.content ul{display:grid;gap:.5rem;margin-bottom:1.25rem}
-.content li{position:relative;padding-left:1.4rem;color:var(--mu)}
-.content li::before{content:"";position:absolute;left:0;top:.85em;width:8px;height:1px;background:var(--ac)}
-.content a{color:var(--tx);border-bottom:1px solid var(--bd);transition:color .15s,border-color .15s}
-.content a:hover{color:var(--ac);border-color:var(--ac)}
-.note{margin-block:1.5rem;padding:1.1rem 1.5rem;border-left:3px solid var(--ac);background:rgba(154,107,74,.09);color:var(--tx);font-size:.9375rem;line-height:1.65}
-.note b{display:block;color:var(--ac);margin-bottom:.2rem}
-.cards{display:grid;grid-template-columns:1fr 1fr;margin-block:1.5rem;border-top:1px solid var(--bd)}
-.cards div{padding:1.25rem;border-bottom:1px solid var(--bd)}
-.cards div:nth-child(odd){border-right:1px solid var(--bd)}
-.cards h3{margin:0 0 .4rem}
-.cards p{font-size:.875rem;line-height:1.6;margin:0}
-.updated{font-size:.875rem;color:var(--sub);padding-top:1rem;border-top:1px solid var(--bd)}
+{% block content %}
+<section data-s id="pendahuluan">
+  <h2>Pendahuluan</h2>
+  <p>Akashic adalah <strong>Location-Based Information System</strong> berbasis web yang menghubungkan informasi digital dengan konteks geografis. Prinsipnya: <em>“Informasi yang hadir di tempat yang tepat.”</em></p>
+  <p>Kebijakan ini menjelaskan bagaimana Akashic memproses informasi saat sistem digunakan, dengan bahasa yang mudah dipahami pengguna umum, termasuk pelajar dan pengguna baru.</p>
+  <p>Akashic <strong>bukan sistem pelacakan pengguna</strong>. Lokasi dipakai sebagai konteks, bukan untuk mengawasi, membuat riwayat perjalanan, atau mengidentifikasi seseorang.</p>
+  <div class="note"><b>Prinsip inti</b>Lokasi → wilayah → relevansi → informasi. Akashic memakai lokasi untuk memahami wilayah, lalu menyajikan informasi yang relevan dengan wilayah itu.</div>
+</section>
 
-/* Closing + footer */
-.closing{padding-block:clamp(3.5rem,8vw,6rem);background:var(--soft);border-top:1px solid var(--bd);text-align:center}
-.closing h2{font:400 clamp(1.5rem,1.1rem + 2vw,2.5rem)/1.2 var(--serif);letter-spacing:-.02em;max-width:24ch;margin:0 auto 1.25rem}
-.closing p{max-width:56ch;margin:0 auto;color:var(--mu)}
-footer{border-top:1px solid var(--bd);padding-block:3rem 1.5rem}
-.f-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2rem;padding-bottom:2rem}
-.f-grid .brand{display:block;font-size:1.75rem;margin-bottom:.75rem}
-.f-grid p,.f-grid h3{font-size:.875rem;color:var(--mu)}
-.f-grid h3{font-weight:600;color:var(--sub);margin-bottom:.9rem}
-.f-grid li+li{margin-top:.6rem}
-.f-grid a{font-size:.875rem;color:var(--mu)}
-.f-grid a:hover{color:var(--ac)}
-.f-bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding-top:1.25rem;border-top:1px solid var(--bd);font-size:.8125rem;color:var(--sub)}
-
-@media(max-width:900px){
-.layout{grid-template-columns:1fr;gap:1.5rem}
-.toc{position:static;max-height:none;padding:1.25rem;background:var(--soft);border:1px solid var(--bd);border-radius:4px}
-.toc ul{display:grid;grid-template-columns:1fr 1fr;column-gap:1rem}
-}
-@media(max-width:640px){
-.clock,.nav-r a{display:none}
-.toc ul{grid-template-columns:1fr}
-.cards{grid-template-columns:1fr}
-.cards div:nth-child(odd){border-right:0}
-.f-grid{grid-template-columns:1fr}
-}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
-@media print{
-.nav,#bar,.toc,.skip,.empty{display:none!important}
-main{padding-top:0}
-.layout{display:block}
-[data-s]{display:block!important;break-inside:avoid}
-body{background:#fff}
-}
-</style>
-</head>
-<body>
-<a href="#main" class="skip">Lewati ke konten</a>
-<div id="bar" aria-hidden="true"></div>
-
-<header class="nav" id="nav">
-  <div class="wrap">
-    <a href="{{ url_for('index') }}" class="brand" aria-label="Akashic — Beranda">AKASHIC</a>
-    <div class="nav-r">
-      <a href="{{ url_for('index') }}">Beranda</a>
-      <time class="clock" id="clock" aria-label="Waktu lokal">--:--:--</time>
-    </div>
+<section data-s id="prinsip">
+  <h2>Prinsip Privasi</h2>
+  <p>Empat prinsip ini mendasari setiap fitur Akashic.</p>
+  <div class="cards">
+    <div><h3>Lokasi sebagai konteks</h3><p>Lokasi menentukan konteks geografis, bukan identitas pribadi.</p></div>
+    <div><h3>Izin lebih dulu</h3><p>Akses lokasi hanya terjadi setelah Anda memberi izin melalui browser.</p></div>
+    <div><h3>Data seperlunya</h3><p>Informasi yang diproses dibatasi pada kebutuhan fungsi sistem.</p></div>
+    <div><h3>Tanpa pelacakan</h3><p>Akashic tidak dirancang untuk melacak perjalanan pengguna.</p></div>
   </div>
-</header>
+</section>
 
-<main id="main">
-  <section class="hero">
-    <div class="wrap">
-      <h1>Kebijakan Privasi</h1>
-      <p>Bagaimana Akashic memproses informasi untuk menghadirkan hal yang relevan berdasarkan konteks wilayah.</p>
-      <small>Terakhir diperbarui: 2026</small>
-    </div>
-  </section>
+<section data-s id="informasi" data-t="Informasi yang Diproses">
+  <h2>Informasi yang Diproses</h2>
+  <p>Jenis data bergantung pada fitur yang dipakai dan implementasi sistem. Secara umum:</p>
+  <h3>Konteks lokasi</h3>
+  <p>Jika Anda mengizinkan lokasi melalui browser, sistem dapat menerima latitude, longitude, dan nilai akurasi untuk menentukan wilayah yang relevan.</p>
+  <h3>Data teknis browser</h3>
+  <p>Browser dapat menyediakan informasi teknis dasar agar sistem berfungsi, seperti jenis perangkat dan preferensi tampilan. Akashic tidak memakainya untuk mengidentifikasi seseorang.</p>
+  <h3>Informasi yang Anda berikan sukarela</h3>
+  <p>Jika Anda menghubungi pengelola lewat halaman Kontak, informasi seperti nama dan pesan hanya dipakai untuk keperluan komunikasi tersebut.</p>
+  <div class="note"><b>Perbedaan penting</b><strong>Data lokasi</strong> adalah informasi geografis dari browser dengan izin Anda. <strong>Data pribadi</strong> adalah informasi yang dapat mengidentifikasi seseorang. Akashic tidak menganggap keduanya sama.</div>
+</section>
 
-  <div class="wrap">
-    <div class="layout">
-      <nav class="toc" aria-label="Daftar isi">
-        <p>Daftar isi</p>
-        <ul id="toc"></ul>
-      </nav>
+<section data-s id="lokasi" data-t="Data Lokasi">
+  <h2>Data Lokasi</h2>
+  <p>Akashic dapat meminta lokasi melalui <strong>Geolocation API</strong> browser. Permintaan hanya terjadi saat fitur lokasi dipakai dan memerlukan interaksi Anda.</p>
+  <h3>Data yang dapat diterima</h3>
+  <p>Latitude, longitude, dan tingkat akurasi dari browser.</p>
+  <h3>Tujuan penggunaan</h3>
+  <ul>
+    <li>Menentukan konteks wilayah dari posisi Anda.</li>
+    <li>Mencocokkan lokasi dengan region yang dikenali sistem.</li>
+    <li>Menentukan relevansi informasi.</li>
+  </ul>
+  <h3>Yang tidak dilakukan Akashic</h3>
+  <ul>
+    <li>Tidak meminta lokasi otomatis saat halaman dibuka.</li>
+    <li>Tidak menyimpan riwayat pergerakan.</li>
+    <li>Tidak menganggap penolakan izin sebagai kesalahan.</li>
+    <li>Tidak menampilkan lokasi presisi Anda di halaman publik.</li>
+  </ul>
+  <div class="note"><b>Catatan</b>Halaman ini tidak meminta izin lokasi Anda. Halaman ini hanya menjelaskan cara kerja fitur lokasi secara konseptual.</div>
+</section>
 
-      <article class="content">
-        <div class="empty" id="empty">
-          <h2>Pilih salah satu bagian untuk membaca.</h2>
-          <p>Klik item pada daftar isi, dan bagian yang dipilih akan tampil di sini.</p>
-        </div>
+<section data-s id="penggunaan" data-t="Penggunaan Informasi">
+  <h2>Penggunaan Informasi</h2>
+  <p>Informasi yang diproses dipakai untuk:</p>
+  <ul>
+    <li>menentukan konteks wilayah dari lokasi yang diberikan;</li>
+    <li>menyajikan informasi yang relevan dengan wilayah tersebut;</li>
+    <li>mendukung pencarian dan penjelajahan informasi;</li>
+    <li>menjaga keamanan dan kestabilan sistem;</li>
+    <li>menerima dan meninjau pesan yang Anda kirim lewat halaman Kontak.</li>
+  </ul>
+  <p>Akashic tidak memakai informasi lokasi untuk membuat profil perilaku, menargetkan iklan, atau menjual data kepada pihak lain.</p>
+</section>
 
-        <section data-s id="pendahuluan">
-          <h2>Pendahuluan</h2>
-          <p>Akashic adalah <strong>Location-Based Information System</strong> berbasis web yang menghubungkan informasi digital dengan konteks geografis. Prinsipnya: <em>“Informasi yang hadir di tempat yang tepat.”</em></p>
-          <p>Kebijakan ini menjelaskan bagaimana Akashic memproses informasi saat sistem digunakan, dengan bahasa yang mudah dipahami pengguna umum, termasuk pelajar dan pengguna baru.</p>
-          <p>Akashic <strong>bukan sistem pelacakan pengguna</strong>. Lokasi dipakai sebagai konteks, bukan untuk mengawasi, membuat riwayat perjalanan, atau mengidentifikasi seseorang.</p>
-          <div class="note"><b>Prinsip inti</b>Lokasi → wilayah → relevansi → informasi. Akashic memakai lokasi untuk memahami wilayah, lalu menyajikan informasi yang relevan dengan wilayah itu.</div>
-        </section>
+<section data-s id="keamanan" data-t="Penyimpanan dan Keamanan">
+  <h2>Penyimpanan dan Keamanan</h2>
+  <p>Akashic berupaya menerapkan langkah teknis dan organisatoris yang sesuai, meliputi:</p>
+  <ul>
+    <li>pembatasan akses terhadap data;</li>
+    <li>pemisahan hak akses administrator;</li>
+    <li>validasi input untuk mencegah penyalahgunaan;</li>
+    <li>pengamanan komunikasi antara browser dan server;</li>
+    <li>perlindungan dari akses tidak sah.</li>
+  </ul>
+  <p>Tidak ada sistem yang dapat menjamin keamanan mutlak. Akashic tidak mengklaim sistemnya sepenuhnya bebas risiko.</p>
+</section>
 
-        <section data-s id="prinsip">
-          <h2>Prinsip Privasi</h2>
-          <p>Empat prinsip ini mendasari setiap fitur Akashic.</p>
-          <div class="cards">
-            <div><h3>Lokasi sebagai konteks</h3><p>Lokasi menentukan konteks geografis, bukan identitas pribadi.</p></div>
-            <div><h3>Izin lebih dulu</h3><p>Akses lokasi hanya terjadi setelah Anda memberi izin melalui browser.</p></div>
-            <div><h3>Data seperlunya</h3><p>Informasi yang diproses dibatasi pada kebutuhan fungsi sistem.</p></div>
-            <div><h3>Tanpa pelacakan</h3><p>Akashic tidak dirancang untuk melacak perjalanan pengguna.</p></div>
-          </div>
-        </section>
+<section data-s id="berbagi" data-t="Berbagi Informasi">
+  <h2>Berbagi Informasi</h2>
+  <p>Akashic tidak menjadikan data lokasi pengguna sebagai produk. Informasi lokasi tidak dimaksudkan untuk dijual atau dibagikan kepada pihak lain untuk tujuan komersial.</p>
+  <p>Jika suatu fitur memerlukan layanan pihak ketiga, seperti infrastruktur notifikasi atau sumber berita eksternal, layanan itu hanya dipakai sebatas kebutuhan fungsinya.</p>
+</section>
 
-        <section data-s id="informasi" data-t="Informasi yang Diproses">
-          <h2>Informasi yang Diproses</h2>
-          <p>Jenis data bergantung pada fitur yang dipakai dan implementasi sistem. Secara umum:</p>
-          <h3>Konteks lokasi</h3>
-          <p>Jika Anda mengizinkan lokasi melalui browser, sistem dapat menerima latitude, longitude, dan nilai akurasi untuk menentukan wilayah yang relevan.</p>
-          <h3>Data teknis browser</h3>
-          <p>Browser dapat menyediakan informasi teknis dasar agar sistem berfungsi, seperti jenis perangkat dan preferensi tampilan. Akashic tidak memakainya untuk mengidentifikasi seseorang.</p>
-          <h3>Informasi yang Anda berikan sukarela</h3>
-          <p>Jika Anda menghubungi pengelola lewat halaman Kontak, informasi seperti nama dan pesan hanya dipakai untuk keperluan komunikasi tersebut.</p>
-          <div class="note"><b>Perbedaan penting</b><strong>Data lokasi</strong> adalah informasi geografis dari browser dengan izin Anda. <strong>Data pribadi</strong> adalah informasi yang dapat mengidentifikasi seseorang. Akashic tidak menganggap keduanya sama.</div>
-        </section>
+<section data-s id="push" data-t="Push Subscription">
+  <h2>Notifikasi dan Push Subscription</h2>
+  <p>Jika Anda mengaktifkan notifikasi, browser dapat menyediakan <strong>Push Subscription</strong> agar Anda menerima pembaruan yang berkaitan dengan informasi atau wilayah Anda.</p>
+  <p>Subscription tidak dimaksudkan sebagai identitas pribadi, tidak dipakai untuk melacak lokasi terus-menerus, dan tidak menggantikan izin lokasi browser. Anda dapat mengelola atau mencabut izin notifikasi melalui pengaturan browser.</p>
+</section>
 
-        <section data-s id="lokasi" data-t="Data Lokasi">
-          <h2>Data Lokasi</h2>
-          <p>Akashic dapat meminta lokasi melalui <strong>Geolocation API</strong> browser. Permintaan hanya terjadi saat fitur lokasi dipakai dan memerlukan interaksi Anda.</p>
-          <h3>Data yang dapat diterima</h3>
-          <p>Latitude, longitude, dan tingkat akurasi dari browser.</p>
-          <h3>Tujuan penggunaan</h3>
-          <ul>
-            <li>Menentukan konteks wilayah dari posisi Anda.</li>
-            <li>Mencocokkan lokasi dengan region yang dikenali sistem.</li>
-            <li>Menentukan relevansi informasi.</li>
-          </ul>
-          <h3>Yang tidak dilakukan Akashic</h3>
-          <ul>
-            <li>Tidak meminta lokasi otomatis saat halaman dibuka.</li>
-            <li>Tidak menyimpan riwayat pergerakan.</li>
-            <li>Tidak menganggap penolakan izin sebagai kesalahan.</li>
-            <li>Tidak menampilkan lokasi presisi Anda di halaman publik.</li>
-          </ul>
-          <div class="note"><b>Catatan</b>Halaman ini tidak meminta izin lokasi Anda. Halaman ini hanya menjelaskan cara kerja fitur lokasi secara konseptual.</div>
-        </section>
+<section data-s id="cookie" data-t="Cookie dan Teknologi Serupa">
+  <h2>Cookie dan Teknologi Serupa</h2>
+  <p>Jika diperlukan, Akashic dapat memakai cookie atau penyimpanan serupa untuk:</p>
+  <ul>
+    <li>menjaga sesi atau keadaan antarmuka;</li>
+    <li>menyimpan preferensi tampilan;</li>
+    <li>mendukung fungsi keamanan dasar;</li>
+    <li>menjaga kestabilan teknis sistem.</li>
+  </ul>
+  <p>Akashic tidak memakai cookie untuk profil periklanan atau melacak Anda di luar situs ini.</p>
+</section>
 
-        <section data-s id="penggunaan" data-t="Penggunaan Informasi">
-          <h2>Penggunaan Informasi</h2>
-          <p>Informasi yang diproses dipakai untuk:</p>
-          <ul>
-            <li>menentukan konteks wilayah dari lokasi yang diberikan;</li>
-            <li>menyajikan informasi yang relevan dengan wilayah tersebut;</li>
-            <li>mendukung pencarian dan penjelajahan informasi;</li>
-            <li>menjaga keamanan dan kestabilan sistem;</li>
-            <li>menerima dan meninjau pesan yang Anda kirim lewat halaman Kontak.</li>
-          </ul>
-          <p>Akashic tidak memakai informasi lokasi untuk membuat profil perilaku, menargetkan iklan, atau menjual data kepada pihak lain.</p>
-        </section>
+<section data-s id="hak" data-t="Hak Pengguna">
+  <h2>Hak Pengguna</h2>
+  <p>Anda memiliki kendali atas cara sistem berinteraksi dengan informasi Anda. Anda dapat:</p>
+  <ul>
+    <li>mengetahui bagaimana informasi dipakai oleh sistem;</li>
+    <li>memberi atau menolak izin lokasi melalui browser;</li>
+    <li>memakai situs tanpa akses lokasi, selama fitur tersebut tidak diwajibkan;</li>
+    <li>meminta penjelasan tentang pemrosesan informasi yang berkaitan dengan Anda;</li>
+    <li>menghubungi pengelola untuk pertanyaan privasi.</li>
+  </ul>
+  <p>Hak-hak ini dapat digunakan sesuai mekanisme dan fitur yang tersedia pada sistem.</p>
+</section>
 
-        <section data-s id="keamanan" data-t="Penyimpanan dan Keamanan">
-          <h2>Penyimpanan dan Keamanan</h2>
-          <p>Akashic berupaya menerapkan langkah teknis dan organisatoris yang sesuai, meliputi:</p>
-          <ul>
-            <li>pembatasan akses terhadap data;</li>
-            <li>pemisahan hak akses administrator;</li>
-            <li>validasi input untuk mencegah penyalahgunaan;</li>
-            <li>pengamanan komunikasi antara browser dan server;</li>
-            <li>perlindungan dari akses tidak sah.</li>
-          </ul>
-          <p>Tidak ada sistem yang dapat menjamin keamanan mutlak. Akashic tidak mengklaim sistemnya sepenuhnya bebas risiko.</p>
-        </section>
+<section data-s id="tanpa-lokasi" data-t="Penggunaan Tanpa Lokasi">
+  <h2>Jika Anda Tidak Memberikan Akses Lokasi</h2>
+  <p>Anda tetap dapat mengakses Akashic tanpa izin lokasi. Menolak lokasi tidak berarti Anda dilarang memakai sistem.</p>
+  <p>Fitur yang membutuhkan konteks geografis mungkin tidak berfungsi penuh, tetapi halaman publik seperti informasi umum, tentang sistem, dan Kontak tetap dapat diakses.</p>
+  <p>Secara konseptual, pemrosesan berjalan dari browser → konteks lokasi → wilayah → relevansi → informasi. Alur ini menggambarkan konsep umum, bukan data pribadi pengguna secara langsung.</p>
+</section>
 
-        <section data-s id="berbagi" data-t="Berbagi Informasi">
-          <h2>Berbagi Informasi</h2>
-          <p>Akashic tidak menjadikan data lokasi pengguna sebagai produk. Informasi lokasi tidak dimaksudkan untuk dijual atau dibagikan kepada pihak lain untuk tujuan komersial.</p>
-          <p>Jika suatu fitur memerlukan layanan pihak ketiga, seperti infrastruktur notifikasi atau sumber berita eksternal, layanan itu hanya dipakai sebatas kebutuhan fungsinya.</p>
-        </section>
+<section data-s id="pihak-ketiga" data-t="Layanan Pihak Ketiga">
+  <h2>Layanan Pihak Ketiga</h2>
+  <p>Beberapa fungsi teknis bergantung pada layanan browser atau pihak ketiga, yaitu:</p>
+  <ul>
+    <li>fitur geolocation dari browser;</li>
+    <li>layanan notifikasi browser untuk push notification;</li>
+    <li>sumber berita eksternal yang dikaitkan dengan relevansi wilayah.</li>
+  </ul>
+  <p>Layanan ini hanya dipakai untuk mendukung fungsi sistem, tidak untuk tujuan di luar yang dijelaskan dalam kebijakan ini.</p>
+</section>
 
-        <section data-s id="push" data-t="Push Subscription">
-          <h2>Notifikasi dan Push Subscription</h2>
-          <p>Jika Anda mengaktifkan notifikasi, browser dapat menyediakan <strong>Push Subscription</strong> agar Anda menerima pembaruan yang berkaitan dengan informasi atau wilayah Anda.</p>
-          <p>Subscription tidak dimaksudkan sebagai identitas pribadi, tidak dipakai untuk melacak lokasi terus-menerus, dan tidak menggantikan izin lokasi browser. Anda dapat mengelola atau mencabut izin notifikasi melalui pengaturan browser.</p>
-        </section>
+<section data-s id="perubahan" data-t="Perubahan Kebijakan">
+  <h2>Perubahan Kebijakan Privasi</h2>
+  <p>Kebijakan ini dapat diperbarui bila terjadi perubahan fitur, mekanisme pemrosesan data, kebutuhan keamanan, atau operasional sistem. Versi terbaru selalu ditampilkan di halaman ini.</p>
+  <p class="updated">Terakhir diperbarui: 2026</p>
+</section>
 
-        <section data-s id="cookie" data-t="Cookie dan Teknologi Serupa">
-          <h2>Cookie dan Teknologi Serupa</h2>
-          <p>Jika diperlukan, Akashic dapat memakai cookie atau penyimpanan serupa untuk:</p>
-          <ul>
-            <li>menjaga sesi atau keadaan antarmuka;</li>
-            <li>menyimpan preferensi tampilan;</li>
-            <li>mendukung fungsi keamanan dasar;</li>
-            <li>menjaga kestabilan teknis sistem.</li>
-          </ul>
-          <p>Akashic tidak memakai cookie untuk profil periklanan atau melacak Anda di luar situs ini.</p>
-        </section>
+<section data-s id="kontak" data-t="Kontak">
+  <h2>Kontak</h2>
+  <p>Pertanyaan tentang kebijakan ini dapat disampaikan melalui halaman <a href="{{ url_for('contact') }}">Kontak</a>. Halaman itu juga menyediakan kanal untuk masukan atau penjelasan lebih lanjut tentang pemrosesan informasi di Akashic.</p>
+</section>
+{% endblock %}
 
-        <section data-s id="hak" data-t="Hak Pengguna">
-          <h2>Hak Pengguna</h2>
-          <p>Anda memiliki kendali atas cara sistem berinteraksi dengan informasi Anda. Anda dapat:</p>
-          <ul>
-            <li>mengetahui bagaimana informasi dipakai oleh sistem;</li>
-            <li>memberi atau menolak izin lokasi melalui browser;</li>
-            <li>memakai situs tanpa akses lokasi, selama fitur tersebut tidak diwajibkan;</li>
-            <li>meminta penjelasan tentang pemrosesan informasi yang berkaitan dengan Anda;</li>
-            <li>menghubungi pengelola untuk pertanyaan privasi.</li>
-          </ul>
-          <p>Hak-hak ini dapat digunakan sesuai mekanisme dan fitur yang tersedia pada sistem.</p>
-        </section>
-
-        <section data-s id="tanpa-lokasi" data-t="Penggunaan Tanpa Lokasi">
-          <h2>Jika Anda Tidak Memberikan Akses Lokasi</h2>
-          <p>Anda tetap dapat mengakses Akashic tanpa izin lokasi. Menolak lokasi tidak berarti Anda dilarang memakai sistem.</p>
-          <p>Fitur yang membutuhkan konteks geografis mungkin tidak berfungsi penuh, tetapi halaman publik seperti informasi umum, tentang sistem, dan Kontak tetap dapat diakses.</p>
-          <p>Secara konseptual, pemrosesan berjalan dari browser → konteks lokasi → wilayah → relevansi → informasi. Alur ini menggambarkan konsep umum, bukan data pribadi pengguna secara langsung.</p>
-        </section>
-
-        <section data-s id="pihak-ketiga" data-t="Layanan Pihak Ketiga">
-          <h2>Layanan Pihak Ketiga</h2>
-          <p>Beberapa fungsi teknis bergantung pada layanan browser atau pihak ketiga, yaitu:</p>
-          <ul>
-            <li>fitur geolocation dari browser;</li>
-            <li>layanan notifikasi browser untuk push notification;</li>
-            <li>sumber berita eksternal yang dikaitkan dengan relevansi wilayah.</li>
-          </ul>
-          <p>Layanan ini hanya dipakai untuk mendukung fungsi sistem, tidak untuk tujuan di luar yang dijelaskan dalam kebijakan ini.</p>
-        </section>
-
-        <section data-s id="perubahan" data-t="Perubahan Kebijakan">
-          <h2>Perubahan Kebijakan Privasi</h2>
-          <p>Kebijakan ini dapat diperbarui bila terjadi perubahan fitur, mekanisme pemrosesan data, kebutuhan keamanan, atau operasional sistem. Versi terbaru selalu ditampilkan di halaman ini.</p>
-          <p class="updated">Terakhir diperbarui: 2026</p>
-        </section>
-
-        <section data-s id="kontak" data-t="Kontak">
-          <h2>Kontak</h2>
-          <p>Pertanyaan tentang kebijakan ini dapat disampaikan melalui halaman <a href="{{ url_for('contact') }}">Kontak</a>. Halaman itu juga menyediakan kanal untuk masukan atau penjelasan lebih lanjut tentang pemrosesan informasi di Akashic.</p>
-        </section>
-      </article>
-    </div>
-  </div>
-
-  <section class="closing">
-    <div class="wrap">
-      <h2>Privasi bukan fitur tambahan. Privasi adalah bagian dari cara Akashic dirancang.</h2>
-      <p>Akashic memakai lokasi sebagai konteks untuk informasi, bukan sebagai alasan untuk mengawasi pengguna.</p>
-    </div>
-  </section>
-</main>
-
-<footer>
-  <div class="wrap">
-    <div class="f-grid">
-      <div>
-        <a href="{{ url_for('index') }}" class="brand">AKASHIC</a>
-        <p>Informasi yang hadir di tempat yang tepat.</p>
-      </div>
-      <div>
-        <h3>Navigasi</h3>
-        <ul>
-          <li><a href="{{ url_for('index') }}">Beranda</a></li>
-          <li><a href="{{ url_for('information') }}">Informasi</a></li>
-          <li><a href="{{ url_for('about') }}">Tentang</a></li>
-          <li><a href="{{ url_for('contact') }}">Kontak</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Legal</h3>
-        <ul>
-          <li><a href="{{ url_for('privacy') }}">Privasi</a></li>
-          <li><a href="{{ url_for('terms') }}">Ketentuan</a></li>
-          <li><a href="{{ url_for('disclaimer') }}">Disclaimer</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="f-bot"><span>© 2026 Akashic</span><span>Location-Based Information System</span></div>
-  </div>
-</footer>
-
-<script>
-(function(){
-'use strict';
-var d=document,secs=[].slice.call(d.querySelectorAll('[data-s]')),
-    tocEl=d.getElementById('toc'),empty=d.getElementById('empty'),
-    nav=d.getElementById('nav'),bar=d.getElementById('bar'),btns=[];
-
-/* TOC dibangun otomatis dari <section data-s>; judul pendek via data-t */
-secs.forEach(function(s){
-  var li=d.createElement('li'),b=d.createElement('button');
-  b.type='button';
-  b.innerHTML=s.getAttribute('data-t')||s.querySelector('h2').innerHTML;
-  b.addEventListener('click',function(){show(s.id,true)});
-  li.appendChild(b);tocEl.appendChild(li);btns.push(b);
-});
-
-function show(id,scroll){
-  var found=false;
-  secs.forEach(function(s,i){
-    var on=s.id===id;
-    s.classList.toggle('on',on);
-    if(on){found=true;btns[i].setAttribute('aria-current','true')}
-    else btns[i].removeAttribute('aria-current');
-  });
-  empty.hidden=found;
-  if(found){
-    history.replaceState(null,'','#'+id);
-    var c=d.querySelector('.content'),top=c.getBoundingClientRect().top;
-    if(scroll&&(top<0||top>window.innerHeight*.5)){
-      c.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});
-    }
-  }
-}
-show(location.hash.slice(1));
-window.addEventListener('hashchange',function(){show(location.hash.slice(1),true)});
-
-/* Scroll: border navbar + progress bar */
-var tick=false;
-function onScroll(){
-  if(tick)return;tick=true;
-  requestAnimationFrame(function(){
-    var y=window.scrollY,h=d.documentElement.scrollHeight-window.innerHeight;
-    nav.classList.toggle('s',y>10);
-    bar.style.width=(h>0?Math.min(y/h,1)*100:0)+'%';
-    tick=false;
-  });
-}
-addEventListener('scroll',onScroll,{passive:true});onScroll();
-
-/* Jam lokal */
-var clock=d.getElementById('clock'),t=null,fmt;
-try{fmt=new Intl.DateTimeFormat('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})}catch(e){}
-function tickClock(){
-  var n=new Date();
-  clock.textContent=fmt?fmt.format(n):n.toTimeString().slice(0,8);
-  clock.dateTime=n.toISOString();
-}
-function run(){if(!t){tickClock();t=setInterval(tickClock,1000)}}
-function stop(){clearInterval(t);t=null}
-d.addEventListener('visibilitychange',function(){d.hidden?stop():run()});
-run();
-})();
-</script>
-</body>
-</html>
+{% block closing %}
+<h2>Privasi bukan fitur tambahan. Privasi adalah bagian dari cara Akashic dirancang.</h2>
+<p>Akashic memakai lokasi sebagai konteks untuk informasi, bukan sebagai alasan untuk mengawasi pengguna.</p>
+{% endblock %}

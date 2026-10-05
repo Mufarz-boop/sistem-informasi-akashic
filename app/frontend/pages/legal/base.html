@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F7F5F2">
+<meta name="color-scheme" content="light">
+<title>Akashic — {% block title %}Legal{% endblock %}</title>
+<meta name="description" content="{% block description %}Informasi legal Akashic, Location-Based Information System.{% endblock %}">
+<link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='image/favicon.svg') }}">
+<script>document.documentElement.classList.add('js')</script>
+<style>
+:root{--bg:#F7F5F2;--soft:#F1EEE9;--tx:#1C1C1E;--mu:#5C5C60;--sub:#8E8E93;--bd:rgba(28,28,30,.1);--bd2:rgba(28,28,30,.16);--ac:#9A6B4A;--wn:#C28E3E;
+--serif:Georgia,"Times New Roman",serif;--sans:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--nav:64px}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav) + 24px);-webkit-text-size-adjust:100%}
+body{font:clamp(.9375rem,.9rem + .2vw,1.0625rem)/1.75 var(--sans);color:var(--tx);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:left}
+ul{list-style:none}
+:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
+.wrap{width:100%;max-width:1240px;margin-inline:auto;padding-inline:clamp(1.25rem,4vw,3rem)}
+.skip{position:absolute;top:-100%;left:1rem;z-index:400;padding:.6rem 1rem;background:var(--tx);color:#fff;border-radius:4px}
+.skip:focus{top:1rem}
+
+/* Nav */
+#bar{position:fixed;top:0;left:0;height:2px;width:0;background:var(--ac);z-index:300}
+.nav{position:fixed;inset:0 0 auto;height:var(--nav);z-index:100;background:rgba(247,245,242,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
+.nav.s{border-color:var(--bd)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:100%;gap:1.5rem}
+.brand{font:400 1.25rem var(--serif);letter-spacing:.08em}
+.nav-r{display:flex;align-items:center;gap:1.5rem;font-size:.875rem}
+.nav-r>a{color:var(--mu);transition:color .15s}
+.nav-r>a:hover{color:var(--tx)}
+.clock{padding-left:1.5rem;border-left:1px solid var(--bd);font-variant-numeric:tabular-nums;color:var(--tx);white-space:nowrap}
+.toggle{display:none;width:44px;height:44px;align-items:center;justify-content:center;margin-right:-.5rem}
+.toggle svg{width:22px;height:22px}
+.toggle .x,.toggle[aria-expanded=true] .m{display:none}
+.toggle[aria-expanded=true] .x{display:block}
+.mobile{position:fixed;inset:0;z-index:200;background:var(--bg);padding:calc(var(--nav) + 2rem) 1.5rem 4rem;opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .3s,transform .3s,visibility 0s .3s}
+.mobile.open{opacity:1;visibility:visible;transform:none;transition:opacity .3s,transform .3s}
+.mobile a{display:block;padding:1.25rem 0;border-block:1px solid var(--bd);font:400 1.5rem/1.2 var(--serif)}
+.mobile .clock{display:block;margin-top:2rem;padding:1.5rem 0 0;border:0;border-top:1px solid var(--bd)}
+
+/* Hero */
+main{flex:1;padding-top:var(--nav)}
+.hero{padding-block:clamp(3rem,7vw,5.5rem) clamp(2.5rem,5vw,4rem);border-bottom:1px solid var(--bd);background:radial-gradient(circle at 20% 20%,rgba(154,107,74,.09),transparent 55%),linear-gradient(180deg,#F7F5F2,#F2EEE8)}
+.hero h1{font:400 clamp(2.5rem,1.5rem + 5vw,5rem)/1.05 var(--serif);letter-spacing:-.025em;margin-bottom:1.25rem}
+.hero p{max-width:52ch;color:var(--mu);font-size:1.125rem;line-height:1.65}
+.hero small{display:block;margin-top:1.5rem;color:var(--sub);font-size:.875rem}
+
+/* Notice (dipakai halaman tertentu) */
+.notice{margin-block:2rem;display:flex;gap:1.25rem;padding:1.5rem;border:1px solid var(--wn);border-left-width:3px;background:rgba(194,142,62,.1)}
+.notice svg{width:28px;height:28px;flex:none;color:var(--wn)}
+.notice h2{font:400 1.375rem/1.25 var(--serif);margin-bottom:.4rem}
+.notice p{color:var(--mu)}
+
+/* Layout + TOC */
+.layout{display:grid;grid-template-columns:250px 1fr;gap:clamp(2rem,5vw,4.5rem);padding-block:2rem 6rem;align-items:start}
+.layout.pt{padding-top:3rem}
+.toc{position:sticky;top:calc(var(--nav) + 24px);max-height:calc(100vh - var(--nav) - 48px);overflow-y:auto;scrollbar-width:none}
+.toc::-webkit-scrollbar{display:none}
+.toc p{font-size:.8125rem;color:var(--sub);padding-bottom:.75rem;margin-bottom:.5rem;border-bottom:1px solid var(--bd)}
+.toc button{display:block;width:100%;padding:.45rem .75rem;font-size:.875rem;line-height:1.4;color:var(--mu);border-left:2px solid transparent;transition:color .15s,background .15s}
+.toc button:hover{color:var(--tx);background:rgba(154,107,74,.05)}
+.toc button[aria-current]{color:var(--tx);border-color:var(--ac);background:rgba(154,107,74,.07)}
+
+/* Content */
+.content{max-width:760px;min-height:400px}
+.empty{padding-block:3rem}
+.empty h2{font:400 1.5rem/1.25 var(--serif);color:var(--mu);margin-bottom:.75rem;max-width:24ch}
+.empty p{color:var(--sub);max-width:50ch}
+.js [data-s]{display:none}
+.js [data-s].on{display:block}
+[data-s]{padding-bottom:2rem}
+[data-s] h2{font:400 clamp(1.75rem,1.3rem + 1.6vw,2.375rem)/1.15 var(--serif);letter-spacing:-.015em;margin-bottom:1.25rem}
+.content p{color:var(--mu);margin-bottom:1rem}
+.content strong{color:var(--tx);font-weight:600}
+.content h3{font-size:1rem;font-weight:600;margin:1.75rem 0 .6rem}
+.content ul{display:grid;gap:.5rem;margin-bottom:1.25rem}
+.content li{position:relative;padding-left:1.4rem;color:var(--mu)}
+.content li::before{content:"";position:absolute;left:0;top:.85em;width:8px;height:1px;background:var(--ac)}
+.content a{color:var(--tx);border-bottom:1px solid var(--bd);transition:color .15s,border-color .15s}
+.content a:hover{color:var(--ac);border-color:var(--ac)}
+.note{margin-block:1.5rem;padding:1.1rem 1.5rem;border-left:3px solid var(--ac);background:rgba(154,107,74,.09);color:var(--tx);font-size:.9375rem;line-height:1.65}
+.note b{display:block;color:var(--ac);margin-bottom:.2rem}
+.cards{display:grid;grid-template-columns:1fr 1fr;margin-block:1.5rem;border-top:1px solid var(--bd)}
+.cards div{padding:1.25rem;border-bottom:1px solid var(--bd)}
+.cards div:nth-child(odd){border-right:1px solid var(--bd)}
+.cards h3{margin:0 0 .4rem}
+.cards p{font-size:.875rem;line-height:1.6;margin:0}
+.cards.c3{grid-template-columns:repeat(3,1fr);border-block:1px solid var(--bd)}
+.cards.c3 div{border-bottom:0;border-right:1px solid var(--bd)}
+.cards.c3 div:last-child{border-right:0}
+.updated{font-size:.875rem;color:var(--sub);padding-top:1rem;border-top:1px solid var(--bd)}
+
+/* Closing + footer */
+.closing{padding-block:clamp(3.5rem,8vw,6rem);background:var(--soft);border-top:1px solid var(--bd);text-align:center}
+.closing h2{font:400 clamp(1.5rem,1.1rem + 2vw,2.5rem)/1.2 var(--serif);letter-spacing:-.02em;max-width:24ch;margin:0 auto 1.25rem}
+.closing p{max-width:60ch;margin:0 auto 2rem;color:var(--mu)}
+.closing p:last-child{margin-bottom:0}
+.btns{display:flex;justify-content:center;flex-wrap:wrap;gap:1rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.75rem 1.75rem;border:1px solid var(--tx);border-radius:2px;font-size:.9375rem;font-weight:500;transition:background .15s,border-color .15s,color .15s}
+.btn.p{background:var(--tx);color:#fff}
+.btn.p:hover{background:var(--ac);border-color:var(--ac)}
+.btn.g{border-color:rgba(28,28,30,.2)}
+.btn.g:hover{border-color:var(--tx)}
+footer{border-top:1px solid var(--bd);padding-block:3rem 1.5rem}
+.f-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2rem;padding-bottom:2rem}
+.f-grid .brand{display:block;font-size:1.75rem;margin-bottom:.75rem}
+.f-grid p,.f-grid h3{font-size:.875rem;color:var(--mu)}
+.f-grid h3{font-weight:600;color:var(--sub);margin-bottom:.9rem}
+.f-grid li+li{margin-top:.6rem}
+.f-grid a{font-size:.875rem;color:var(--mu)}
+.f-grid a:hover{color:var(--ac)}
+.f-bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding-top:1.25rem;border-top:1px solid var(--bd);font-size:.8125rem;color:var(--sub)}
+
+@media(max-width:900px){
+.layout{grid-template-columns:1fr;gap:1.5rem}
+.toc{position:static;max-height:none;padding:1.25rem;background:var(--soft);border:1px solid var(--bd);border-radius:4px}
+.toc ul{display:grid;grid-template-columns:1fr 1fr;column-gap:1rem}
+}
+@media(max-width:640px){
+.clock,.nav-r>a{display:none}
+.mobile .clock{display:block}
+.toggle{display:flex}
+.toc ul{grid-template-columns:1fr}
+.cards,.cards.c3{grid-template-columns:1fr}
+.cards div,.cards.c3 div{border-right:0;border-bottom:1px solid var(--bd)}
+.cards div:nth-child(odd){border-right:0}
+.cards div:last-child,.cards.c3 div:last-child{border-bottom:0}
+.notice{flex-direction:column;gap:.75rem}
+.f-grid{grid-template-columns:1fr}
+.btns{flex-direction:column}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+@media print{
+.nav,.mobile,#bar,.toc,.skip,.empty{display:none!important}
+main{padding-top:0}
+.layout{display:block}
+[data-s]{display:block!important;break-inside:avoid}
+body{background:#fff}
+}
+</style>
+{% block head_extra %}{% endblock %}
+</head>
+<body>
+<a href="#main" class="skip">Lewati ke konten</a>
+<div id="bar" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div class="wrap">
+    <a href="{{ url_for('index') }}" class="brand" aria-label="Akashic — Beranda">AKASHIC</a>
+    <div class="nav-r">
+      <a href="{{ url_for('index') }}">Beranda</a>
+      <time class="clock" data-clock aria-label="Waktu lokal">--:--:--</time>
+      <button class="toggle" id="toggle" type="button" aria-expanded="false" aria-controls="mobile" aria-label="Buka menu">
+        <svg class="m" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
+        <svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile" id="mobile" role="dialog" aria-modal="true" aria-label="Navigasi mobile">
+  <a href="{{ url_for('index') }}">Beranda</a>
+  <a href="{{ url_for('information') }}">Informasi</a>
+  <a href="{{ url_for('about') }}">Tentang</a>
+  <a href="{{ url_for('contact') }}">Kontak</a>
+  <time class="clock" data-clock aria-label="Waktu lokal">--:--:--</time>
+</div>
+
+<main id="main">
+  <section class="hero">
+    <div class="wrap">
+      <h1>{% block hero_title %}{% endblock %}</h1>
+      <p>{% block hero_desc %}{% endblock %}</p>
+      <small>Terakhir diperbarui: {% block hero_updated %}2026{% endblock %}</small>
+    </div>
+  </section>
+
+  <div class="wrap">
+    {% block before_layout %}{% endblock %}
+
+    <div class="layout{% block layout_class %}{% endblock %}">
+      <nav class="toc" aria-label="Daftar isi">
+        <p>Daftar isi</p>
+        <ul id="toc"></ul>
+      </nav>
+
+      <article class="content">
+        <div class="empty" id="empty">
+          <h2>Pilih salah satu bagian untuk membaca.</h2>
+          <p>Klik item pada daftar isi, dan bagian yang dipilih akan tampil di sini.</p>
+        </div>
+
+        {% block content %}{% endblock %}
+      </article>
+    </div>
+  </div>
+
+  <section class="closing">
+    <div class="wrap">
+      {% block closing %}{% endblock %}
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="f-grid">
+      <div>
+        <a href="{{ url_for('index') }}" class="brand">AKASHIC</a>
+        <p>Informasi yang hadir di tempat yang tepat.</p>
+      </div>
+      <div>
+        <h3>Navigasi</h3>
+        <ul>
+          <li><a href="{{ url_for('index') }}">Beranda</a></li>
+          <li><a href="{{ url_for('information') }}">Informasi</a></li>
+          <li><a href="{{ url_for('about') }}">Tentang</a></li>
+          <li><a href="{{ url_for('contact') }}">Kontak</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <ul>
+          <li><a href="{{ url_for('privacy') }}">Privasi</a></li>
+          <li><a href="{{ url_for('terms') }}">Ketentuan</a></li>
+          <li><a href="{{ url_for('disclaimer') }}">Disclaimer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="f-bot"><span>© 2026 Akashic</span><span>Location-Based Information System</span></div>
+  </div>
+</footer>
+
+<script>
+(function(){
+'use strict';
+var d=document,
+    secs=[].slice.call(d.querySelectorAll('[data-s]')),
+    tocEl=d.getElementById('toc'),empty=d.getElementById('empty'),
+    nav=d.getElementById('nav'),bar=d.getElementById('bar'),
+    toggle=d.getElementById('toggle'),menu=d.getElementById('mobile'),
+    reduce=matchMedia('(prefers-reduced-motion:reduce)').matches,
+    btns=[],prev=null;
+
+/* TOC dibangun otomatis dari <section data-s>; judul pendek via data-t */
+secs.forEach(function(s){
+  var li=d.createElement('li'),b=d.createElement('button');
+  b.type='button';
+  b.innerHTML=s.getAttribute('data-t')||s.querySelector('h2').innerHTML;
+  b.addEventListener('click',function(){show(s.id,true)});
+  li.appendChild(b);tocEl.appendChild(li);btns.push(b);
+});
+
+function show(id,scroll){
+  var found=false;
+  secs.forEach(function(s,i){
+    var on=s.id===id;
+    s.classList.toggle('on',on);
+    if(on){found=true;btns[i].setAttribute('aria-current','true')}
+    else btns[i].removeAttribute('aria-current');
+  });
+  empty.hidden=found;
+  if(found){
+    history.replaceState(null,'','#'+id);
+    var c=d.querySelector('.content'),top=c.getBoundingClientRect().top;
+    if(scroll&&(top<0||top>window.innerHeight*.5)){
+      c.scrollIntoView({behavior:reduce?'auto':'smooth',block:'start'});
+    }
+  }
+}
+show(location.hash.slice(1));
+window.addEventListener('hashchange',function(){show(location.hash.slice(1),true)});
+
+/* Scroll: border navbar + progress bar */
+var tick=false;
+function onScroll(){
+  if(tick)return;tick=true;
+  requestAnimationFrame(function(){
+    var y=window.scrollY,h=d.documentElement.scrollHeight-window.innerHeight;
+    nav.classList.toggle('s',y>10);
+    bar.style.width=(h>0?Math.min(y/h,1)*100:0)+'%';
+    tick=false;
+  });
+}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+/* Menu mobile */
+function setMenu(open){
+  menu.classList.toggle('open',open);
+  toggle.setAttribute('aria-expanded',open);
+  toggle.setAttribute('aria-label',open?'Tutup menu':'Buka menu');
+  d.body.style.overflow=open?'hidden':'';
+  if(open){prev=d.activeElement;setTimeout(function(){menu.querySelector('a').focus()},50)}
+  else if(prev)prev.focus();
+}
+toggle.addEventListener('click',function(){setMenu(!menu.classList.contains('open'))});
+[].forEach.call(menu.querySelectorAll('a'),function(a){a.addEventListener('click',function(){setMenu(false)})});
+d.addEventListener('keydown',function(e){
+  if(!menu.classList.contains('open'))return;
+  if(e.key==='Escape')return setMenu(false);
+  if(e.key==='Tab'){ /* focus trap */
+    var f=[].slice.call(menu.querySelectorAll('a[href]')).concat(toggle),first=f[0],last=f[f.length-1];
+    if(e.shiftKey&&d.activeElement===first){e.preventDefault();last.focus()}
+    else if(!e.shiftKey&&d.activeElement===last){e.preventDefault();first.focus()}
+  }
+});
+addEventListener('resize',function(){if(innerWidth>640&&menu.classList.contains('open'))setMenu(false)},{passive:true});
+
+/* Jam lokal */
+var clocks=[].slice.call(d.querySelectorAll('[data-clock]')),t=null,fmt;
+try{fmt=new Intl.DateTimeFormat('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})}catch(e){}
+function tickClock(){
+  var n=new Date(),s=fmt?fmt.format(n):n.toTimeString().slice(0,8);
+  clocks.forEach(function(c){c.textContent=s;c.setAttribute('datetime',n.toISOString())});
+}
+function run(){if(!t){tickClock();t=setInterval(tickClock,1000)}}
+function stop(){clearInterval(t);t=null}
+d.addEventListener('visibilitychange',function(){d.hidden?stop():run()});
+run();
+})();
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

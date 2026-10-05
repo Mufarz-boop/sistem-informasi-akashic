@@ -1,575 +1,214 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#F7F5F2">
-<meta name="color-scheme" content="light">
-<title>Akashic — Syarat dan Ketentuan</title>
-<meta name="description" content="Syarat dan Ketentuan Akashic: aturan penggunaan sistem informasi berbasis lokasi, fitur lokasi, konten, sumber eksternal, dan layanan.">
-<link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='image/favicon.svg') }}">
+{% extends "legal/base.html" %}
+
+{% block title %}Syarat dan Ketentuan{% endblock %}
+{% block description %}Syarat dan Ketentuan Akashic: aturan penggunaan sistem informasi berbasis lokasi, fitur lokasi, konten, sumber eksternal, dan layanan.{% endblock %}
+
+{% block hero_title %}Syarat dan Ketentuan{% endblock %}
+{% block hero_desc %}Ketentuan yang mengatur penggunaan sistem informasi Akashic dan layanan yang tersedia di dalamnya.{% endblock %}
+
+{% block head_extra %}
 <style>
-:root{
-  --bg:#F7F5F2;--soft:#F1EEE9;--text:#1C1C1E;--muted:#5C5C60;--subtle:#8E8E93;
-  --line:rgba(28,28,30,.08);--line2:rgba(28,28,30,.16);
-  --accent:#9A6B4A;--accent-soft:rgba(154,107,74,.10);--notice:#7A6B4A;--notice-soft:rgba(122,107,74,.10);
-  --serif:Georgia,"Times New Roman","Noto Serif",serif;
-  --sans:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
-  --mono:"SF Mono","Fira Code",Consolas,monospace;
-  --nav:72px;--ease:cubic-bezier(.22,1,.36,1);
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:calc(var(--nav) + 2rem)}
-body{font:clamp(.9375rem,.9rem + .2vw,1.0625rem)/1.7 var(--sans);color:var(--text);background:var(--bg);-webkit-font-smoothing:antialiased;overflow-x:hidden;min-height:100vh;display:flex;flex-direction:column;counter-reset:sec toc}
-svg{display:block;max-width:100%}
-a{color:inherit;text-decoration:none}
-button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-ul{list-style:none}
-:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
-.wrap{width:100%;max-width:1440px;margin-inline:auto;padding-inline:clamp(1.25rem,4vw,4rem)}
-.mono{font-family:var(--mono);font-size:.625rem;letter-spacing:.16em;text-transform:uppercase;color:var(--subtle)}
-
-.skip{position:absolute;top:-100%;left:1rem;z-index:400;padding:.75rem 1.5rem;background:#141416;color:#fff;font-size:.8rem;border-radius:4px}
-.skip:focus{top:1rem}
-.progress{position:fixed;top:0;left:0;width:100%;height:2px;z-index:300;pointer-events:none}
-#bar{height:100%;width:0;background:var(--accent)}
-
-/* Nav */
-.nav{position:fixed;inset:0 0 auto;z-index:100;height:var(--nav);background:rgba(247,245,242,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
-.nav.scrolled{border-bottom-color:var(--line)}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:100%;gap:1.5rem}
-.brand{display:flex;align-items:center;gap:.75rem}
-.brand i{width:8px;height:8px;border:1.5px solid var(--accent);border-radius:50%;position:relative}
-.brand i::after{content:"";position:absolute;inset:2px;background:var(--accent);border-radius:50%}
-.brand b{display:block;font:400 1.25rem/1.1 var(--serif);letter-spacing:.08em}
-.brand small{display:block;font-size:.5625rem;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
-.nav-right{display:flex;align-items:center;gap:1.5rem}
-.nav-link{font-size:.75rem;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:color .15s}
-.nav-link:hover{color:var(--text)}
-.clock{display:inline-flex;align-items:center;gap:.75rem;padding-left:1.5rem;border-left:1px solid var(--line);font:500 .75rem/1 var(--mono);letter-spacing:.08em;white-space:nowrap;font-variant-numeric:tabular-nums}
-.clock::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--accent);animation:blink 2s ease-in-out infinite}
-.clock small{font-size:.5625rem;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
-@keyframes blink{50%{opacity:.35}}
-.toggle{display:none;width:44px;height:44px;align-items:center;justify-content:center;margin-right:-.5rem}
-.toggle svg{width:22px;height:22px}
-.toggle .x,.toggle[aria-expanded=true] .m{display:none}
-.toggle[aria-expanded=true] .x{display:block}
-
-.mobile{position:fixed;inset:0;z-index:200;background:var(--bg);padding:calc(64px + 2rem) 1.5rem 4rem;opacity:0;visibility:hidden;transform:translateY(-8px);transition:opacity .3s,transform .3s,visibility 0s .3s}
-.mobile.open{opacity:1;visibility:visible;transform:none;transition:opacity .3s,transform .3s}
-.mobile a{display:block;padding:1.5rem 0;border-block:1px solid var(--line);font:400 1.75rem/1.2 var(--serif)}
-.mobile .clock{margin-top:2rem;padding:2rem 0 0;border:0;border-top:1px solid var(--line)}
-
-main{flex:1;padding-top:var(--nav)}
-
-/* Hero */
-.hero{position:relative;padding-block:clamp(3rem,6vh,5rem) clamp(2.5rem,5vh,4rem);border-bottom:1px solid var(--line);isolation:isolate;overflow:hidden;
-  background:radial-gradient(circle at 22% 28%,rgba(154,107,74,.09),transparent 55%),linear-gradient(180deg,#F7F5F2,#F2EEE8)}
-.hero-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(2rem,5vw,6rem);align-items:center}
-.eyebrow{display:flex;align-items:center;gap:1rem;margin-bottom:2rem;font-size:.6875rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
-.eyebrow::before{content:"";width:32px;height:1px;background:var(--accent)}
-h1{font:400 clamp(2rem,1.3rem + 3.6vw,4.25rem)/1.06 var(--serif);letter-spacing:-.025em;max-width:16ch;margin-bottom:2rem}
-h1 em,.closing h2 em{font-style:italic;color:var(--accent)}
-.hero p{color:var(--muted);max-width:52ch;margin-bottom:2rem;font-size:1.0625rem;line-height:1.65}
-.meta{display:flex;gap:3rem;padding-top:1.5rem;border-top:1px solid var(--line);flex-wrap:wrap}
-.meta span{display:block}
-.meta b{display:block;font-size:.875rem;font-weight:500}
-.hero-art{width:100%;max-width:420px;margin-left:auto;aspect-ratio:1}
-.pulse{animation:pulse 3.2s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
-@keyframes pulse{0%,100%{opacity:.7;transform:scale(1)}50%{opacity:.2;transform:scale(1.7)}}
-
-/* Notice */
-.notice{padding-block:clamp(2rem,4vw,3rem);border-bottom:1px solid var(--line)}
-.notice-card{display:grid;grid-template-columns:auto 1fr;gap:2rem;padding:clamp(1.5rem,3vw,2.25rem);border:1px solid var(--notice);border-left-width:3px;background:var(--notice-soft)}
-.notice-card svg{width:32px;height:32px;color:var(--notice)}
-.notice-card .mono{color:var(--notice);font-weight:600}
-.notice-card h2{font:400 clamp(1.25rem,1.1rem + .8vw,1.625rem)/1.25 var(--serif);margin:.5rem 0 .75rem}
-.notice-card p{color:var(--muted)}
-
-/* Layout */
-.layout{display:grid;grid-template-columns:260px 1fr;gap:clamp(2rem,5vw,5rem);padding-block:clamp(3rem,6vw,5rem) clamp(4rem,8vw,7rem);align-items:start}
-.toc{position:sticky;top:calc(var(--nav) + 2rem);max-height:calc(100vh - var(--nav) - 4rem);overflow-y:auto;scrollbar-width:none}
-.toc::-webkit-scrollbar{display:none}
-.toc .mono{padding-bottom:1rem;border-bottom:1px solid var(--line);margin-bottom:1rem}
-.toc ul{display:flex;flex-direction:column;gap:.25rem}
-.toc button{display:grid;grid-template-columns:auto 1fr;gap:.75rem;align-items:baseline;width:100%;text-align:left;padding:.5rem .75rem;font-size:.8125rem;line-height:1.4;color:var(--muted);border-left:2px solid transparent;transition:.15s}
-.toc button::before{counter-increment:toc;content:counter(toc,decimal-leading-zero);font:.625rem var(--mono);letter-spacing:.06em;color:var(--subtle)}
-.toc button:hover{color:var(--text);background:rgba(154,107,74,.04)}
-.toc button.on{color:var(--text);border-left-color:var(--accent);background:rgba(154,107,74,.06)}
-.toc button.on::before{color:var(--accent)}
-
-/* Content */
-.content{max-width:820px;min-height:400px}
-.empty{padding:clamp(2.5rem,5vw,4rem) 0;display:flex;flex-direction:column;gap:1rem}
-.empty h2{font:400 clamp(1.25rem,1.1rem + .8vw,1.625rem)/1.25 var(--serif);color:var(--muted);max-width:24ch}
-.empty p{color:var(--subtle);max-width:52ch}
-section.sec{display:none;counter-increment:sec;padding-bottom:2rem}
-section.sec.on{display:block}
-section.sec::before{content:counter(sec,decimal-leading-zero) " / " attr(data-label);display:block;margin-bottom:1.25rem;font:600 .6875rem var(--sans);letter-spacing:.14em;text-transform:uppercase;color:var(--subtle)}
-.sec h2{font:400 clamp(1.5rem,1.2rem + 1.4vw,2.125rem)/1.15 var(--serif);letter-spacing:-.015em;margin-bottom:1.5rem}
-.sec h3{font-size:1rem;font-weight:600;margin:2rem 0 .75rem}
-.sec p,.sec li{color:var(--muted);line-height:1.75}
-.sec p{margin-bottom:1rem}
-.sec strong{color:var(--text);font-weight:600}
-.sec ul{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.5rem}
-.sec li{position:relative;padding-left:1.5rem}
-.sec li::before{content:"";position:absolute;left:0;top:.8em;width:8px;height:1px;background:var(--accent)}
-.sec a{color:var(--text);border-bottom:1px solid var(--line2);transition:.15s}
-.sec a:hover{color:var(--accent);border-color:var(--accent)}
-.callout{padding:1.5rem 2rem;border-left:3px solid var(--accent);background:var(--accent-soft);margin-block:1.5rem;color:var(--text);font-size:.9375rem;line-height:1.65}
-.callout b{display:block;margin-bottom:.5rem;font:600 .625rem var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
-.principles{display:grid;grid-template-columns:repeat(2,1fr);border-block:1px solid var(--line2);margin-block:2rem}
-.principles div{padding:1.5rem;border-right:1px solid var(--line);border-bottom:1px solid var(--line)}
-.principles div:nth-child(2n){border-right:0}
-.principles div:nth-last-child(-n+2){border-bottom:0}
-.principles .mono{color:var(--accent);font-size:.5625rem}
-.principles h3{margin:.5rem 0}
-.principles p{font-size:.875rem;line-height:1.6;margin:0}
-.flow{padding:2rem;border:1px solid var(--line);background:#fff;margin-block:2rem}
+.flow{padding:2rem;border:1px solid var(--bd);background:#fff;margin-block:2rem}
 .flow svg{width:100%;max-width:400px;margin-inline:auto}
-.flow .mono{margin:1.25rem 0 0;padding-top:1rem;border-top:1px solid var(--line);text-align:center;font-size:.6875rem}
-
-/* Closing + footer */
-.closing{padding-block:clamp(4rem,8vw,6rem);border-top:1px solid var(--line);background:var(--soft);text-align:center}
-.closing .in{max-width:820px;margin-inline:auto}
-.closing h2{font:400 clamp(1.5rem,1.2rem + 1.8vw,2.5rem)/1.2 var(--serif);letter-spacing:-.02em;margin:1.25rem 0}
-.closing p{color:var(--muted);max-width:62ch;margin:0 auto 2rem;font-size:1.0625rem}
-.actions{display:flex;justify-content:center;flex-wrap:wrap;gap:1rem}
-.btn{display:inline-flex;align-items:center;min-height:44px;padding:.75rem 1.5rem;font-size:.8125rem;font-weight:500;letter-spacing:.06em;text-transform:uppercase;border:1px solid var(--line2);border-radius:2px;transition:.15s}
-.btn:hover{border-color:var(--text)}
-.btn.pri{background:#141416;color:#fff;border-color:#141416}
-.btn.pri:hover{background:var(--accent);border-color:var(--accent)}
-footer{border-top:1px solid var(--line);padding-top:clamp(3rem,6vw,5rem)}
-.f-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:clamp(2rem,4vw,4rem);padding-bottom:3rem}
-.f-brand{font:400 clamp(1.5rem,1.3rem + 1vw,2rem)/1 var(--serif);letter-spacing:.08em;margin-bottom:1rem}
-.f-grid>div>p:not(.f-brand){color:var(--muted);max-width:32ch}
-.f-grid h4{font-size:.6875rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--subtle);margin-bottom:1.25rem}
-.f-grid li{margin-bottom:.75rem;font-size:.875rem;color:var(--muted)}
-.f-grid li a:hover{color:var(--accent)}
-.f-bottom{display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;padding-block:1.5rem;border-top:1px solid var(--line)}
-
-@media(max-width:1024px){
-  .hero-grid,.layout{grid-template-columns:1fr;gap:3rem}
-  .hero-art{max-width:380px;margin-inline:auto}
-  .toc{position:static;max-height:none;padding:1.5rem;background:var(--soft);border:1px solid var(--line);border-radius:4px}
-  .toc ul{display:grid;grid-template-columns:1fr 1fr;gap:.25rem 1rem}
-}
-@media(max-width:768px){
-  .nav{height:64px}main{padding-top:64px}
-  .nav-link,.nav-right .clock{display:none}
-  .toggle{display:flex}
-  .principles,.toc ul,.notice-card,.f-grid{grid-template-columns:1fr}
-  .notice-card{gap:1rem}
-  .principles div{border-right:0}
-  .principles div:nth-last-child(-n+2){border-bottom:1px solid var(--line)}
-  .principles div:last-child{border-bottom:0}
-}
-@media(max-width:480px){
-  .brand small{display:none}
-  .actions{flex-direction:column;align-items:stretch}
-  .btn{justify-content:center}
-}
-@media(prefers-reduced-motion:reduce){
-  html{scroll-behavior:auto}
-  *,*::before,*::after{animation:none!important;transition:none!important}
-}
-@media print{
-  .nav,.mobile,.progress,.skip,.toc{display:none!important}
-  main{padding-top:0}
-  body{background:#fff;color:#000;font-size:11pt}
-  .layout{grid-template-columns:1fr}
-  section.sec{display:block!important;break-inside:avoid}
-  .empty{display:none!important}
-}
+.flow p{margin:1.25rem 0 0;padding-top:1rem;border-top:1px solid var(--bd);text-align:center;font-size:.8125rem;color:var(--sub)}
 </style>
-</head>
-<body>
-<a href="#main" class="skip">Skip to content</a>
-<div class="progress" aria-hidden="true"><div id="bar"></div></div>
+{% endblock %}
 
-<header class="nav" id="nav">
-  <div class="wrap">
-    <a href="{{ url_for('index') }}" class="brand" aria-label="Akashic — Home">
-      <i aria-hidden="true"></i>
-      <span><b>AKASHIC</b><small>Location-Based Information System</small></span>
-    </a>
-    <div class="nav-right">
-      <a href="{{ url_for('index') }}" class="nav-link">Home</a>
-      <div class="clock" role="timer" aria-live="off" aria-label="Waktu lokal saat ini"><time data-clock datetime="">--:--:--</time><small aria-hidden="true">Local</small></div>
-      <button class="toggle" id="toggle" type="button" aria-expanded="false" aria-controls="mobile" aria-label="Open menu">
-        <svg class="m" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M3 7h18M3 12h18M3 17h18"/></svg>
-        <svg class="x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M5 5l14 14M19 5L5 19"/></svg>
-      </button>
-    </div>
+{% block before_layout %}
+<div class="notice" role="note">
+  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="16" cy="16" r="13"/><circle cx="16" cy="9" r="1.2" fill="currentColor" stroke="none"/><path d="M16 14v8"/></svg>
+  <div>
+    <h2>Harap membaca sebelum menggunakan Akashic</h2>
+    <p>Dengan mengakses atau menggunakan Akashic, pengguna dianggap telah membaca dan memahami ketentuan yang berlaku. Jika tidak menyetujui, pengguna dapat berhenti menggunakan layanan.</p>
   </div>
-</header>
-
-<div class="mobile" id="mobile" role="dialog" aria-modal="true" aria-label="Mobile navigation">
-  <a href="{{ url_for('index') }}">Home</a>
-  <div class="clock" role="timer" aria-live="off" aria-label="Waktu lokal saat ini"><time data-clock datetime="">--:--:--</time><small aria-hidden="true">Local Time</small></div>
 </div>
+{% endblock %}
 
-<main id="main">
-  <section class="hero" aria-labelledby="h1">
-    <div class="wrap hero-grid">
-      <div>
-        <div class="eyebrow">Akashic / Legal</div>
-        <h1 id="h1">Syarat dan <em>Ketentuan.</em></h1>
-        <p>Ketentuan yang mengatur penggunaan sistem informasi Akashic dan layanan yang tersedia di dalamnya.</p>
-        <div class="meta">
-          <div><span class="mono">Document</span><b>Terms of Use</b></div>
-          <div><span class="mono">Last Updated</span><b>2026</b></div>
-          <div><span class="mono">System</span><b>Akashic</b></div>
-        </div>
-      </div>
-      <svg class="hero-art" viewBox="0 0 420 420" fill="none" aria-hidden="true">
-        <rect x="15" y="15" width="390" height="390" stroke="var(--line2)"/>
-        <rect x="35" y="35" width="350" height="350" stroke="var(--line)" stroke-width=".75"/>
-        <g stroke="var(--line)" stroke-width=".5">
-          <path d="M15 115h390M15 210h390M15 305h390M115 15v390M210 15v390M305 15v390"/>
-        </g>
-        <path d="M80 130Q140 70 210 100T340 130Q380 190 350 270T260 350Q170 370 100 320T60 210Q50 160 80 130Z" stroke="var(--accent)" stroke-width=".9" opacity=".5" stroke-dasharray="4 3"/>
-        <circle cx="210" cy="210" r="100" class="pulse" fill="var(--accent)" opacity=".06"/>
-        <g transform="translate(210 210)">
-          <rect x="-45" y="-60" width="90" height="120" rx="3" fill="var(--accent-soft)" stroke="var(--accent)" stroke-width="1.8"/>
-          <path d="M-30-40h60" stroke="var(--accent)" stroke-width="1.5"/>
-          <path d="M-30-22h60M-30-8h48M-30 6h60M-30 20h54M-30 34h60" stroke="var(--subtle)" stroke-width=".9"/>
-          <circle cx="30" cy="48" r="9" stroke="var(--accent)" stroke-width="1.5"/>
-          <circle cx="30" cy="48" r="3" fill="var(--accent)"/>
-        </g>
-        <text x="30" y="30" font-family="monospace" font-size="9" fill="var(--subtle)" letter-spacing="1">TERMS / DOCUMENT</text>
-        <text x="310" y="405" font-family="monospace" font-size="9" fill="var(--subtle)" letter-spacing="1">AKASHIC</text>
-      </svg>
-    </div>
-  </section>
+{% block content %}
+<section data-s id="acceptance" data-t="Penerimaan Ketentuan">
+  <h2>Penerimaan Ketentuan</h2>
+  <p>Dengan mengakses atau menggunakan Akashic, pengguna dianggap telah membaca, memahami, dan menyetujui Syarat dan Ketentuan pada halaman ini.</p>
+  <p>Jika pengguna tidak menyetujui ketentuan ini, pengguna dapat berhenti menggunakan layanan. Pengguna tidak diwajibkan menggunakan fitur tertentu yang memerlukan persetujuan tambahan.</p>
+  <div class="note"><b>Ringkasan</b>Penggunaan Akashic menunjukkan penerimaan terhadap ketentuan. Pengguna dapat berhenti kapan saja apabila tidak menyetujuinya.</div>
+</section>
 
-  <section class="notice" aria-labelledby="nt">
-    <div class="wrap">
-      <div class="notice-card">
-        <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><circle cx="16" cy="16" r="13"/><circle cx="16" cy="9" r="1.2" fill="currentColor" stroke="none"/><path d="M16 14v8"/></svg>
-        <div>
-          <span class="mono">Notice / Important</span>
-          <h2 id="nt">Harap membaca sebelum menggunakan Akashic</h2>
-          <p>Dengan mengakses atau menggunakan Akashic, pengguna dianggap telah membaca dan memahami ketentuan yang berlaku. Jika tidak menyetujui, pengguna dapat berhenti menggunakan layanan.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <div class="wrap">
-    <div class="layout">
-      <aside class="toc" aria-label="Table of contents">
-        <p class="mono">On This Page</p>
-        <ul>
-        {% for id, t in [('acceptance','Penerimaan Ketentuan'),('about','Tentang Akashic'),('eligibility','Kelayakan Penggunaan'),('use','Penggunaan Layanan'),('location','Penggunaan Lokasi'),('accounts','Akun dan Autentikasi'),('content','Konten Pengguna'),('information','Information &amp; Event'),('external','Sumber Eksternal'),('prohibited','Penggunaan Dilarang'),('ip','Kekayaan Intelektual'),('availability','Ketersediaan Layanan'),('suspension','Pembatasan Akses'),('privacy','Privasi'),('disclaimer','Disclaimer'),('liability','Batasan Tanggung Jawab'),('changes','Perubahan Terms'),('contact','Kontak')] %}
-          <li><button type="button" data-target="section-{{ id }}">{{ t|safe }}</button></li>
-        {% endfor %}
-        </ul>
-      </aside>
-
-      <article class="content">
-        <div class="empty" id="empty">
-          <span class="mono">On This Page / Select</span>
-          <h2>Pilih salah satu bagian di samping untuk membaca.</h2>
-          <p>Klik salah satu item pada daftar &ldquo;On This Page&rdquo; untuk mulai membaca.</p>
-        </div>
-
-        <section class="sec" id="section-acceptance" data-label="Acceptance">
-          <h2>Penerimaan Ketentuan</h2>
-          <p>Dengan mengakses atau menggunakan Akashic, pengguna dianggap telah membaca, memahami, dan menyetujui Syarat dan Ketentuan pada halaman ini.</p>
-          <p>Jika pengguna tidak menyetujui ketentuan ini, pengguna dapat berhenti menggunakan layanan. Pengguna tidak diwajibkan menggunakan fitur tertentu yang memerlukan persetujuan tambahan.</p>
-          <div class="callout"><b>Ringkasan</b>Penggunaan Akashic menunjukkan penerimaan terhadap ketentuan. Pengguna dapat berhenti kapan saja apabila tidak menyetujuinya.</div>
-        </section>
-
-        <section class="sec" id="section-about" data-label="About">
-          <h2>Tentang Akashic</h2>
-          <p>Akashic adalah sistem informasi berbasis web yang menghubungkan konteks geografis dengan informasi yang relevan.</p>
-          <div class="flow">
-            <svg viewBox="0 0 400 300" fill="none" aria-hidden="true" font-family="monospace" font-size="10" letter-spacing="1" text-anchor="middle">
-              <g stroke="var(--line2)"><rect x="110" y="10" width="180" height="42"/><rect x="110" y="88" width="180" height="42"/><rect x="110" y="166" width="180" height="42"/></g>
-              <rect x="110" y="244" width="180" height="42" stroke="var(--accent)"/>
-              <g stroke="var(--accent)"><path d="M200 52v32M200 130v32M200 208v32"/></g>
-              <g fill="var(--accent)"><path d="M195 78l5 8 5-8zM195 156l5 8 5-8zM195 234l5 8 5-8z"/></g>
-              <g fill="var(--text)"><text x="200" y="36">LOCATION</text><text x="200" y="114">REGION</text><text x="200" y="192">RELEVANCE</text><text x="200" y="270">INFORMATION</text></g>
-            </svg>
-            <p class="mono">Diagram konseptual &mdash; bukan representasi data pengguna</p>
-          </div>
-          <h3>Komponen Sistem</h3>
-          <ul>
-            <li><strong>Information</strong> &mdash; informasi yang dikelola dalam sistem.</li>
-            <li><strong>Event</strong> &mdash; kegiatan dengan konteks waktu dan lokasi.</li>
-            <li><strong>News</strong> &mdash; berita dari sumber eksternal.</li>
-            <li><strong>Region</strong> &mdash; wilayah yang menjadi dasar relevansi.</li>
-            <li><strong>Location Context</strong> &mdash; konteks geografis pengguna.</li>
-            <li><strong>Notification / Subscription</strong> &mdash; notifikasi, bila tersedia.</li>
-          </ul>
-        </section>
-
-        <section class="sec" id="section-eligibility" data-label="Eligibility">
-          <h2>Kelayakan Penggunaan</h2>
-          <p>Akashic dapat digunakan oleh pengguna yang mampu menggunakan layanan sesuai ketentuan yang berlaku bagi mereka.</p>
-          <p>Pengguna bertanggung jawab memastikan penggunaan layanan sesuai ketentuan yang berlaku, termasuk ketentuan di wilayah atau konteks masing-masing.</p>
-        </section>
-
-        <section class="sec" id="section-use" data-label="Use of Service">
-          <h2>Penggunaan Layanan</h2>
-          <p>Akashic disediakan untuk membantu pengguna:</p>
-          <ul>
-            <li>Menemukan dan memahami informasi berbasis wilayah.</li>
-            <li>Melihat event atau kegiatan.</li>
-            <li>Menggunakan fitur lokasi apabila diizinkan.</li>
-            <li>Menggunakan fitur subscription apabila tersedia.</li>
-          </ul>
-          <p>Penggunaan yang mengganggu layanan, merusak sistem, atau merugikan pihak lain tidak diperbolehkan.</p>
-          <div class="principles">
-            <div><span class="mono">01 / Responsible</span><h3>Use Responsibly</h3><p>Gunakan Akashic sesuai tujuan sistem dan ketentuan yang berlaku.</p></div>
-            <div><span class="mono">02 / Context</span><h3>Location is Context</h3><p>Lokasi membantu menentukan relevansi geografis.</p></div>
-            <div><span class="mono">03 / Verify</span><h3>Verify Important Info</h3><p>Verifikasi informasi penting melalui sumber yang sesuai.</p></div>
-            <div><span class="mono">04 / Respect</span><h3>Respect the System</h3><p>Jangan mengganggu, menyalahgunakan, atau mengakses sistem tanpa izin.</p></div>
-          </div>
-        </section>
-
-        <section class="sec" id="section-location" data-label="Location">
-          <h2>Penggunaan Lokasi</h2>
-          <p>Fitur lokasi dapat menggunakan <strong>Geolocation API</strong> browser, dengan data berupa latitude, longitude, dan accuracy. Data ini dipakai untuk menentukan konteks geografis dan region yang relevan.</p>
-          <h3>Hal Penting</h3>
-          <ul>
-            <li>Izin lokasi berasal dari browser dan diberikan oleh pengguna.</li>
-            <li>Pengguna dapat menolak memberikan izin lokasi.</li>
-            <li>Hasil lokasi bergantung pada perangkat, browser, dan lingkungan.</li>
-            <li>Akashic tidak dirancang sebagai sistem pelacakan perjalanan.</li>
-          </ul>
-          <div class="callout"><b>Catatan</b>Jika izin lokasi ditolak, website tetap dapat digunakan untuk fungsi yang tidak membutuhkan lokasi.</div>
-        </section>
-
-        <section class="sec" id="section-accounts" data-label="Accounts">
-          <h2>Akun dan Autentikasi</h2>
-          <p>Fitur tertentu dapat membutuhkan akun bila tersedia. Fitur publik tetap dapat diakses tanpa akun.</p>
-          <p>Apabila akun digunakan, pengguna bertanggung jawab menjaga kredensial, akses, dan informasi autentikasi akun, serta segera menghubungi pengelola bila ada indikasi penyalahgunaan.</p>
-        </section>
-
-        <section class="sec" id="section-content" data-label="Content">
-          <h2>Konten yang Diberikan Pengguna</h2>
-          <p>Jika fitur tersedia, pengguna bertanggung jawab atas konten yang diberikan. Konten tidak boleh:</p>
-          <ul>
-            <li>Bersifat ilegal atau menyesatkan dengan sengaja.</li>
-            <li>Mengandung malware.</li>
-            <li>Melanggar hak pihak lain.</li>
-            <li>Mengandung data pribadi pihak lain tanpa dasar yang sesuai.</li>
-            <li>Digunakan untuk mengganggu sistem.</li>
-          </ul>
-        </section>
-
-        <section class="sec" id="section-information" data-label="Information">
-          <h2>Information, Event, dan News</h2>
-          <h3>Information</h3>
-          <p>Konten informasi yang dikelola dalam sistem dan disajikan berdasarkan konteks wilayah.</p>
-          <h3>Event</h3>
-          <p>Informasi kegiatan dengan konteks waktu dan lokasi. Jadwal, lokasi, atau detail lain dapat berubah.</p>
-          <h3>News</h3>
-          <p>Berita dapat berasal dari sumber eksternal dan dapat berubah, diperbarui, atau tidak lagi tersedia sesuai sumber aslinya.</p>
-          <p>Seluruh konten dapat diubah, diperbarui, atau dihapus sewaktu-waktu sesuai kebutuhan sistem.</p>
-        </section>
-
-        <section class="sec" id="section-external" data-label="External Sources">
-          <h2>Sumber Eksternal</h2>
-          <p>Akashic dapat merujuk atau mengintegrasikan informasi dari sumber eksternal, dan tidak selalu mengendalikan:</p>
-          <ul>
-            <li>Isi dan akurasi informasi sumber tersebut.</li>
-            <li>Ketersediaan layanan dan kebijakannya.</li>
-            <li>Perubahan informasi yang terjadi di sana.</li>
-          </ul>
-          <p>Pengguna yang mengakses sumber eksternal tunduk pada ketentuan dan kebijakan sumber masing-masing.</p>
-        </section>
-
-        <section class="sec" id="section-prohibited" data-label="Prohibited Use">
-          <h2>Penggunaan yang Dilarang</h2>
-          <p>Pengguna tidak diperbolehkan menggunakan Akashic untuk:</p>
-          <ul>
-            <li>Aktivitas ilegal atau akses tanpa izin.</li>
-            <li>Mengganggu operasi sistem atau menghindari mekanisme keamanan.</li>
-            <li>Mengirim malware atau kode berbahaya.</li>
-            <li>Scraping atau otomatisasi yang membebani sistem secara tidak wajar.</li>
-            <li>Menyalahgunakan fitur lokasi atau informasi pengguna lain.</li>
-            <li>Impersonasi.</li>
-            <li>Memanipulasi konten untuk merusak fungsi sistem.</li>
-          </ul>
-        </section>
-
-        <section class="sec" id="section-ip" data-label="Intellectual Property">
-          <h2>Kekayaan Intelektual</h2>
-          <p>Nama, logo, desain antarmuka, struktur visual, kode, teks, ilustrasi, dan elemen grafis Akashic dapat dilindungi hak yang berlaku, kecuali dinyatakan lain. Hak atas konten pihak ketiga tetap berada pada pemilik atau sumbernya.</p>
-          <p>Pengguna tidak diperkenankan menggunakan elemen tersebut di luar konteks penggunaan sistem tanpa dasar yang sesuai.</p>
-        </section>
-
-        <section class="sec" id="section-availability" data-label="Availability">
-          <h2>Ketersediaan Layanan</h2>
-          <p>Ketersediaan layanan dapat terpengaruh oleh pemeliharaan, gangguan server atau jaringan, kesalahan teknis, perubahan sistem, dan gangguan layanan pihak ketiga. Akashic tidak menjanjikan layanan selalu tersedia tanpa gangguan.</p>
-        </section>
-
-        <section class="sec" id="section-suspension" data-label="Suspension">
-          <h2>Pembatasan atau Penghentian Akses</h2>
-          <p>Demi keamanan, maintenance, penanganan penyalahgunaan, tindak lanjut pelanggaran, atau perlindungan sistem, akses ke fitur tertentu dapat dibatasi atau dihentikan sesuai kebutuhan operasional dan ketentuan yang berlaku.</p>
-        </section>
-
-        <section class="sec" id="section-privacy" data-label="Privacy">
-          <h2>Privasi</h2>
-          <p>Pemrosesan informasi dijelaskan dalam <a href="{{ url_for('privacy') }}">Kebijakan Privasi</a>.</p>
-          <ul>
-            <li><strong>Terms</strong> mengatur aturan penggunaan sistem.</li>
-            <li><strong>Privacy Policy</strong> menjelaskan cara informasi diproses.</li>
-          </ul>
-          <p>Kedua dokumen saling melengkapi dan sebaiknya dibaca bersama.</p>
-        </section>
-
-        <section class="sec" id="section-disclaimer" data-label="Disclaimer">
-          <h2>Disclaimer</h2>
-          <p>Penggunaan Akashic juga tunduk pada keterbatasan yang dijelaskan di <a href="{{ url_for('disclaimer') }}">halaman Disclaimer</a>, mencakup akurasi dan kelengkapan informasi, konteks lokasi, event dan waktu, berita dan sumber eksternal, serta ketersediaan sistem.</p>
-        </section>
-
-        <section class="sec" id="section-liability" data-label="Liability">
-          <h2>Batasan Tanggung Jawab</h2>
-          <p>Akashic tidak dapat menjamin bahwa:</p>
-          <ul>
-            <li>Seluruh informasi selalu benar dan tersedia ketika dibutuhkan.</li>
-            <li>Lokasi selalu akurat pada setiap kondisi.</li>
-            <li>Layanan dan sumber eksternal selalu bebas dari gangguan.</li>
-            <li>Informasi cocok untuk setiap jenis keputusan.</li>
-          </ul>
-          <p>Pengguna bertanggung jawab memverifikasi informasi penting sebelum menjadikannya dasar keputusan.</p>
-          <div class="callout"><b>Catatan</b>Akashic menyediakan informasi sebagai alat bantu. Keputusan akhir tetap berada pada pengguna.</div>
-        </section>
-
-        <section class="sec" id="section-changes" data-label="Changes">
-          <h2>Perubahan Syarat dan Ketentuan</h2>
-          <p>Ketentuan ini dapat diperbarui apabila terjadi perubahan pada fitur, perkembangan sistem, kebijakan operasional, kebutuhan keamanan, atau kebutuhan hukum dan administratif. Versi terbaru selalu ditampilkan pada halaman ini.</p>
-          <p class="mono">Terakhir diperbarui: 2026</p>
-        </section>
-
-        <section class="sec" id="section-contact" data-label="Contact">
-          <h2>Kontak</h2>
-          <p>Pertanyaan mengenai ketentuan penggunaan dapat disampaikan melalui halaman <a href="{{ url_for('contact') }}">Contact</a>. Baca juga <a href="{{ url_for('privacy') }}">Kebijakan Privasi</a> dan <a href="{{ url_for('disclaimer') }}">Disclaimer</a>.</p>
-        </section>
-      </article>
-    </div>
+<section data-s id="about" data-t="Tentang Akashic">
+  <h2>Tentang Akashic</h2>
+  <p>Akashic adalah sistem informasi berbasis web yang menghubungkan konteks geografis dengan informasi yang relevan.</p>
+  <div class="flow">
+    <svg viewBox="0 0 400 300" fill="none" aria-hidden="true" font-family="monospace" font-size="10" letter-spacing="1" text-anchor="middle">
+      <g stroke="var(--bd2)"><rect x="110" y="10" width="180" height="42"/><rect x="110" y="88" width="180" height="42"/><rect x="110" y="166" width="180" height="42"/></g>
+      <rect x="110" y="244" width="180" height="42" stroke="var(--ac)"/>
+      <g stroke="var(--ac)"><path d="M200 52v32M200 130v32M200 208v32"/></g>
+      <g fill="var(--ac)"><path d="M195 78l5 8 5-8zM195 156l5 8 5-8zM195 234l5 8 5-8z"/></g>
+      <g fill="var(--tx)"><text x="200" y="36">LOCATION</text><text x="200" y="114">REGION</text><text x="200" y="192">RELEVANCE</text><text x="200" y="270">INFORMATION</text></g>
+    </svg>
+    <p>Diagram konseptual — bukan representasi data pengguna</p>
   </div>
+  <h3>Komponen Sistem</h3>
+  <ul>
+    <li><strong>Information</strong> — informasi yang dikelola dalam sistem.</li>
+    <li><strong>Event</strong> — kegiatan dengan konteks waktu dan lokasi.</li>
+    <li><strong>News</strong> — berita dari sumber eksternal.</li>
+    <li><strong>Region</strong> — wilayah yang menjadi dasar relevansi.</li>
+    <li><strong>Location Context</strong> — konteks geografis pengguna.</li>
+    <li><strong>Notification / Subscription</strong> — notifikasi, bila tersedia.</li>
+  </ul>
+</section>
 
-  <section class="closing" aria-labelledby="ct">
-    <div class="wrap"><div class="in">
-      <span class="mono">Closing / Statement</span>
-      <h2 id="ct">Gunakan Akashic dengan memahami <em>konteksnya.</em></h2>
-      <p>Akashic membantu pengguna menemukan informasi dalam konteks wilayah yang relevan. Pahami batasan informasi, hormati sistem, dan verifikasi informasi penting bila diperlukan.</p>
-      <div class="actions">
-        <a href="{{ url_for('privacy') }}" class="btn pri">Kebijakan Privasi</a>
-        <a href="{{ url_for('disclaimer') }}" class="btn">Disclaimer</a>
-        <a href="{{ url_for('contact') }}" class="btn">Hubungi Akashic</a>
-      </div>
-    </div></div>
-  </section>
-</main>
+<section data-s id="eligibility" data-t="Kelayakan Penggunaan">
+  <h2>Kelayakan Penggunaan</h2>
+  <p>Akashic dapat digunakan oleh pengguna yang mampu menggunakan layanan sesuai ketentuan yang berlaku bagi mereka.</p>
+  <p>Pengguna bertanggung jawab memastikan penggunaan layanan sesuai ketentuan yang berlaku, termasuk ketentuan di wilayah atau konteks masing-masing.</p>
+</section>
 
-<footer>
-  <div class="wrap">
-    <div class="f-grid">
-      <div>
-        <p class="f-brand">AKASHIC</p>
-        <p>Informasi yang hadir<br>di tempat yang tepat.</p>
-      </div>
-      <div>
-        <h4>Navigation</h4>
-        <ul>
-          <li><a href="{{ url_for('index') }}">Home</a></li>
-          <li><a href="{{ url_for('information') }}">Information</a></li>
-          <li><a href="{{ url_for('about') }}">About</a></li>
-          <li><a href="{{ url_for('contact') }}">Contact</a></li>
-        </ul>
-      </div>
-      <div>
-        <h4>Legal</h4>
-        <ul>
-          <li><a href="{{ url_for('privacy') }}">Privacy</a></li>
-          <li><a href="{{ url_for('terms') }}">Terms</a></li>
-          <li><a href="{{ url_for('disclaimer') }}">Disclaimer</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="f-bottom">
-      <p class="mono">© 2026 Akashic</p>
-      <p class="mono">Location-Based Information System</p>
-    </div>
+<section data-s id="use" data-t="Penggunaan Layanan">
+  <h2>Penggunaan Layanan</h2>
+  <p>Akashic disediakan untuk membantu pengguna:</p>
+  <ul>
+    <li>Menemukan dan memahami informasi berbasis wilayah.</li>
+    <li>Melihat event atau kegiatan.</li>
+    <li>Menggunakan fitur lokasi apabila diizinkan.</li>
+    <li>Menggunakan fitur subscription apabila tersedia.</li>
+  </ul>
+  <p>Penggunaan yang mengganggu layanan, merusak sistem, atau merugikan pihak lain tidak diperbolehkan.</p>
+  <div class="cards">
+    <div><h3>Gunakan secara bertanggung jawab</h3><p>Gunakan Akashic sesuai tujuan sistem dan ketentuan yang berlaku.</p></div>
+    <div><h3>Lokasi adalah konteks</h3><p>Lokasi membantu menentukan relevansi geografis.</p></div>
+    <div><h3>Verifikasi informasi penting</h3><p>Verifikasi informasi penting melalui sumber yang sesuai.</p></div>
+    <div><h3>Hormati sistem</h3><p>Jangan mengganggu, menyalahgunakan, atau mengakses sistem tanpa izin.</p></div>
   </div>
-</footer>
+</section>
 
-<script>
-(function () {
-  'use strict';
-  var $ = function (s, c) { return (c || document).querySelector(s); };
-  var $$ = function (s, c) { return Array.prototype.slice.call((c || document).querySelectorAll(s)); };
-  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+<section data-s id="location" data-t="Penggunaan Lokasi">
+  <h2>Penggunaan Lokasi</h2>
+  <p>Fitur lokasi dapat menggunakan <strong>Geolocation API</strong> browser, dengan data berupa latitude, longitude, dan accuracy. Data ini dipakai untuk menentukan konteks geografis dan region yang relevan.</p>
+  <h3>Hal Penting</h3>
+  <ul>
+    <li>Izin lokasi berasal dari browser dan diberikan oleh pengguna.</li>
+    <li>Pengguna dapat menolak memberikan izin lokasi.</li>
+    <li>Hasil lokasi bergantung pada perangkat, browser, dan lingkungan.</li>
+    <li>Akashic tidak dirancang sebagai sistem pelacakan perjalanan.</li>
+  </ul>
+  <div class="note"><b>Catatan</b>Jika izin lokasi ditolak, website tetap dapat digunakan untuk fungsi yang tidak membutuhkan lokasi.</div>
+</section>
 
-  /* Scroll: navbar border + progress bar */
-  var nav = $('#nav'), bar = $('#bar'), tick = false;
-  function onScroll() {
-    if (tick) return;
-    tick = true;
-    requestAnimationFrame(function () {
-      var y = scrollY, h = document.documentElement.scrollHeight - innerHeight;
-      nav.classList.toggle('scrolled', y > 10);
-      if (h > 0) bar.style.width = Math.min(y / h, 1) * 100 + '%';
-      tick = false;
-    });
-  }
-  addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+<section data-s id="accounts" data-t="Akun dan Autentikasi">
+  <h2>Akun dan Autentikasi</h2>
+  <p>Fitur tertentu dapat membutuhkan akun bila tersedia. Fitur publik tetap dapat diakses tanpa akun.</p>
+  <p>Apabila akun digunakan, pengguna bertanggung jawab menjaga kredensial, akses, dan informasi autentikasi akun, serta segera menghubungi pengelola bila ada indikasi penyalahgunaan.</p>
+</section>
 
-  /* Mobile menu */
-  var toggle = $('#toggle'), menu = $('#mobile'), prev = null;
-  function setMenu(open) {
-    menu.classList.toggle('open', open);
-    toggle.setAttribute('aria-expanded', open);
-    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
-    document.body.style.overflow = open ? 'hidden' : '';
-    if (open) { prev = document.activeElement; setTimeout(function () { $('a', menu).focus(); }, 50); }
-    else if (prev) prev.focus();
-  }
-  toggle.addEventListener('click', function () { setMenu(!menu.classList.contains('open')); });
-  $$('a', menu).forEach(function (a) { a.addEventListener('click', function () { setMenu(false); }); });
-  document.addEventListener('keydown', function (e) {
-    if (!menu.classList.contains('open')) return;
-    if (e.key === 'Escape') return setMenu(false);
-    if (e.key === 'Tab') {  /* focus trap */
-      var f = $$('a[href],button', menu).concat(toggle), first = f[0], last = f[f.length - 1];
-      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-    }
-  });
-  addEventListener('resize', function () { if (innerWidth > 768 && menu.classList.contains('open')) setMenu(false); }, { passive: true });
+<section data-s id="content" data-t="Konten Pengguna">
+  <h2>Konten yang Diberikan Pengguna</h2>
+  <p>Jika fitur tersedia, pengguna bertanggung jawab atas konten yang diberikan. Konten tidak boleh:</p>
+  <ul>
+    <li>Bersifat ilegal atau menyesatkan dengan sengaja.</li>
+    <li>Mengandung malware.</li>
+    <li>Melanggar hak pihak lain.</li>
+    <li>Mengandung data pribadi pihak lain tanpa dasar yang sesuai.</li>
+    <li>Digunakan untuk mengganggu sistem.</li>
+  </ul>
+</section>
 
-  /* TOC: hanya satu section tampil */
-  var btns = $$('.toc button'), secs = $$('.sec'), empty = $('#empty');
-  btns.forEach(function (b) {
-    b.addEventListener('click', function () {
-      btns.forEach(function (x) { x.classList.toggle('on', x === b); });
-      secs.forEach(function (s) { s.classList.toggle('on', s.id === b.dataset.target); });
-      empty.style.display = 'none';
-      var top = scrollY + $('.content').getBoundingClientRect().top - (innerWidth > 768 ? 112 : 104);
-      if (scrollY > top || scrollY < top - 200) scrollTo({ top: top, behavior: reduce ? 'auto' : 'smooth' });
-    });
-  });
+<section data-s id="information" data-t="Information &amp; Event">
+  <h2>Information, Event, dan News</h2>
+  <h3>Information</h3>
+  <p>Konten informasi yang dikelola dalam sistem dan disajikan berdasarkan konteks wilayah.</p>
+  <h3>Event</h3>
+  <p>Informasi kegiatan dengan konteks waktu dan lokasi. Jadwal, lokasi, atau detail lain dapat berubah.</p>
+  <h3>News</h3>
+  <p>Berita dapat berasal dari sumber eksternal dan dapat berubah, diperbarui, atau tidak lagi tersedia sesuai sumber aslinya.</p>
+  <p>Seluruh konten dapat diubah, diperbarui, atau dihapus sewaktu-waktu sesuai kebutuhan sistem.</p>
+</section>
 
-  /* Clock */
-  var clocks = $$('[data-clock]'), fmt, timer;
-  try { fmt = new Intl.DateTimeFormat('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: false }); } catch (e) {}
-  function tickClock() {
-    var d = new Date(), t = fmt ? fmt.format(d) : d.toTimeString().slice(0, 8);
-    clocks.forEach(function (c) { c.textContent = t; c.setAttribute('datetime', d.toISOString()); });
-  }
-  function startClock() { if (!timer) { tickClock(); timer = setInterval(tickClock, 1000); } }
-  document.addEventListener('visibilitychange', function () {
-    if (document.hidden) { clearInterval(timer); timer = null; } else startClock();
-  });
-  startClock();
-})();
-</script>
-</body>
-</html>
+<section data-s id="external" data-t="Sumber Eksternal">
+  <h2>Sumber Eksternal</h2>
+  <p>Akashic dapat merujuk atau mengintegrasikan informasi dari sumber eksternal, dan tidak selalu mengendalikan:</p>
+  <ul>
+    <li>Isi dan akurasi informasi sumber tersebut.</li>
+    <li>Ketersediaan layanan dan kebijakannya.</li>
+    <li>Perubahan informasi yang terjadi di sana.</li>
+  </ul>
+  <p>Pengguna yang mengakses sumber eksternal tunduk pada ketentuan dan kebijakan sumber masing-masing.</p>
+</section>
+
+<section data-s id="prohibited" data-t="Penggunaan Dilarang">
+  <h2>Penggunaan yang Dilarang</h2>
+  <p>Pengguna tidak diperbolehkan menggunakan Akashic untuk:</p>
+  <ul>
+    <li>Aktivitas ilegal atau akses tanpa izin.</li>
+    <li>Mengganggu operasi sistem atau menghindari mekanisme keamanan.</li>
+    <li>Mengirim malware atau kode berbahaya.</li>
+    <li>Scraping atau otomatisasi yang membebani sistem secara tidak wajar.</li>
+    <li>Menyalahgunakan fitur lokasi atau informasi pengguna lain.</li>
+    <li>Impersonasi.</li>
+    <li>Memanipulasi konten untuk merusak fungsi sistem.</li>
+  </ul>
+</section>
+
+<section data-s id="ip" data-t="Kekayaan Intelektual">
+  <h2>Kekayaan Intelektual</h2>
+  <p>Nama, logo, desain antarmuka, struktur visual, kode, teks, ilustrasi, dan elemen grafis Akashic dapat dilindungi hak yang berlaku, kecuali dinyatakan lain. Hak atas konten pihak ketiga tetap berada pada pemilik atau sumbernya.</p>
+  <p>Pengguna tidak diperkenankan menggunakan elemen tersebut di luar konteks penggunaan sistem tanpa dasar yang sesuai.</p>
+</section>
+
+<section data-s id="availability" data-t="Ketersediaan Layanan">
+  <h2>Ketersediaan Layanan</h2>
+  <p>Ketersediaan layanan dapat terpengaruh oleh pemeliharaan, gangguan server atau jaringan, kesalahan teknis, perubahan sistem, dan gangguan layanan pihak ketiga. Akashic tidak menjanjikan layanan selalu tersedia tanpa gangguan.</p>
+</section>
+
+<section data-s id="suspension" data-t="Pembatasan Akses">
+  <h2>Pembatasan atau Penghentian Akses</h2>
+  <p>Demi keamanan, maintenance, penanganan penyalahgunaan, tindak lanjut pelanggaran, atau perlindungan sistem, akses ke fitur tertentu dapat dibatasi atau dihentikan sesuai kebutuhan operasional dan ketentuan yang berlaku.</p>
+</section>
+
+<section data-s id="privacy" data-t="Privasi">
+  <h2>Privasi</h2>
+  <p>Pemrosesan informasi dijelaskan dalam <a href="{{ url_for('privacy') }}">Kebijakan Privasi</a>.</p>
+  <ul>
+    <li><strong>Terms</strong> mengatur aturan penggunaan sistem.</li>
+    <li><strong>Privacy Policy</strong> menjelaskan cara informasi diproses.</li>
+  </ul>
+  <p>Kedua dokumen saling melengkapi dan sebaiknya dibaca bersama.</p>
+</section>
+
+<section data-s id="disclaimer" data-t="Disclaimer">
+  <h2>Disclaimer</h2>
+  <p>Penggunaan Akashic juga tunduk pada keterbatasan yang dijelaskan di <a href="{{ url_for('disclaimer') }}">halaman Disclaimer</a>, mencakup akurasi dan kelengkapan informasi, konteks lokasi, event dan waktu, berita dan sumber eksternal, serta ketersediaan sistem.</p>
+</section>
+
+<section data-s id="liability" data-t="Batasan Tanggung Jawab">
+  <h2>Batasan Tanggung Jawab</h2>
+  <p>Akashic tidak dapat menjamin bahwa:</p>
+  <ul>
+    <li>Seluruh informasi selalu benar dan tersedia ketika dibutuhkan.</li>
+    <li>Lokasi selalu akurat pada setiap kondisi.</li>
+    <li>Layanan dan sumber eksternal selalu bebas dari gangguan.</li>
+    <li>Informasi cocok untuk setiap jenis keputusan.</li>
+  </ul>
+  <p>Pengguna bertanggung jawab memverifikasi informasi penting sebelum menjadikannya dasar keputusan.</p>
+  <div class="note"><b>Catatan</b>Akashic menyediakan informasi sebagai alat bantu. Keputusan akhir tetap berada pada pengguna.</div>
+</section>
+
+<section data-s id="changes" data-t="Perubahan Terms">
+  <h2>Perubahan Syarat dan Ketentuan</h2>
+  <p>Ketentuan ini dapat diperbarui apabila terjadi perubahan pada fitur, perkembangan sistem, kebijakan operasional, kebutuhan keamanan, atau kebutuhan hukum dan administratif. Versi terbaru selalu ditampilkan pada halaman ini.</p>
+  <p class="updated">Terakhir diperbarui: 2026</p>
+</section>
+
+<section data-s id="contact" data-t="Kontak">
+  <h2>Kontak</h2>
+  <p>Pertanyaan mengenai ketentuan penggunaan dapat disampaikan melalui halaman <a href="{{ url_for('contact') }}">Kontak</a>. Baca juga <a href="{{ url_for('privacy') }}">Kebijakan Privasi</a> dan <a href="{{ url_for('disclaimer') }}">Disclaimer</a>.</p>
+</section>
+{% endblock %}
+
+{% block closing %}
+<h2>Gunakan Akashic dengan memahami konteksnya.</h2>
+<p>Akashic membantu pengguna menemukan informasi dalam konteks wilayah yang relevan. Pahami batasan informasi, hormati sistem, dan verifikasi informasi penting bila diperlukan.</p>
+<div class="btns">
+  <a href="{{ url_for('privacy') }}" class="btn p">Kebijakan Privasi</a>
+  <a href="{{ url_for('disclaimer') }}" class="btn g">Disclaimer</a>
+  <a href="{{ url_for('contact') }}" class="btn g">Hubungi Akashic</a>
+</div>
+{% endblock %}

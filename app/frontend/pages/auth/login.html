@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Masuk ke Akashic — Location-Based Information System.">
-<title>Login — Akashic</title>
+<title>Login</title>
 <style>
 :root{
   --c-bg:#05070A; --c-bg2:#0B1016; --c-bg3:#111923; --c-bg4:#1A2029;
@@ -42,19 +42,20 @@ html,body{margin:0;min-height:100%}
 .akashic-login-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
 .akashic-login-brand svg{width:26px;height:26px;flex:none}
 .akashic-login-brand-name{font-size:13px;font-weight:700;letter-spacing:.2em}
-.akashic-login-nav-links{display:flex;align-items:center;gap:clamp(12px,2.2vw,28px);flex-wrap:wrap;justify-content:flex-end}
-.akashic-login-nav-links a{text-decoration:none;color:var(--c-muted);padding:6px 0;border-bottom:1px solid transparent;transition:color .25s,border-color .25s}
-.akashic-login-nav-links a:hover{color:var(--c-text)}
-.akashic-login-nav-links a[aria-current="page"]{color:var(--c-text);border-bottom-color:var(--c-accent)}
 /* body grid */
 .akashic-login-body{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(360px,.85fr);min-height:0}
-.akashic-login-visual{position:relative;padding:clamp(22px,3.4vw,48px);overflow:hidden;border-right:1px solid var(--c-line);display:flex;flex-direction:column;justify-content:space-between;gap:20px;min-height:420px}
+.akashic-login-visual{position:relative;padding:clamp(22px,3.4vw,48px);overflow:hidden;border-right:1px solid var(--c-line);display:flex;flex-direction:column;justify-content:space-between;gap:20px;min-height:420px;background:var(--c-bg3)}
 .akashic-login-visual-copy{position:relative;z-index:2;opacity:0;animation:akashic-login-fade 700ms var(--ease) 600ms forwards}
-.akashic-login-micro{font-size:10.5px;letter-spacing:.18em;color:var(--c-muted);opacity:.75;margin:0 0 14px}
-.akashic-login-title{font-family:var(--font-display);font-weight:500;font-size:clamp(2rem,3.6vw,3.4rem);line-height:1.08;margin:0;letter-spacing:-.01em}
+.akashic-login-micro{font-size:10.5px;letter-spacing:.18em;color:var(--c-text);opacity:.8;margin:0 0 14px}
+.akashic-login-title{font-family:var(--font-display);font-weight:500;font-size:clamp(2rem,3.6vw,3.4rem);line-height:1.08;margin:0;letter-spacing:-.01em;text-shadow:0 2px 24px rgba(0,0,0,.45)}
 .akashic-login-title small{display:block;font-family:var(--font-ui);font-size:12px;letter-spacing:.32em;font-weight:600;color:var(--c-accent);margin-bottom:14px}
-.akashic-login-spatial{position:absolute;inset:0;width:100%;height:100%;opacity:0;animation:akashic-login-fade 900ms var(--ease) 450ms forwards}
-.akashic-login-tags{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;font-size:10.5px;letter-spacing:.16em;color:var(--c-muted);opacity:.7}
+/* media (gambar / video) */
+.akashic-login-media{position:absolute;inset:0;z-index:0;background:var(--c-bg3);opacity:0;animation:akashic-login-fade 900ms var(--ease) 450ms forwards}
+.akashic-login-media img,.akashic-login-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.akashic-login-media video{opacity:0;transition:opacity .8s var(--ease)}
+.akashic-login-media video.is-ready{opacity:1}
+.akashic-login-media::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,7,10,.55) 0%,rgba(5,7,10,.12) 42%,rgba(5,7,10,.82) 100%)}
+.akashic-login-tags{position:relative;z-index:2;display:flex;justify-content:space-between;align-items:flex-end;gap:16px;flex-wrap:wrap;font-size:10.5px;letter-spacing:.16em;color:var(--c-text);opacity:.75}
 .akashic-login-tags span{display:block;line-height:1.9}
 /* login side */
 .akashic-login-panel{padding:clamp(24px,4vw,60px) clamp(22px,4vw,64px);display:flex;flex-direction:column;justify-content:center;gap:0}
@@ -105,11 +106,10 @@ html,body{margin:0;min-height:100%}
 .akashic-login-footer nav{display:flex;gap:18px}
 .akashic-login-footer a{text-decoration:none;transition:color .2s}
 .akashic-login-footer a:hover{color:var(--c-text)}
-.akashic-login-footer-mid{opacity:.6}
 /* focus */
 .akashic-login-page :focus-visible{outline:2px solid var(--c-accent);outline-offset:3px;border-radius:6px}
 .akashic-login-input:focus-visible{outline:none}
-/* svg motion */
+/* svg motion (background) */
 .akashic-login-pulse{transform-box:fill-box;transform-origin:center;animation:akashic-login-pulse 4.5s ease-in-out infinite}
 .akashic-login-pulse.p2{animation-delay:1.3s}.akashic-login-pulse.p3{animation-delay:2.6s}.akashic-login-pulse.p4{animation-delay:3.4s}
 .akashic-login-flow{stroke-dasharray:3 9;animation:akashic-login-flow 26s linear infinite}
@@ -128,10 +128,9 @@ html,body{margin:0;min-height:100%}
   .akashic-login-page{justify-content:flex-start}
   .akashic-login-shell{width:100%;min-height:0}
   .akashic-login-body{grid-template-columns:minmax(0,1fr)}
-  .akashic-login-visual{min-height:340px;border-right:0;border-bottom:1px solid var(--c-login-line,var(--c-line))}
+  .akashic-login-visual{min-height:340px;border-right:0;border-bottom:1px solid var(--c-line)}
   .akashic-login-background{opacity:.55!important}
   .akashic-login-nav{flex-wrap:wrap}
-  .akashic-login-nav-links{width:100%;justify-content:flex-start}
   .akashic-login-submit{align-self:stretch}
 }
 @media (max-width:480px){
@@ -143,7 +142,7 @@ html,body{margin:0;min-height:100%}
 @media (prefers-reduced-motion:reduce){
   .akashic-login-shell,.akashic-login-eyebrow,.akashic-login-heading,.akashic-login-sub,.akashic-login-form{transform:none;animation:akashic-login-fade 300ms linear forwards}
   .akashic-login-pulse,.akashic-login-flow,.akashic-login-drift{animation:none}
-  .akashic-login-submit,.akashic-login-submit svg,.akashic-login-input{transition:none}
+  .akashic-login-submit,.akashic-login-submit svg,.akashic-login-input,.akashic-login-media video{transition:none}
 }
 </style>
 </head>
@@ -220,61 +219,20 @@ html,body{margin:0;min-height:100%}
         <span class="akashic-login-brand-name">AKASHIC</span>
       </span>
     </a>
-    <div class="akashic-login-nav-links">
-      <a href="{{ url_for('index') }}">Home</a>
-      <a href="{{ url_for('about') }}">About</a>
-      <a href="{{ url_for('information') }}">Information</a>
-      <a href="{{ url_for('contact') }}">Contact</a>
-      <a href="#" aria-current="page">Sign in</a>
-    </div>
   </nav>
 
   <div class="akashic-login-body">
 
-    <!-- Left: spatial visual -->
-    <section class="akashic-login-visual" aria-label="Visual spasial Akashic">
-      <svg class="akashic-login-spatial" viewBox="0 0 700 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <pattern id="al-grid2" width="40" height="40" patternUnits="userSpaceOnUse"><path d="M40 0H0V40" fill="none" stroke="#9fb0c8" stroke-width=".5"/></pattern>
-          <radialGradient id="al-glow-c" cx="55%" cy="60%" r="55%"><stop offset="0" stop-color="#C58A52" stop-opacity=".12"/><stop offset="1" stop-color="#C58A52" stop-opacity="0"/></radialGradient>
-        </defs>
-        <rect width="700" height="620" fill="url(#al-grid2)" opacity=".08"/>
-        <rect width="700" height="620" fill="url(#al-glow-c)"/>
-        <g>
-          <path d="M120 300 L210 190 L330 160 L440 100 L560 150 L640 260 L610 400 L520 480 L400 540 L280 500 L170 430Z" fill="#1c2638" fill-opacity=".5" stroke="#9fb0c8" stroke-opacity=".35"/>
-          <path d="M210 190 L330 160 L360 280 L250 330Z M330 160 L440 100 L560 150 L470 250 L360 280Z M470 250 L560 150 L640 260 L610 400 L500 340Z M250 330 L360 280 L470 250 L500 340 L400 400 L290 410Z M290 410 L400 400 L520 480 L400 540 L280 500Z" fill="none" stroke="#9fb0c8" stroke-opacity=".2"/>
-          <g fill="none" stroke="#9fb0c8" stroke-opacity=".16">
-            <path d="M270 330 C320 290 390 300 430 330 C470 360 440 410 380 420 C320 430 250 390 270 330Z"/>
-            <path d="M310 340 C340 320 380 326 400 342 C418 360 404 384 372 388 C336 392 298 372 310 340Z"/>
-            <path d="M-20 500 C100 470 200 540 300 590 C380 630 470 640 560 660"/>
-          </g>
-          <g fill="none" stroke="#C58A52" stroke-opacity=".4">
-            <path class="akashic-login-flow" d="M210 190 L360 280 L500 340 L610 400"/>
-            <path class="akashic-login-flow" d="M330 160 L360 280 L400 400 L520 480"/>
-            <path d="M120 300 L250 330 L360 280 L470 250 L560 150"/>
-          </g>
-          <g fill="#c9d4e4">
-            <circle cx="210" cy="190" r="3" opacity=".6"/><circle cx="330" cy="160" r="3.5" opacity=".7"/><circle cx="440" cy="100" r="3" opacity=".5"/>
-            <circle cx="560" cy="150" r="3" opacity=".6"/><circle cx="640" cy="260" r="3" opacity=".5"/><circle cx="610" cy="400" r="3" opacity=".5"/>
-            <circle cx="360" cy="280" r="5" opacity=".85"/><circle cx="470" cy="250" r="3.5" opacity=".7"/><circle cx="500" cy="340" r="4" opacity=".7"/>
-            <circle cx="250" cy="330" r="3.5" opacity=".6"/><circle cx="400" cy="400" r="3.5" opacity=".6"/><circle cx="120" cy="300" r="3" opacity=".45"/>
-            <circle cx="520" cy="480" r="3" opacity=".5"/><circle cx="280" cy="500" r="3" opacity=".45"/>
-          </g>
-          <g fill="#C58A52">
-            <circle class="akashic-login-pulse" cx="360" cy="280" r="3"/>
-            <circle class="akashic-login-pulse p2" cx="500" cy="340" r="3"/>
-            <circle class="akashic-login-pulse p3" cx="210" cy="190" r="2.6"/>
-            <circle class="akashic-login-pulse p4" cx="400" cy="400" r="2.6"/>
-          </g>
-          <g fill="none" stroke="#C58A52" stroke-opacity=".55">
-            <path d="M360 258v-14m0 0l-5 5m5-5l5 5"/><rect x="466" y="246" width="8" height="8" transform="rotate(45 470 250)"/>
-            <circle cx="500" cy="340" r="12" stroke-opacity=".25"/><circle cx="360" cy="280" r="16" stroke-opacity=".2"/>
-          </g>
-          <g fill="#9fb0c8" fill-opacity=".55" font-family="Segoe UI,Arial,sans-serif" font-size="9" letter-spacing="1.6">
-            <text x="372" y="236">NODE 01</text><text x="512" y="360">REGION 02</text><text x="170" y="178">CONTEXT</text>
-          </g>
-        </g>
-      </svg>
+    <!-- Left: gambar / video -->
+    <section class="akashic-login-visual" aria-label="Visual Akashic">
+      <div class="akashic-login-media" aria-hidden="true">
+        <!-- Gambar: dasar dan fallback -->
+        <img src="{{ url_for('static', filename='image/gambar-02.jpg') }}" alt="" loading="eager" decoding="async" id="akashic-login-img">
+        <!-- Video: tampil di atas gambar bila berhasil diputar -->
+        <video id="akashic-login-video" autoplay muted loop playsinline preload="metadata">
+          <source src="{{ url_for('static', filename='video/animasi-02.mp4') }}" type="video/mp4">
+        </video>
+      </div>
 
       <div class="akashic-login-visual-copy">
         <p class="akashic-login-micro">LOCATION-BASED INFORMATION SYSTEM</p>
@@ -317,8 +275,7 @@ html,body{margin:0;min-height:100%}
             <input type="checkbox" name="remember" id="login-remember">
             <span>Ingat saya</span>
           </label>
-          <!-- TODO: connect to forgot-password route -->
-          <a class="akashic-login-link" href="{{ url_for('auth.forgot_password')}}">Lupa kata sandi?</a>
+          <a class="akashic-login-link" href="{{ url_for('auth.forgot_password') }}">Lupa kata sandi?</a>
         </div>
 
         <button class="akashic-login-submit" type="submit">
@@ -338,8 +295,7 @@ html,body{margin:0;min-height:100%}
   </div>
 
   <footer class="akashic-login-footer">
-    <span>AKASHIC / 2026</span>
-    <span class="akashic-login-footer-mid">LOCATION &nbsp; REGION &nbsp; INFORMATION</span>
+    <span>SISTEM INFORMASI AKASHIC</span>
     <nav aria-label="Tautan hukum">
       <a href="{{ url_for('privacy') }}">Privacy</a>
       <a href="{{ url_for('terms') }}">Terms</a>
@@ -363,9 +319,38 @@ html,body{margin:0;min-height:100%}
     });
   }
 
-  // Light mouse parallax (desktop, no reduced motion)
-  var map = document.getElementById('akashic-login-map');
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  // Media kiri: gambar sebagai dasar, video tampil di atasnya bila siap
+  var img = document.getElementById('akashic-login-img');
+  var video = document.getElementById('akashic-login-video');
+  if (img) {
+    img.addEventListener('error', function () { img.style.display = 'none'; });
+  }
+  if (video) {
+    var sources = video.querySelectorAll('source');
+    var lastSource = sources[sources.length - 1];
+    var dropVideo = function () { if (video.parentNode) video.parentNode.removeChild(video); };
+    if (reduce.matches) {
+      video.pause();
+      video.removeAttribute('autoplay');
+    } else {
+      video.addEventListener('playing', function () { video.classList.add('is-ready'); });
+      video.addEventListener('error', dropVideo);
+      if (lastSource) lastSource.addEventListener('error', dropVideo);
+      var p = video.play();
+      if (p && p.catch) p.catch(function () { /* autoplay diblokir: gambar tetap tampil */ });
+    }
+    // Hemat baterai: jeda saat tab tidak terlihat
+    document.addEventListener('visibilitychange', function () {
+      if (!video.parentNode || reduce.matches) return;
+      if (document.hidden) video.pause();
+      else { var q = video.play(); if (q && q.catch) q.catch(function () {}); }
+    });
+  }
+
+  // Light mouse parallax pada background (desktop, no reduced motion)
+  var map = document.getElementById('akashic-login-map');
   var desktop = window.matchMedia('(min-width: 821px) and (hover: hover)');
   if (!map) return;
 

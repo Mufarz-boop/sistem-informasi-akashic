@@ -1,412 +1,157 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#F7F5F2">
-<meta name="color-scheme" content="light">
-<title>Akashic — Disclaimer</title>
-<meta name="description" content="Disclaimer Akashic menjelaskan batasan informasi, penggunaan data berbasis lokasi, sumber eksternal, dan keterbatasan sistem.">
-<link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='image/favicon.svg') }}">
-<script>document.documentElement.classList.add('js')</script>
-<style>
-:root{--bg:#F7F5F2;--soft:#F1EEE9;--tx:#1C1C1E;--mu:#5C5C60;--sub:#8E8E93;--bd:rgba(28,28,30,.1);--ac:#9A6B4A;--wn:#C28E3E;
---serif:Georgia,"Times New Roman",serif;--sans:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;--nav:64px}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth;scroll-padding-top:calc(var(--nav) + 24px);-webkit-text-size-adjust:100%}
-body{font:clamp(.9375rem,.9rem + .2vw,1.0625rem)/1.75 var(--sans);color:var(--tx);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;-webkit-font-smoothing:antialiased}
-a{color:inherit;text-decoration:none}
-button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:left}
-ul{list-style:none}
-:focus-visible{outline:2px solid var(--ac);outline-offset:3px}
-.wrap{width:100%;max-width:1240px;margin-inline:auto;padding-inline:clamp(1.25rem,4vw,3rem)}
-.skip{position:absolute;top:-100%;left:1rem;z-index:50;padding:.6rem 1rem;background:var(--tx);color:#fff;border-radius:4px}
-.skip:focus{top:1rem}
+{% extends "legal/base.html" %}
 
-/* Nav */
-#bar{position:fixed;top:0;left:0;height:2px;width:0;background:var(--ac);z-index:40}
-.nav{position:fixed;inset:0 0 auto;height:var(--nav);z-index:30;background:rgba(247,245,242,.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid transparent;transition:border-color .3s}
-.nav.s{border-color:var(--bd)}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:100%;gap:1.5rem}
-.brand{font:400 1.25rem var(--serif);letter-spacing:.08em}
-.nav-r{display:flex;align-items:center;gap:1.5rem;font-size:.875rem}
-.nav-r a{color:var(--mu);transition:color .15s}
-.nav-r a:hover{color:var(--tx)}
-.clock{padding-left:1.5rem;border-left:1px solid var(--bd);font-variant-numeric:tabular-nums;color:var(--tx)}
+{% block title %}Disclaimer{% endblock %}
+{% block description %}Disclaimer Akashic menjelaskan batasan informasi, penggunaan data berbasis lokasi, sumber eksternal, dan keterbatasan sistem.{% endblock %}
 
-/* Hero */
-main{flex:1;padding-top:var(--nav)}
-.hero{padding-block:clamp(3rem,7vw,5.5rem) clamp(2.5rem,5vw,4rem);border-bottom:1px solid var(--bd);background:radial-gradient(circle at 20% 20%,rgba(194,142,62,.09),transparent 55%),linear-gradient(180deg,#F7F5F2,#F2EEE8)}
-.hero h1{font:400 clamp(2.5rem,1.5rem + 5vw,5rem)/1.05 var(--serif);letter-spacing:-.025em;margin-bottom:1.25rem}
-.hero p{max-width:52ch;color:var(--mu);font-size:1.125rem;line-height:1.65}
-.hero small{display:block;margin-top:1.5rem;color:var(--sub);font-size:.875rem}
+{% block hero_title %}Disclaimer{% endblock %}
+{% block hero_desc %}Catatan penting mengenai sifat informasi, keterbatasan sistem, dan penggunaan Akashic.{% endblock %}
 
-/* Notice */
-.notice{margin-block:2rem;display:flex;gap:1.25rem;padding:1.5rem;border:1px solid var(--wn);border-left-width:3px;background:rgba(194,142,62,.1)}
-.notice svg{width:28px;height:28px;flex:none;color:var(--wn)}
-.notice h2{font:400 1.375rem/1.25 var(--serif);margin-bottom:.4rem}
-.notice p{color:var(--mu)}
-
-/* Layout */
-.layout{display:grid;grid-template-columns:250px 1fr;gap:clamp(2rem,5vw,4.5rem);padding-block:2rem 6rem;align-items:start}
-.toc{position:sticky;top:calc(var(--nav) + 24px);max-height:calc(100vh - var(--nav) - 48px);overflow-y:auto;scrollbar-width:none}
-.toc::-webkit-scrollbar{display:none}
-.toc p{font-size:.8125rem;color:var(--sub);padding-bottom:.75rem;margin-bottom:.5rem;border-bottom:1px solid var(--bd)}
-.toc button{display:block;width:100%;padding:.45rem .75rem;font-size:.875rem;line-height:1.4;color:var(--mu);border-left:2px solid transparent;transition:color .15s,background .15s}
-.toc button:hover{color:var(--tx);background:rgba(154,107,74,.05)}
-.toc button[aria-current]{color:var(--tx);border-color:var(--ac);background:rgba(154,107,74,.07)}
-
-/* Content */
-.content{max-width:760px;min-height:400px}
-.empty{padding-block:3rem}
-.empty h2{font:400 1.5rem/1.25 var(--serif);color:var(--mu);margin-bottom:.75rem;max-width:24ch}
-.empty p{color:var(--sub);max-width:50ch}
-.js [data-s]{display:none}
-.js [data-s].on{display:block}
-[data-s]{padding-bottom:2rem}
-[data-s] h2{font:400 clamp(1.75rem,1.3rem + 1.6vw,2.375rem)/1.15 var(--serif);letter-spacing:-.015em;margin-bottom:1.25rem}
-[data-s] h2 em{font-style:italic}
-.content p{color:var(--mu);margin-bottom:1rem}
-.content strong{color:var(--tx);font-weight:600}
-.content h3{font-size:1rem;font-weight:600;margin:1.75rem 0 .6rem}
-.content ul{display:grid;gap:.5rem;margin-bottom:1.25rem}
-.content li{position:relative;padding-left:1.4rem;color:var(--mu)}
-.content li::before{content:"";position:absolute;left:0;top:.85em;width:8px;height:1px;background:var(--ac)}
-.content a{color:var(--tx);border-bottom:1px solid var(--bd);transition:color .15s,border-color .15s}
-.content a:hover{color:var(--ac);border-color:var(--ac)}
-.note{margin-block:1.5rem;padding:1.1rem 1.5rem;border-left:3px solid var(--ac);background:rgba(154,107,74,.09);color:var(--tx);font-size:.9375rem;line-height:1.65}
-.note b{display:block;color:var(--ac);margin-bottom:.2rem}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);margin-block:1.5rem;border-block:1px solid var(--bd)}
-.cards div{padding:1.25rem;border-right:1px solid var(--bd)}
-.cards div:last-child{border:0}
-.cards h3{margin:0 0 .4rem}
-.cards p{font-size:.875rem;line-height:1.6;margin:0}
-.updated{font-size:.875rem;color:var(--sub);padding-top:1rem;border-top:1px solid var(--bd)}
-
-/* Closing + footer */
-.closing{padding-block:clamp(3.5rem,8vw,6rem);background:var(--soft);border-top:1px solid var(--bd);text-align:center}
-.closing h2{font:400 clamp(1.5rem,1.1rem + 2vw,2.5rem)/1.2 var(--serif);letter-spacing:-.02em;max-width:22ch;margin:0 auto 1.25rem}
-.closing p{max-width:60ch;margin:0 auto 2rem;color:var(--mu)}
-.btns{display:flex;justify-content:center;flex-wrap:wrap;gap:1rem}
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:.75rem 1.75rem;border:1px solid var(--tx);border-radius:2px;font-size:.9375rem;font-weight:500;transition:background .15s,border-color .15s,color .15s}
-.btn.p{background:var(--tx);color:#fff}
-.btn.p:hover{background:var(--ac);border-color:var(--ac)}
-.btn.g{border-color:rgba(28,28,30,.2)}
-.btn.g:hover{border-color:var(--tx)}
-footer{border-top:1px solid var(--bd);padding-block:3rem 1.5rem}
-.f-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:2rem;padding-bottom:2rem}
-.f-grid .brand{display:block;font-size:1.75rem;margin-bottom:.75rem}
-.f-grid p,.f-grid h3{font-size:.875rem;color:var(--mu)}
-.f-grid h3{font-weight:600;color:var(--sub);margin-bottom:.9rem}
-.f-grid li+li{margin-top:.6rem}
-.f-grid a{font-size:.875rem;color:var(--mu)}
-.f-grid a:hover{color:var(--ac)}
-.f-bot{display:flex;justify-content:space-between;flex-wrap:wrap;gap:.5rem;padding-top:1.25rem;border-top:1px solid var(--bd);font-size:.8125rem;color:var(--sub)}
-
-@media(max-width:900px){
-.layout{grid-template-columns:1fr;gap:1.5rem}
-.toc{position:static;max-height:none;padding:1.25rem;background:var(--soft);border:1px solid var(--bd);border-radius:4px}
-.toc ul{display:grid;grid-template-columns:1fr 1fr;column-gap:1rem}
-}
-@media(max-width:640px){
-.clock,.nav-r a{display:none}
-.toc ul{grid-template-columns:1fr}
-.cards{grid-template-columns:1fr}
-.cards div{border:0;border-bottom:1px solid var(--bd)}
-.cards div:last-child{border:0}
-.notice{flex-direction:column;gap:.75rem}
-.f-grid{grid-template-columns:1fr}
-.btns{flex-direction:column}
-}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
-@media print{
-.nav,#bar,.toc,.skip,.empty{display:none!important}
-main{padding-top:0}
-.layout{display:block}
-[data-s]{display:block!important;break-inside:avoid}
-body{background:#fff}
-}
-</style>
-</head>
-<body>
-<a href="#main" class="skip">Lewati ke konten</a>
-<div id="bar" aria-hidden="true"></div>
-
-<header class="nav" id="nav">
-  <div class="wrap">
-    <a href="{{ url_for('index') }}" class="brand" aria-label="Akashic — Beranda">AKASHIC</a>
-    <div class="nav-r">
-      <a href="{{ url_for('index') }}">Beranda</a>
-      <time class="clock" id="clock" aria-label="Waktu lokal">--:--:--</time>
-    </div>
+{% block before_layout %}
+<div class="notice" role="note">
+  <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3 29 27H3Z"/><line x1="16" y1="11" x2="16" y2="18"/><circle cx="16" cy="22" r="1.2" fill="currentColor" stroke="none"/></svg>
+  <div>
+    <h2>Penting untuk dipahami</h2>
+    <p>Informasi di Akashic membantu pengguna menemukan hal yang relevan berdasarkan konteks wilayah. Informasi ini tidak selalu dimaksudkan sebagai pengganti pengumuman, dokumen, atau sumber resmi.</p>
   </div>
-</header>
+</div>
+{% endblock %}
 
-<main id="main">
-  <section class="hero">
-    <div class="wrap">
-      <h1>Disclaimer</h1>
-      <p>Catatan penting mengenai sifat informasi, keterbatasan sistem, dan penggunaan Akashic.</p>
-      <small>Terakhir diperbarui: 2026</small>
-    </div>
-  </section>
+{% block content %}
+<section data-s id="pendahuluan">
+  <h2>Pendahuluan</h2>
+  <p>Akashic adalah <strong>Location-Based Information System</strong> berbasis web yang menyajikan informasi berdasarkan konteks geografis pengguna. Prinsipnya: <em>“Informasi yang hadir di tempat yang tepat.”</em></p>
+  <p>Disclaimer ini menjelaskan batasan, sifat informasi, dan tanggung jawab penggunaan sistem Akashic dengan bahasa yang mudah dipahami. Dengan menggunakan Akashic, Anda memahami bahwa informasi yang tampil memiliki keterbatasan dan tidak selalu dapat menggantikan sumber resmi.</p>
+  <div class="note"><b>Ringkasan</b>Akashic menghadirkan informasi dalam konteks wilayah, namun pengguna tetap perlu menggunakan pertimbangan sendiri, terutama untuk keputusan penting.</div>
+</section>
 
-  <div class="wrap">
-    <div class="notice" role="note">
-      <svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3 29 27H3Z"/><line x1="16" y1="11" x2="16" y2="18"/><circle cx="16" cy="22" r="1.2" fill="currentColor" stroke="none"/></svg>
-      <div>
-        <h2>Penting untuk dipahami</h2>
-        <p>Informasi di Akashic membantu pengguna menemukan hal yang relevan berdasarkan konteks wilayah. Informasi ini tidak selalu dimaksudkan sebagai pengganti pengumuman, dokumen, atau sumber resmi.</p>
-      </div>
-    </div>
-
-    <div class="layout">
-      <nav class="toc" aria-label="Daftar isi">
-        <p>Daftar isi</p>
-        <ul id="toc"></ul>
-      </nav>
-
-      <article class="content">
-        <div class="empty" id="empty">
-          <h2>Pilih salah satu bagian untuk membaca.</h2>
-          <p>Klik item pada daftar isi, dan bagian yang dipilih akan tampil di sini.</p>
-        </div>
-
-        <section data-s id="pendahuluan">
-          <h2>Pendahuluan</h2>
-          <p>Akashic adalah <strong>Location-Based Information System</strong> berbasis web yang menyajikan informasi berdasarkan konteks geografis pengguna. Prinsipnya: <em>“Informasi yang hadir di tempat yang tepat.”</em></p>
-          <p>Disclaimer ini menjelaskan batasan, sifat informasi, dan tanggung jawab penggunaan sistem Akashic dengan bahasa yang mudah dipahami. Dengan menggunakan Akashic, Anda memahami bahwa informasi yang tampil memiliki keterbatasan dan tidak selalu dapat menggantikan sumber resmi.</p>
-          <div class="note"><b>Ringkasan</b>Akashic menghadirkan informasi dalam konteks wilayah, namun pengguna tetap perlu menggunakan pertimbangan sendiri, terutama untuk keputusan penting.</div>
-        </section>
-
-        <section data-s id="informasi">
-          <h2>Sifat Informasi</h2>
-          <p>Akashic menyajikan beberapa jenis informasi, masing-masing dengan keterbatasannya.</p>
-          <div class="cards">
-            <div><h3>Informasi sistem</h3><p>Dikelola dalam sistem dan disajikan sesuai konteks wilayah pengguna.</p></div>
-            <div><h3>Kegiatan</h3><p>Informasi kegiatan dengan waktu dan konteks wilayah tertentu.</p></div>
-            <div><h3>Berita</h3><p>Dapat berasal dari sumber eksternal di luar Akashic.</p></div>
-          </div>
-          <p>Informasi dapat berubah, diperbarui, diperbaiki, dihapus, atau menjadi tidak relevan seiring waktu. Akashic tidak menjamin informasi selalu tersedia dalam bentuk yang sama.</p>
-        </section>
-
-        <section data-s id="akurasi" data-t="Akurasi &amp; Kelengkapan">
-          <h2>Akurasi dan Kelengkapan</h2>
-          <p>Akashic berupaya menyajikan informasi yang relevan dan terstruktur, tetapi tidak menjamin informasi akan selalu:</p>
-          <ul>
-            <li>benar pada setiap waktu;</li>
-            <li>lengkap dalam cakupannya;</li>
-            <li>terbaru saat diakses;</li>
-            <li>bebas sepenuhnya dari kesalahan;</li>
-            <li>tersedia di setiap wilayah.</li>
-          </ul>
-          <p>Informasi berasal dari berbagai sumber dan dapat berubah. Gunakan pertimbangan yang tepat saat membaca atau memakainya.</p>
-          <div class="note"><b>Catatan</b>Akashic tidak memberikan jaminan absolut atas akurasi, kelengkapan, atau ketersediaan informasi.</div>
-        </section>
-
-        <section data-s id="lokasi" data-t="Informasi Berbasis Lokasi">
-          <h2>Informasi Berbasis Lokasi</h2>
-          <p>Akashic dapat memakai lokasi browser sebagai konteks untuk menentukan informasi yang relevan dengan wilayah Anda. Data yang dapat digunakan meliputi latitude, longitude, dan tingkat akurasi dari browser.</p>
-          <p>Alur konseptualnya: <strong>lokasi → wilayah → relevansi → informasi</strong>. Lokasi diproses untuk memahami konteks wilayah, bukan sebagai identitas pribadi.</p>
-          <h3>Keterbatasan lokasi</h3>
-          <ul>
-            <li>Lokasi bergantung pada izin yang Anda berikan melalui browser.</li>
-            <li>Akurasi berbeda antar perangkat dan lingkungan.</li>
-            <li>Perangkat dapat memberikan estimasi yang tidak sempurna.</li>
-            <li>Anda dapat menolak memberikan izin lokasi.</li>
-          </ul>
-          <div class="note"><b>Catatan</b>Halaman ini tidak meminta izin lokasi Anda. Halaman ini hanya menjelaskan bagaimana lokasi digunakan sebagai konteks.</div>
-        </section>
-
-        <section data-s id="wilayah" data-t="Region &amp; Relevansi">
-          <h2>Wilayah tidak selalu berarti titik yang tepat</h2>
-          <p>Lokasi diproses dalam konteks wilayah, bukan titik presisi. Sistem mengenali wilayah berdasarkan hierarki administratif: Indonesia, provinsi, kabupaten/kota, kecamatan, dan wilayah lokal.</p>
-          <p>Karena itu, informasi yang tampil untuk suatu wilayah mungkin tidak selalu mencerminkan titik lokasi Anda secara tepat.</p>
-          <div class="note"><b>Catatan</b>Informasi wilayah bersifat kontekstual dan tidak selalu merepresentasikan titik presisi lokasi pengguna.</div>
-        </section>
-
-        <section data-s id="event" data-t="Event &amp; Waktu">
-          <h2>Event dan Informasi Waktu</h2>
-          <p>Informasi event dapat berubah karena:</p>
-          <ul>
-            <li>perubahan jadwal atau lokasi;</li>
-            <li>pembatalan kegiatan;</li>
-            <li>pergantian penyelenggara;</li>
-            <li>kondisi tertentu di lapangan.</li>
-          </ul>
-          <p>Verifikasi informasi event melalui sumber resmi penyelenggara jika Anda memakainya untuk keputusan praktis.</p>
-        </section>
-
-        <section data-s id="berita" data-t="Berita Eksternal">
-          <h2>Berita dan Sumber Eksternal</h2>
-          <p>Akashic dapat mengintegrasikan berita dari sumber eksternal. Berita tersebut:</p>
-          <ul>
-            <li>tidak selalu dibuat oleh Akashic;</li>
-            <li>dapat berasal dari RSS, API, atau sumber lain;</li>
-            <li>dapat berubah atau dihapus dari sumber asalnya;</li>
-            <li>tunduk pada kebijakan sumber masing-masing.</li>
-          </ul>
-          <p>Akashic dapat menyimpan metadata atau referensi sumber, misalnya untuk menautkan berita dengan wilayah tertentu.</p>
-        </section>
-
-        <section data-s id="teknologi" data-t="Ketergantungan Teknologi">
-          <h2>Ketergantungan Teknologi</h2>
-          <p>Akashic berjalan di atas berbagai komponen yang dapat memengaruhi fitur:</p>
-          <ul>
-            <li>browser Anda, termasuk Geolocation API dan Web Push;</li>
-            <li>koneksi internet;</li>
-            <li>server dan database;</li>
-            <li>layanan pihak ketiga dan sumber berita eksternal.</li>
-          </ul>
-          <p>Jika salah satu komponen terganggu, fitur tertentu dapat tidak berfungsi sebagaimana mestinya.</p>
-        </section>
-
-        <section data-s id="ketersediaan" data-t="Ketersediaan Sistem">
-          <h2>Ketersediaan Sistem</h2>
-          <p>Layanan dapat terpengaruh oleh pemeliharaan, gangguan server atau jaringan, perubahan konfigurasi, kesalahan teknis tak terduga, dan keterbatasan layanan pihak ketiga. Akashic tidak menjanjikan layanan yang terus-menerus tanpa gangguan.</p>
-        </section>
-
-        <section data-s id="penggunaan" data-t="Penggunaan Informasi">
-          <h2>Penggunaan Informasi</h2>
-          <p>Informasi Akashic membantu Anda memahami hal yang relevan dengan suatu wilayah, tetapi Anda tetap perlu menggunakan pertimbangan sendiri. Untuk keputusan penting, periksa sumber resmi yang berwenang, terutama terkait keselamatan, hukum, kesehatan, administrasi, perjalanan, dan kegiatan resmi.</p>
-          <div class="note"><b>Penting</b>Akashic bukan pengganti sumber resmi. Untuk keputusan penting, verifikasi melalui sumber resmi yang berwenang.</div>
-        </section>
-
-        <section data-s id="tanggung-jawab" data-t="Tanggung Jawab Pengguna">
-          <h2>Tanggung Jawab Pengguna</h2>
-          <p>Anda bertanggung jawab menggunakan informasi di Akashic secara bijak, yaitu dengan:</p>
-          <ul>
-            <li>membaca informasi secara kritis;</li>
-            <li>memeriksa waktu publikasi atau pembaruan bila tersedia;</li>
-            <li>memverifikasi informasi penting melalui sumber resmi;</li>
-            <li>memahami keterbatasan yang berkaitan dengan lokasi.</li>
-          </ul>
-          <p>Akashic menyediakan informasi sebagai alat bantu. Keputusan akhir tetap berada pada Anda.</p>
-        </section>
-
-        <section data-s id="pihak-ketiga" data-t="Pihak Ketiga">
-          <h2>Tautan dan Layanan Pihak Ketiga</h2>
-          <p>Akashic dapat merujuk atau terhubung ke sumber eksternal, dan tidak selalu mengendalikan isi, ketersediaan, keamanan, kebijakan, maupun perubahan informasi di sana. Saat mengakses layanan pihak ketiga, Anda tunduk pada kebijakan dan ketentuan penyedia layanan tersebut.</p>
-        </section>
-
-        <section data-s id="perubahan" data-t="Perubahan Informasi">
-          <h2>Perubahan Informasi dan Disclaimer</h2>
-          <p>Informasi di Akashic dapat berubah sewaktu-waktu. Disclaimer ini juga dapat diperbarui bila terjadi perubahan sistem atau kebutuhan operasional. Versi terbaru selalu ditampilkan di halaman ini.</p>
-          <p class="updated">Terakhir diperbarui: 2026</p>
-        </section>
-
-        <section data-s id="kontak" data-t="Hubungi Kami">
-          <h2>Hubungi Kami</h2>
-          <p>Pertanyaan tentang informasi atau cara kerja Akashic dapat disampaikan melalui halaman <a href="{{ url_for('contact') }}">Kontak</a>.</p>
-          <p>Cara data dan konteks lokasi diproses dijelaskan di <a href="{{ url_for('privacy') }}">Kebijakan Privasi</a>. Ketentuan penggunaan ada di <a href="{{ url_for('terms') }}">Syarat dan Ketentuan</a>.</p>
-        </section>
-      </article>
-    </div>
+<section data-s id="informasi" data-t="Sifat Informasi">
+  <h2>Sifat Informasi</h2>
+  <p>Akashic menyajikan beberapa jenis informasi, masing-masing dengan keterbatasannya.</p>
+  <div class="cards c3">
+    <div><h3>Informasi sistem</h3><p>Dikelola dalam sistem dan disajikan sesuai konteks wilayah pengguna.</p></div>
+    <div><h3>Kegiatan</h3><p>Informasi kegiatan dengan waktu dan konteks wilayah tertentu.</p></div>
+    <div><h3>Berita</h3><p>Dapat berasal dari sumber eksternal di luar Akashic.</p></div>
   </div>
+  <p>Informasi dapat berubah, diperbarui, diperbaiki, dihapus, atau menjadi tidak relevan seiring waktu. Akashic tidak menjamin informasi selalu tersedia dalam bentuk yang sama.</p>
+</section>
 
-  <section class="closing">
-    <div class="wrap">
-      <h2>Konteks geografis tidak menghilangkan kebutuhan verifikasi.</h2>
-      <p>Akashic membantu informasi hadir di tempat yang tepat. Tetap periksa sumbernya, pahami keterbatasannya, dan gunakan pertimbangan Anda.</p>
-      <div class="btns">
-        <a href="{{ url_for('privacy') }}" class="btn p">Baca Kebijakan Privasi</a>
-        <a href="{{ url_for('contact') }}" class="btn g">Hubungi Akashic</a>
-      </div>
-    </div>
-  </section>
-</main>
+<section data-s id="akurasi" data-t="Akurasi &amp; Kelengkapan">
+  <h2>Akurasi dan Kelengkapan</h2>
+  <p>Akashic berupaya menyajikan informasi yang relevan dan terstruktur, tetapi tidak menjamin informasi akan selalu:</p>
+  <ul>
+    <li>benar pada setiap waktu;</li>
+    <li>lengkap dalam cakupannya;</li>
+    <li>terbaru saat diakses;</li>
+    <li>bebas sepenuhnya dari kesalahan;</li>
+    <li>tersedia di setiap wilayah.</li>
+  </ul>
+  <p>Informasi berasal dari berbagai sumber dan dapat berubah. Gunakan pertimbangan yang tepat saat membaca atau memakainya.</p>
+  <div class="note"><b>Catatan</b>Akashic tidak memberikan jaminan absolut atas akurasi, kelengkapan, atau ketersediaan informasi.</div>
+</section>
 
-<footer>
-  <div class="wrap">
-    <div class="f-grid">
-      <div>
-        <a href="{{ url_for('index') }}" class="brand">AKASHIC</a>
-        <p>Informasi yang hadir di tempat yang tepat.</p>
-      </div>
-      <div>
-        <h3>Navigasi</h3>
-        <ul>
-          <li><a href="{{ url_for('index') }}">Beranda</a></li>
-          <li><a href="{{ url_for('information') }}">Informasi</a></li>
-          <li><a href="{{ url_for('about') }}">Tentang</a></li>
-          <li><a href="{{ url_for('contact') }}">Kontak</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3>Legal</h3>
-        <ul>
-          <li><a href="{{ url_for('privacy') }}">Privasi</a></li>
-          <li><a href="{{ url_for('terms') }}">Ketentuan</a></li>
-          <li><a href="{{ url_for('disclaimer') }}">Disclaimer</a></li>
-        </ul>
-      </div>
-    </div>
-    <div class="f-bot"><span>© 2026 Akashic</span><span>Location-Based Information System</span></div>
-  </div>
-</footer>
+<section data-s id="lokasi" data-t="Informasi Berbasis Lokasi">
+  <h2>Informasi Berbasis Lokasi</h2>
+  <p>Akashic dapat memakai lokasi browser sebagai konteks untuk menentukan informasi yang relevan dengan wilayah Anda. Data yang dapat digunakan meliputi latitude, longitude, dan tingkat akurasi dari browser.</p>
+  <p>Alur konseptualnya: <strong>lokasi → wilayah → relevansi → informasi</strong>. Lokasi diproses untuk memahami konteks wilayah, bukan sebagai identitas pribadi.</p>
+  <h3>Keterbatasan lokasi</h3>
+  <ul>
+    <li>Lokasi bergantung pada izin yang Anda berikan melalui browser.</li>
+    <li>Akurasi berbeda antar perangkat dan lingkungan.</li>
+    <li>Perangkat dapat memberikan estimasi yang tidak sempurna.</li>
+    <li>Anda dapat menolak memberikan izin lokasi.</li>
+  </ul>
+  <div class="note"><b>Catatan</b>Halaman ini tidak meminta izin lokasi Anda. Halaman ini hanya menjelaskan bagaimana lokasi digunakan sebagai konteks.</div>
+</section>
 
-<script>
-(function(){
-'use strict';
-var d=document,secs=[].slice.call(d.querySelectorAll('[data-s]')),
-    tocEl=d.getElementById('toc'),empty=d.getElementById('empty'),
-    nav=d.getElementById('nav'),bar=d.getElementById('bar'),btns=[];
+<section data-s id="wilayah" data-t="Region &amp; Relevansi">
+  <h2>Wilayah tidak selalu berarti titik yang tepat</h2>
+  <p>Lokasi diproses dalam konteks wilayah, bukan titik presisi. Sistem mengenali wilayah berdasarkan hierarki administratif: Indonesia, provinsi, kabupaten/kota, kecamatan, dan wilayah lokal.</p>
+  <p>Karena itu, informasi yang tampil untuk suatu wilayah mungkin tidak selalu mencerminkan titik lokasi Anda secara tepat.</p>
+  <div class="note"><b>Catatan</b>Informasi wilayah bersifat kontekstual dan tidak selalu merepresentasikan titik presisi lokasi pengguna.</div>
+</section>
 
-/* TOC dibangun otomatis dari <section data-s>; judul pendek via data-t */
-secs.forEach(function(s,i){
-  var li=d.createElement('li'),b=d.createElement('button');
-  b.type='button';
-  b.innerHTML=s.getAttribute('data-t')||s.querySelector('h2').innerHTML;
-  b.addEventListener('click',function(){show(s.id,true)});
-  li.appendChild(b);tocEl.appendChild(li);btns.push(b);
-});
+<section data-s id="event" data-t="Event &amp; Waktu">
+  <h2>Event dan Informasi Waktu</h2>
+  <p>Informasi event dapat berubah karena:</p>
+  <ul>
+    <li>perubahan jadwal atau lokasi;</li>
+    <li>pembatalan kegiatan;</li>
+    <li>pergantian penyelenggara;</li>
+    <li>kondisi tertentu di lapangan.</li>
+  </ul>
+  <p>Verifikasi informasi event melalui sumber resmi penyelenggara jika Anda memakainya untuk keputusan praktis.</p>
+</section>
 
-function show(id,scroll){
-  var found=false;
-  secs.forEach(function(s,i){
-    var on=s.id===id;
-    s.classList.toggle('on',on);
-    if(on){found=true;btns[i].setAttribute('aria-current','true')}
-    else btns[i].removeAttribute('aria-current');
-  });
-  empty.hidden=found;
-  if(found){
-    history.replaceState(null,'','#'+id);
-    var c=d.querySelector('.content'),top=c.getBoundingClientRect().top;
-    if(scroll&&(top<0||top>window.innerHeight*.5)){
-      c.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth',block:'start'});
-    }
-  }
-}
-show(location.hash.slice(1));
-window.addEventListener('hashchange',function(){show(location.hash.slice(1),true)});
+<section data-s id="berita" data-t="Berita Eksternal">
+  <h2>Berita dan Sumber Eksternal</h2>
+  <p>Akashic dapat mengintegrasikan berita dari sumber eksternal. Berita tersebut:</p>
+  <ul>
+    <li>tidak selalu dibuat oleh Akashic;</li>
+    <li>dapat berasal dari RSS, API, atau sumber lain;</li>
+    <li>dapat berubah atau dihapus dari sumber asalnya;</li>
+    <li>tunduk pada kebijakan sumber masing-masing.</li>
+  </ul>
+  <p>Akashic dapat menyimpan metadata atau referensi sumber, misalnya untuk menautkan berita dengan wilayah tertentu.</p>
+</section>
 
-/* Scroll: border navbar + progress bar */
-var tick=false;
-function onScroll(){
-  if(tick)return;tick=true;
-  requestAnimationFrame(function(){
-    var y=window.scrollY,h=d.documentElement.scrollHeight-window.innerHeight;
-    nav.classList.toggle('s',y>10);
-    bar.style.width=(h>0?Math.min(y/h,1)*100:0)+'%';
-    tick=false;
-  });
-}
-addEventListener('scroll',onScroll,{passive:true});onScroll();
+<section data-s id="teknologi" data-t="Ketergantungan Teknologi">
+  <h2>Ketergantungan Teknologi</h2>
+  <p>Akashic berjalan di atas berbagai komponen yang dapat memengaruhi fitur:</p>
+  <ul>
+    <li>browser Anda, termasuk Geolocation API dan Web Push;</li>
+    <li>koneksi internet;</li>
+    <li>server dan database;</li>
+    <li>layanan pihak ketiga dan sumber berita eksternal.</li>
+  </ul>
+  <p>Jika salah satu komponen terganggu, fitur tertentu dapat tidak berfungsi sebagaimana mestinya.</p>
+</section>
 
-/* Jam lokal */
-var clock=d.getElementById('clock'),t=null,fmt;
-try{fmt=new Intl.DateTimeFormat('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit',hour12:false})}catch(e){}
-function tickClock(){
-  var n=new Date();
-  clock.textContent=fmt?fmt.format(n):n.toTimeString().slice(0,8);
-  clock.dateTime=n.toISOString();
-}
-function run(){if(!t){tickClock();t=setInterval(tickClock,1000)}}
-function stop(){clearInterval(t);t=null}
-d.addEventListener('visibilitychange',function(){d.hidden?stop():run()});
-run();
-})();
-</script>
-</body>
-</html>
+<section data-s id="ketersediaan" data-t="Ketersediaan Sistem">
+  <h2>Ketersediaan Sistem</h2>
+  <p>Layanan dapat terpengaruh oleh pemeliharaan, gangguan server atau jaringan, perubahan konfigurasi, kesalahan teknis tak terduga, dan keterbatasan layanan pihak ketiga. Akashic tidak menjanjikan layanan yang terus-menerus tanpa gangguan.</p>
+</section>
+
+<section data-s id="penggunaan" data-t="Penggunaan Informasi">
+  <h2>Penggunaan Informasi</h2>
+  <p>Informasi Akashic membantu Anda memahami hal yang relevan dengan suatu wilayah, tetapi Anda tetap perlu menggunakan pertimbangan sendiri. Untuk keputusan penting, periksa sumber resmi yang berwenang, terutama terkait keselamatan, hukum, kesehatan, administrasi, perjalanan, dan kegiatan resmi.</p>
+  <div class="note"><b>Penting</b>Akashic bukan pengganti sumber resmi. Untuk keputusan penting, verifikasi melalui sumber resmi yang berwenang.</div>
+</section>
+
+<section data-s id="tanggung-jawab" data-t="Tanggung Jawab Pengguna">
+  <h2>Tanggung Jawab Pengguna</h2>
+  <p>Anda bertanggung jawab menggunakan informasi di Akashic secara bijak, yaitu dengan:</p>
+  <ul>
+    <li>membaca informasi secara kritis;</li>
+    <li>memeriksa waktu publikasi atau pembaruan bila tersedia;</li>
+    <li>memverifikasi informasi penting melalui sumber resmi;</li>
+    <li>memahami keterbatasan yang berkaitan dengan lokasi.</li>
+  </ul>
+  <p>Akashic menyediakan informasi sebagai alat bantu. Keputusan akhir tetap berada pada Anda.</p>
+</section>
+
+<section data-s id="pihak-ketiga" data-t="Pihak Ketiga">
+  <h2>Tautan dan Layanan Pihak Ketiga</h2>
+  <p>Akashic dapat merujuk atau terhubung ke sumber eksternal, dan tidak selalu mengendalikan isi, ketersediaan, keamanan, kebijakan, maupun perubahan informasi di sana. Saat mengakses layanan pihak ketiga, Anda tunduk pada kebijakan dan ketentuan penyedia layanan tersebut.</p>
+</section>
+
+<section data-s id="perubahan" data-t="Perubahan Informasi">
+  <h2>Perubahan Informasi dan Disclaimer</h2>
+  <p>Informasi di Akashic dapat berubah sewaktu-waktu. Disclaimer ini juga dapat diperbarui bila terjadi perubahan sistem atau kebutuhan operasional. Versi terbaru selalu ditampilkan di halaman ini.</p>
+  <p class="updated">Terakhir diperbarui: 2026</p>
+</section>
+
+<section data-s id="kontak" data-t="Hubungi Kami">
+  <h2>Hubungi Kami</h2>
+  <p>Pertanyaan tentang informasi atau cara kerja Akashic dapat disampaikan melalui halaman <a href="{{ url_for('contact') }}">Kontak</a>.</p>
+  <p>Cara data dan konteks lokasi diproses dijelaskan di <a href="{{ url_for('privacy') }}">Kebijakan Privasi</a>. Ketentuan penggunaan ada di <a href="{{ url_for('terms') }}">Syarat dan Ketentuan</a>.</p>
+</section>
+{% endblock %}
+
+{% block closing %}
+<h2>Konteks geografis tidak menghilangkan kebutuhan verifikasi.</h2>
+<p>Akashic membantu informasi hadir di tempat yang tepat. Tetap periksa sumbernya, pahami keterbatasannya, dan gunakan pertimbangan Anda.</p>
+<div class="btns">
+  <a href="{{ url_for('privacy') }}" class="btn p">Baca Kebijakan Privasi</a>
+  <a href="{{ url_for('contact') }}" class="btn g">Hubungi Akashic</a>
+</div>
+{% endblock %}
